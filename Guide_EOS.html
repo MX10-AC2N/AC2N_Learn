@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EOS Mind Navigator – Guide Régisseur Pro 2025</title>
+  <meta name="description" content="Guide interactif EOS sous forme de carte mentale avec sous-catégories et actions claires.">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #161822;
+      --text: #e8eaed;
+      --accent: #00d4ff;
+      --blue: #0066ff;
+      --green: #00ff88;
+      --red: #ff3b30;
+      --purple: #bb88ff;
+      --orange: #ff9500;
+      --gray: #555;
+      --border: #333;
+    }
+    [data-theme="light"] {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #222222;
+      --accent: #0066cc;
+      --blue: #0044cc;
+      --green: #008844;
+      --red: #d93025;
+      --purple: #8e44ad;
+      --orange: #e67e22;
+      --gray: #999;
+      --border: #ddd;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    header {
+      background: linear-gradient(135deg, #001122, #000428);
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: white;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 20px;
+      color: #0066cc;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    #themeToggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .title {
+      text-align: center;
+      font-size: 26px;
+      color: var(--accent);
+      margin-bottom: 32px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    }
+    .bubble {
+      background: var(--card);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .bubble:hover {
+      transform: scale(1.08);
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.3);
+    }
+    .bubble .label {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.3;
+      text-align: center;
+    }
+    .bubble .count {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .back-btn {
+      background: rgba(0, 212, 255, 0.15);
+      color: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .back-btn:hover {
+      background: rgba(0, 212, 255, 0.25);
+    }
+    .card-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .command-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .command-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 20px rgba(0, 212, 255, 0.15);
+    }
+    .more-actions {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .command-card:hover .more-actions {
+      opacity: 1;
+    }
+    .actions-menu {
+      position: absolute;
+      top: 40px;
+      right: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 10;
+      display: none;
+      flex-direction: column;
+      min-width: 120px;
+    }
+    .actions-menu button {
+      padding: 8px 12px;
+      text-align: left;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .actions-menu button:hover {
+      background: rgba(0, 212, 255, 0.2);
+      color: var(--accent);
+    }
+    .action-text {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+    .cmd-syntax {
+      font-family: monospace;
+      font-size: 14px;
+      color: #0f0;
+      background: rgba(0, 30, 0, 0.3);
+      padding: 8px;
+      border-radius: 6px;
+      margin: 10px 0;
+      white-space: pre-wrap;
+    }
+    .console-keys {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0;
+    }
+    .eos-key {
+      min-width: 44px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: white;
+      user-select: none;
+      background: linear-gradient(145deg, #444, #333);
+    }
+    .eos-key.blue { background: linear-gradient(145deg, var(--blue), #0055aa); }
+    .eos-key.red { background: linear-gradient(145deg, var(--red), #cc0000); }
+    .eos-key.green { background: linear-gradient(145deg, var(--green), #00aa00); color: #000; }
+    .eos-key.orange { background: linear-gradient(145deg, var(--orange), #cc7700); color: #000; }
+    .eos-key.purple { background: linear-gradient(145deg, var(--purple), #7700cc); }
+    .eos-key.cyan { background: linear-gradient(145deg, #00cccc, #00aaaa); }
+    .eos-key.enter { background: linear-gradient(145deg, #00cc00, #008800); font-weight: 800; color: #000; }
+
+    .edit-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .edit-form textarea, .edit-form input, .edit-form select {
+      padding: 10px;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--card);
+      color: var(--text);
+      font-family: inherit;
+    }
+    .edit-form textarea { min-height: 80px; resize: vertical; }
+    .edit-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+    .edit-actions button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .edit-actions .save { background: var(--green); color: #000; }
+    .edit-actions .cancel { background: var(--gray); color: white; }
+
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+      .bubble { width: 90px; height: 90px; font-size: 11px; }
+      .card-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="logo-icon">EOS</div>
+      <h1>EOS Mind Navigator</h1>
+    </div>
+    <button id="themeToggle" aria-label="Basculer thème">🌙</button>
+  </header>
+
+  <div class="container">
+    <div id="categoriesView" class="view active">
+      <h2 class="title">Catégories</h2>
+      <div class="grid" id="categoriesGrid"></div>
+    </div>
+
+    <div id="subcategoriesView" class="view">
+      <button class="back-btn" id="backToCategories">← Catégories</button>
+      <h2 class="title" id="subcategoriesTitle"></h2>
+      <div class="grid" id="subcategoriesGrid"></div>
+    </div>
+
+    <div id="commandsView" class="view">
+      <button class="back-btn" id="backToSubcategories">← Sous-catégories</button>
+      <h2 class="title" id="commandsTitle"></h2>
+      <div class="card-list" id="commandsList"></div>
+      <button class="back-btn" style="margin-top:20px" onclick="addCommand()">+ Ajouter commande</button>
+    </div>
+  </div>
+
+  <script>
+    // === BASE DE DONNÉES STRUCTURÉE EN SOUS-CATÉGORIES ===
+    const db = {
+  "fundamentals": {
+    "Base": [
+      { "action": "Allumer/éteindre la console", "cmd": "[ON] → [OFF]", "keys": ["[ON]", "[OFF]"], "level": "basic" },
+      { "action": "Créer un nouveau show", "cmd": "Setup → User → New Show", "keys": ["Setup", "User", "New Show"], "level": "basic" },
+      { "action": "Ouvrir un show existant", "cmd": "Setup → User → Open Show", "keys": ["Setup", "User", "Open Show"], "level": "basic" },
+      { "action": "Sauvegarder le show", "cmd": "Update", "keys": ["Update"], "level": "basic" },
+      { "action": "Sauvegarder (raccourci)", "cmd": "Ctrl+S", "keys": ["Ctrl+S"], "level": "basic" },
+      { "action": "Annuler la dernière action", "cmd": "Undo", "keys": ["Ctrl+Z"], "level": "basic" },
+      { "action": "Rétablir", "cmd": "Redo", "keys": ["Ctrl+Y"], "level": "basic" },
+      { "action": "Aide contextuelle", "cmd": "Help", "keys": ["Help"], "level": "basic" },
+      { "action": "Sélectionner le canal 1", "cmd": "Chan 1 Enter", "keys": ["Chan", "1", "Enter"], "level": "basic" },
+      { "action": "Sélectionner canaux 1, 5 et 8", "cmd": "Chan 1 + 5 + 8 Enter", "keys": ["Chan", "1", "+", "5", "+", "8", "Enter"], "level": "basic" },
+      { "action": "Sélectionner canaux 1 à 10", "cmd": "Chan 1 Thru 10 Enter", "keys": ["Chan", "1", "Thru", "10", "Enter"], "level": "basic" },
+      { "action": "Sélectionner tous les canaux", "cmd": "Chan * Enter", "keys": ["Chan", "*", "Enter"], "level": "basic" },
+      { "action": "Sélectionner le groupe 1", "cmd": "Group 1 Enter", "keys": ["Group", "1", "Enter"], "level": "basic" },
+      { "action": "Intensité du canal 1 à 100%", "cmd": "Chan 1 @ 100 Enter", "keys": ["Chan", "1", "@", "100", "Enter"], "level": "basic" },
+      { "action": "Intensité du canal 1 à 100% (Full)", "cmd": "Chan 1 @ Full Enter", "keys": ["Chan", "1", "@", "Full", "Enter"], "level": "basic" },
+      { "action": "Intensité du canal 1 à 0%", "cmd": "Chan 1 @ 0 Enter", "keys": ["Chan", "1", "@", "0", "Enter"], "level": "basic" },
+      { "action": "Intensité du canal 1 à 0% (Blackout)", "cmd": "Chan 1 @ Out Enter", "keys": ["Chan", "1", "@", "Out", "Enter"], "level": "basic" },
+      { "action": "Effacer tout", "cmd": "Clear Enter", "keys": ["Clear", "Enter"], "level": "basic" },
+      { "action": "Flash la sélection", "cmd": "Highlight", "keys": ["Highlight"], "level": "basic" },
+      { "action": "Isoler la sélection", "cmd": "Solo", "keys": ["Solo"], "level": "basic" },
+      { "action": "Enregistrer le cue 1", "cmd": "Record Cue 1 Enter", "keys": ["Record", "Cue", "1", "Enter"], "level": "basic" },
+      { "action": "Préparer le cue 1", "cmd": "Cue 1 Enter", "keys": ["Cue", "1", "Enter"], "level": "basic" },
+      { "action": "Lancer le cue suivant", "cmd": "Go", "keys": ["Go"], "level": "basic" },
+      { "action": "Retour au cue précédent", "cmd": "Back", "keys": ["Back"], "level": "basic" },
+      { "action": "Temps de fade de 3 secondes", "cmd": "Time 3 Enter", "keys": ["Time", "3", "Enter"], "level": "basic" },
+      { "action": "Enregistrer le preset focus 1", "cmd": "Record Preset 1 Enter", "keys": ["Record", "Preset", "1", "Enter"], "level": "basic" },
+      { "action": "Enregistrer la palette couleur 1", "cmd": "Record ColorPalette 1 Enter", "keys": ["Record", "ColorPalette", "1", "Enter"], "level": "basic" },
+      { "action": "Lancer l'effet 1", "cmd": "Effect 1 Enter", "keys": ["Effect", "1", "Enter"], "level": "basic" },
+      { "action": "Exécuter la macro 1", "cmd": "Macro 1 Enter", "keys": ["Macro", "1", "Enter"], "level": "basic" },
+      { "action": "Assigne le cue 10 au submaster 1", "cmd": "Sub 1 Cue 10 Enter", "keys": ["Sub", "1", "Cue", "10", "Enter"], "level": "basic" },
+      { "action": "Accéder au menu patch", "cmd": "Setup → Patch", "keys": ["Setup", "Patch"], "level": "basic" },
+      { "action": "Ouvrir la Magic Sheet 1", "cmd": "Magic.Sheet 1 Enter", "keys": ["Magic.Sheet", "1", "Enter"], "level": "basic" },
+      { "action": "Label personnalisé pour canal 1", "cmd": "Chan 1 Label \"Nom\" Enter", "keys": ["Chan", "1", "Label", "\"Nom\"", "Enter"], "level": "basic" },
+      { "action": "Voir les paramètres du canal 1", "cmd": "Query Chan 1 Enter", "keys": ["Query", "Chan", "1", "Enter"], "level": "basic" },
+      { "action": "Voir le contenu de la cue 1", "cmd": "Query Cue 1 Enter", "keys": ["Query", "Cue", "1", "Enter"], "level": "basic" },
+      { "action": "Basculer en mode programmation", "cmd": "Blind", "keys": ["Blind"], "level": "basic" },
+      { "action": "Retour au mode live", "cmd": "Live", "keys": ["Live"], "level": "basic" },
+      { "action": "Grand Master à 100%", "cmd": "Grand @ Full Enter", "keys": ["Grand", "@", "Full", "Enter"], "level": "basic" },
+      { "action": "Grand Master à 0%", "cmd": "Grand @ 0 Enter", "keys": ["Grand", "@", "0", "Enter"], "level": "basic" },
+      { "action": "BLACKOUT TOTAL", "cmd": "Chan * @ 0 Enter", "keys": ["Chan", "*", "@", "0", "Enter"], "level": "basic" },
+      { "action": "Relâcher tout", "cmd": "Release Enter", "keys": ["Release", "Enter"], "level": "basic" },
+      { "action": "Stop tous les effets", "cmd": "Effect * Stop Enter", "keys": ["Effect", "*", "Stop", "Enter"], "level": "basic" },
+      { "action": "Sélection par type de fixture", "cmd": "Select [Type]", "keys": ["Select", "[Type]"], "level": "advanced" },
+      { "action": "Désactiver temporairement le tracking", "cmd": "Track Off", "keys": ["Track", "Off"], "level": "advanced" }
+    ]
+  },
+  "selection": {
+    "Filtres & Sélection": [
+      { "action": "Sélectionner canaux impairs de 1 à 20", "cmd": "Chan 1 Thru 20 Odd Enter", "keys": ["Chan", "1", "Thru", "20", "Odd", "Enter"], "level": "advanced" },
+      { "action": "Sélectionner canaux pairs de 1 à 20", "cmd": "Chan 1 Thru 20 Even Enter", "keys": ["Chan", "1", "Thru", "20", "Even", "Enter"], "level": "advanced" },
+      { "action": "Ajouter canal 5 à la sélection", "cmd": "Chan 5 + Enter", "keys": ["Chan", "5", "+", "Enter"], "level": "basic" },
+      { "action": "Retirer canal 5 de la sélection", "cmd": "Chan 5 - Enter", "keys": ["Chan", "5", "-", "Enter"], "level": "basic" },
+      { "action": "Atténuer la sélection", "cmd": "Lowlight", "keys": ["Lowlight"], "level": "basic" },
+      { "action": "Rappeler la dernière intensité", "cmd": "Rem Dim", "keys": ["Rem", "Dim"], "level": "advanced" },
+      { "action": "Effacer le canal 1", "cmd": "Chan 1 Clear Enter", "keys": ["Chan", "1", "Clear", "Enter"], "level": "basic" },
+      { "action": "Effacer l'intensité du canal 1", "cmd": "Chan 1 Intens Clear Enter", "keys": ["Chan", "1", "Intens", "Clear", "Enter"], "level": "basic" },
+      { "action": "Effacer la couleur du canal 1", "cmd": "Chan 1 ColorPalette Clear Enter", "keys": ["Chan", "1", "ColorPalette", "Clear", "Enter"], "level": "basic" },
+      { "action": "Effacer le beam du canal 1", "cmd": "Chan 1 BeamPalette Clear Enter", "keys": ["Chan", "1", "BeamPalette", "Clear", "Enter"], "level": "basic" },
+      { "action": "Enregistrer le groupe 1", "cmd": "Record Group 1 Enter", "keys": ["Record", "Group", "1", "Enter"], "level": "basic" },
+      { "action": "Label 'Wash' pour groupe 1", "cmd": "Group 1 Label \"Wash\" Enter", "keys": ["Group", "1", "Label", "\"Wash\"", "Enter"], "level": "advanced" },
+      { "action": "Modifier le groupe 1", "cmd": "Update Group 1 Enter", "keys": ["Update", "Group", "1", "Enter"], "level": "advanced" },
+      { "action": "Supprimer le groupe 1", "cmd": "Delete Group 1 Enter", "keys": ["Delete", "Group", "1", "Enter"], "level": "basic" },
+      { "action": "Créer une classe pour organisation", "cmd": "Chan 1 Thru 10 Class \"Wash\" Enter", "keys": ["Chan", "1", "Thru", "10", "Class", "\"Wash\"", "Enter"], "level": "advanced" },
+      { "action": "Label automatique basé sur profil", "cmd": "Chan 1 Thru 10 Auto_Label Enter", "keys": ["Chan", "1", "Thru", "10", "Auto_Label", "Enter"], "level": "advanced" },
+      { "action": "Label multiple avec numérotation", "cmd": "Chan 1 Thru 10 Label \"Wash #\" Enter", "keys": ["Chan", "1", "Thru", "10", "Label", "\"Wash #\"", "Enter"], "level": "advanced" },
+      { "action": "Copier un label vers un autre canal", "cmd": "Copy Chan 1 Label Enter Chan 2 Enter", "keys": ["Copy", "Chan", "1", "Label", "Enter", "Chan", "2", "Enter"], "level": "advanced" },
+      { "action": "Désélectionner les impairs", "cmd": "Chan 1 Thru 50 Odd - Enter", "keys": ["Chan", "1", "Thru", "50", "Odd", "-", "Enter"], "level": "advanced" },
+      { "action": "Sélectionner seulement les pairs", "cmd": "Chan 1 Thru 50 Even Enter", "keys": ["Chan", "1", "Thru", "50", "Even", "Enter"], "level": "advanced" },
+      { "action": "Macro: Select Wash Only", "cmd": "Group 2 Enter", "keys": ["Group", "2", "Enter"], "level": "basic" },
+      { "action": "Sélectionner fixtures avec paramètre Beam", "cmd": "Select Beam_Enter", "keys": ["Select", "Beam_Enter"], "level": "advanced" },
+      { "action": "Sélectionner uniquement les moving lights", "cmd": "Select Moving_Light", "keys": ["Select", "Moving_Light"], "level": "advanced" },
+      { "action": "Numérotation à 2 chiffres (01-10)", "cmd": "Chan 1 Thru 10 Label \"Wash ##\" Enter", "keys": ["Chan", "1", "Thru", "10", "Label", "\"Wash ##\"", "Enter"], "level": "advanced" }
+    ]
+  },
+  "intensity": {
+    "Contrôle intensité": [
+      { "action": "Intensité du canal 1 à 50%", "cmd": "Chan 1 @ 50 Enter", "keys": ["Chan", "1", "@", "50", "Enter"], "level": "basic" },
+      { "action": "Intensité canal 1 à 80% et canal 2 à 50%", "cmd": "Chan 1 @ 80 Chan 2 @ 50 Enter", "keys": ["Chan", "1", "@", "80", "Chan", "2", "@", "50", "Enter"], "level": "basic" },
+      { "action": "Intensité des canaux 1 à 10 à 75%", "cmd": "Chan 1 Thru 10 @ 75 Enter", "keys": ["Chan", "1", "Thru", "10", "@", "75", "Enter"], "level": "basic" },
+      { "action": "Augmenter intensité du canal 1 de 10%", "cmd": "Chan 1 @ + 10 Enter", "keys": ["Chan", "1", "@", "+", "10", "Enter"], "level": "basic" },
+      { "action": "Diminuer intensité du canal 1 de 10%", "cmd": "Chan 1 @ - 10 Enter", "keys": ["Chan", "1", "@", "-", "10", "Enter"], "level": "basic" },
+      { "action": "Valeur fixe (ignore programmer)", "cmd": "Chan 1 @ 50 Park Enter", "keys": ["Chan", "1", "@", "50", "Park", "Enter"], "level": "expert" },
+      { "action": "Combinaison d'intensités différenciées", "cmd": "Chan 1 @ 50% + Chan 2 @ Full", "keys": ["Chan", "1", "@", "50", "Chan", "2", "@", "Full"], "level": "basic" },
+      { "action": "Diminuer intensité de 20% sur une plage", "cmd": "Chan 1 Thru 10 @ - 20 Enter", "keys": ["Chan", "1", "Thru", "10", "@", "-", "20", "Enter"], "level": "advanced" },
+      { "action": "Augmenter intensité de 30% sur une plage", "cmd": "Chan 1 Thru 10 @ + 30 Enter", "keys": ["Chan", "1", "Thru", "10", "@", "+", "30", "Enter"], "level": "advanced" }
+    ]
+  },
+  "cues": {
+    "Cues & Séquence": [
+      { "action": "Enregistrer le prochain cue disponible", "cmd": "Record Enter", "keys": ["Record", "Enter"], "level": "basic" },
+      { "action": "Enregistrer cue 1 avec label personnalisé", "cmd": "Record Cue 1 Label [Label] Enter", "keys": ["Record", "Cue", "1", "Label", "[Label]", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer un cue décimal 1.5", "cmd": "Record Cue 1.5 Enter", "keys": ["Record", "Cue", "1.5", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer les cues 10 à 20", "cmd": "Record Cue 10 Thru 20 Enter", "keys": ["Record", "Cue", "10", "Thru", "20", "Enter"], "level": "advanced" },
+      { "action": "Aller directement au cue 5", "cmd": "Goto Cue 5 Enter", "keys": ["Goto", "Cue", "5", "Enter"], "level": "basic" },
+      { "action": "Arrêter la lecture", "cmd": "Stop", "keys": ["Stop"], "level": "basic" },
+      { "action": "Assert le cue 1", "cmd": "Cue 1 Assert Enter", "keys": ["Cue", "1", "Assert", "Enter"], "level": "advanced" },
+      { "action": "Mettre à jour le cue actif", "cmd": "Update Enter", "keys": ["Update", "Enter"], "level": "basic" },
+      { "action": "Mettre à jour le cue 1 spécifique", "cmd": "Update Cue 1 Enter", "keys": ["Update", "Cue", "1", "Enter"], "level": "basic" },
+      { "action": "Fusionner dans le cue 1", "cmd": "Merge Cue 1 Enter", "keys": ["Merge", "Cue", "1", "Enter"], "level": "advanced" },
+      { "action": "Copier le cue 1 vers le cue 2", "cmd": "Copy Cue 1 Enter Cue 2 Enter", "keys": ["Copy", "Cue", "1", "Enter", "Cue", "2", "Enter"], "level": "advanced" },
+      { "action": "Copier une plage de cues", "cmd": "Copy Cue 1 Thru 10 Enter Cue 101 Enter", "keys": ["Copy", "Cue", "1", "Thru", "10", "Enter", "Cue", "101", "Enter"], "level": "advanced" },
+      { "action": "Déplacer le cue 1 vers le cue 5", "cmd": "Move Cue 1 Enter Cue 5 Enter", "keys": ["Move", "Cue", "1", "Enter", "Cue", "5", "Enter"], "level": "advanced" },
+      { "action": "Supprimer le cue 1", "cmd": "Delete Cue 1 Enter", "keys": ["Delete", "Cue", "1", "Enter"], "level": "basic" },
+      { "action": "Lier le cue 1 à un autre", "cmd": "Cue 1 Link Enter", "keys": ["Cue", "1", "Link", "Enter"], "level": "advanced" },
+      { "action": "Délier le cue 1", "cmd": "Cue 1 Unlink Enter", "keys": ["Cue", "1", "Unlink", "Enter"], "level": "advanced" },
+      { "action": "Cue 1 suit automatiquement après 3s", "cmd": "Cue 1 Follow 3 Enter", "keys": ["Cue", "1", "Follow", "3", "Enter"], "level": "advanced" },
+      { "action": "Cue 1 en pause pendant 2s", "cmd": "Cue 1 Hang 2 Enter", "keys": ["Cue", "1", "Hang", "2", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer la part 1 du cue 1", "cmd": "Record Cue 1 Part 1 Enter", "keys": ["Record", "Cue", "1", "Part", "1", "Enter"], "level": "expert" },
+      { "action": "Lancer la part 2 du cue 1", "cmd": "Cue 1 Part 2 Enter", "keys": ["Cue", "1", "Part", "2", "Enter"], "level": "expert" },
+      { "action": "Lancer toutes les parts du cue 1", "cmd": "Cue 1 Part * Enter", "keys": ["Cue", "1", "Part", "*", "Enter"], "level": "expert" },
+      { "action": "Bloquer la cue 1 (arrête tracking)", "cmd": "Cue 1 Block Enter", "keys": ["Cue", "1", "Block", "Enter"], "level": "advanced" },
+      { "action": "Mode Cue Only pour la cue 1", "cmd": "Cue 1 Cue_Only Enter", "keys": ["Cue", "1", "Cue_Only", "Enter"], "level": "advanced" },
+      { "action": "Déclencher cue au timecode", "cmd": "Cue 1 Timecode 00:01:30:00 Enter", "keys": ["Cue", "1", "Timecode", "00:01:30:00", "Enter"], "level": "expert" },
+      { "action": "Macro: Record Cue with Auto-Label", "cmd": "Record Cue 1 Label \"Nom\" Enter", "keys": ["Record", "Cue", "1", "Label", "\"Nom\"", "Enter"], "level": "advanced" },
+      { "action": "Pas de tracking entre les cues", "cmd": "Cue Only Mode", "keys": ["Cue", "Cue_Only"], "level": "advanced" },
+      { "action": "Force valeurs dans la cue", "cmd": "Assert Cue", "keys": ["Cue", "Assert"], "level": "advanced" },
+      { "action": "Structure des cues recommandée", "cmd": "Cue List: Cue 0 preset → Cues principales", "keys": ["Record", "Cue"], "level": "basic" },
+      { "action": "Prépare le cue 1 en écrasant la sélection", "cmd": "Cue 1 Only Enter", "keys": ["Cue", "1", "Only", "Enter"], "level": "advanced" }
+    ]
+  },
+  "timing": {
+    "Timing & Fades": [
+      { "action": "Fade up 3s, fade down 5s", "cmd": "Up_Time 3 Down_Time 5 Enter", "keys": ["Up_Time", "3", "Down_Time", "5", "Enter"], "level": "advanced" },
+      { "action": "Délai de 2 secondes avant exécution", "cmd": "Delay 2 Enter", "keys": ["Delay", "2", "Enter"], "level": "basic" },
+      { "action": "Suit automatiquement après 5s", "cmd": "Follow 5 Enter", "keys": ["Follow", "5", "Enter"], "level": "advanced" },
+      { "action": "Pause de 3 secondes", "cmd": "Hang 3 Enter", "keys": ["Hang", "3", "Enter"], "level": "advanced" },
+      { "action": "Délai de 3s sur canal 1 à 100%", "cmd": "Chan 1 Delay 3 @ 100 Enter", "keys": ["Chan", "1", "Delay", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Temps de 5s sur canal 1 à 100%", "cmd": "Chan 1 Time 5 @ 100 Enter", "keys": ["Chan", "1", "Time", "5", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Délai 2s + temps 3s sur canal 1", "cmd": "Chan 1 Delay 2 Time 3 @ 100 Enter", "keys": ["Chan", "1", "Delay", "2", "Time", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Délai up de 3s sur canal 1", "cmd": "Chan 1 Up_Delay 3 @ 100 Enter", "keys": ["Chan", "1", "Up_Delay", "3", "@", "100", "Enter"], "level": "expert" },
+      { "action": "Délai down de 2s sur canal 1 à 0%", "cmd": "Chan 1 Down_Delay 2 @ 0 Enter", "keys": ["Chan", "1", "Down_Delay", "2", "@", "0", "Enter"], "level": "expert" },
+      { "action": "Follow time pour cue 1", "cmd": "Cue 1 Follow 3 Enter", "keys": ["Cue", "1", "Follow", "3", "Enter"], "level": "advanced" },
+      { "action": "Hang time pour cue 1", "cmd": "Cue 1 Hang 2 Enter", "keys": ["Cue", "1", "Hang", "2", "Enter"], "level": "advanced" },
+      { "action": "Arrête effet 1 avec fade de 3s", "cmd": "Effect 1 Stop Time 3 Enter", "keys": ["Effect", "1", "Stop", "Time", "3", "Enter"], "level": "advanced" },
+      { "action": "Lie le Rate Master 1 au cue 1", "cmd": "Cue 1 Rate_Master 1 Enter", "keys": ["Cue", "1", "Rate_Master", "1", "Enter"], "level": "advanced" }
+    ]
+  },
+  "tracking": {
+    "Tracking": [
+      { "action": "Mode tracking seulement", "cmd": "Track Only", "keys": ["Track", "Only"], "level": "advanced" },
+      { "action": "Avance dans le tracking", "cmd": "Track Forward", "keys": ["Track", "Forward"], "level": "advanced" },
+      { "action": "Bloque la cue 1 (résout problèmes tracking)", "cmd": "Cue 1 Block Enter", "keys": ["Cue", "1", "Block", "Enter"], "level": "advanced" },
+      { "action": "Bloque le canal 1 dans la cue 1", "cmd": "Cue 1 Chan 1 Block Enter", "keys": ["Cue", "1", "Chan", "1", "Block", "Enter"], "level": "advanced" },
+      { "action": "Débloque le canal 1 dans la cue 1", "cmd": "Cue 1 Chan 1 Unblock Enter", "keys": ["Cue", "1", "Chan", "1", "Unblock", "Enter"], "level": "advanced" },
+      { "action": "Mode Cue Only pour la cue 1", "cmd": "Cue 1 Cue_Only Enter", "keys": ["Cue", "1", "Cue_Only", "Enter"], "level": "advanced" },
+      { "action": "Modification centralisée via palettes", "cmd": "PROGRAMMER AVEC PALETTES", "keys": ["Preset", "ColorPalette"], "level": "basic" },
+      { "action": "Économie de programmation (valeurs persistent)", "cmd": "TRACKING: Les valeurs persistent", "keys": ["Track"], "level": "advanced" },
+      { "action": "Tracking limité à la Part 1", "cmd": "Track Only Part 1", "keys": ["Track", "Only", "Part", "1"], "level": "expert" }
+    ]
+  },
+  "palettes": {
+    "Focus et Couleur": [
+      { "action": "Enregistrer la palette beam 1", "cmd": "Record BeamPalette 1 Enter", "keys": ["Record", "BeamPalette", "1", "Enter"], "level": "basic" },
+      { "action": "Enregistrer la palette effet 1", "cmd": "Record FXPalette 1 Enter", "keys": ["Record", "FXPalette", "1", "Enter"], "level": "basic" },
+      { "action": "Enregistrer la prochaine palette disponible", "cmd": "Record Preset Enter", "keys": ["Record", "Preset", "Enter"], "level": "basic" },
+      { "action": "Enregistrer uniquement Pan/Tilt dans preset 1", "cmd": "Preset Pan Thru Tilt Record Preset 1 Enter", "keys": ["Preset", "Pan", "Thru", "Tilt", "Record", "Preset", "1", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer uniquement RGB dans palette couleur", "cmd": "Color Red Thru Blue Record ColorPalette 1 Enter", "keys": ["Color", "Red", "Thru", "Blue", "Record", "ColorPalette", "1", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer uniquement CMY dans palette couleur", "cmd": "Color Cyan Thru Yellow Record ColorPalette 1 Enter", "keys": ["Color", "Cyan", "Thru", "Yellow", "Record", "ColorPalette", "1", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer uniquement Zoom dans palette beam", "cmd": "Beam Zoom Record BeamPalette 1 Enter", "keys": ["Beam", "Zoom", "Record", "BeamPalette", "1", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer uniquement Iris dans palette beam", "cmd": "Beam Iris Record BeamPalette 1 Enter", "keys": ["Beam", "Iris", "Record", "BeamPalette", "1", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer uniquement Shutter dans palette beam", "cmd": "Beam Strobe Record BeamPalette 1 Enter", "keys": ["Beam", "Strobe", "Record", "BeamPalette", "1", "Enter"], "level": "advanced" },
+      { "action": "Enregistrer uniquement Gobo dans palette beam", "cmd": "Beam Gobo_Select Record BeamPalette 1 Enter", "keys": ["Beam", "Gobo_Select", "Record", "BeamPalette", "1", "Enter"], "level": "advanced" },
+      { "action": "Rappeller le preset focus 1 sur canal 1", "cmd": "Chan 1 Preset 1 Enter", "keys": ["Chan", "1", "Preset", "1", "Enter"], "level": "basic" },
+      { "action": "Rappeller la palette couleur 1 sur canal 1", "cmd": "Chan 1 ColorPalette 1 Enter", "keys": ["Chan", "1", "ColorPalette", "1", "Enter"], "level": "basic" },
+      { "action": "Rappeller la palette beam 1 sur canal 1", "cmd": "Chan 1 BeamPalette 1 Enter", "keys": ["Chan", "1", "BeamPalette", "1", "Enter"], "level": "basic" },
+      { "action": "Rappeller la palette effet 1 sur canal 1", "cmd": "Chan 1 FXPalette 1 Enter", "keys": ["Chan", "1", "FXPalette", "1", "Enter"], "level": "basic" },
+      { "action": "Rappeller le preset 1 sur la sélection", "cmd": "Preset 1 Enter", "keys": ["Preset", "1", "Enter"], "level": "basic" },
+      { "action": "Mettre à jour le preset 1", "cmd": "Update Preset 1 Enter", "keys": ["Update", "Preset", "1", "Enter"], "level": "advanced" },
+      { "action": "Mettre à jour la dernière palette", "cmd": "Update Enter", "keys": ["Update", "Enter"], "level": "basic" },
+      { "action": "Fusionner dans le preset 1", "cmd": "Merge Preset 1 Enter", "keys": ["Merge", "Preset", "1", "Enter"], "level": "advanced" },
+      { "action": "Retirer Pan/Tilt du preset 1", "cmd": "Preset Pan Thru Tilt Remove Preset 1 Enter", "keys": ["Preset", "Pan", "Thru", "Tilt", "Remove", "Preset", "1", "Enter"], "level": "expert" },
+      { "action": "Copier le preset 1 vers le preset 2", "cmd": "Copy Preset 1 Enter Preset 2 Enter", "keys": ["Copy", "Preset", "1", "Enter", "Preset", "2", "Enter"], "level": "advanced" },
+      { "action": "Déplacer le preset 1 vers le preset 5", "cmd": "Move Preset 1 Enter Preset 5 Enter", "keys": ["Move", "Preset", "1", "Enter", "Preset", "5", "Enter"], "level": "advanced" },
+      { "action": "Supprimer le preset 1", "cmd": "Delete Preset 1 Enter", "keys": ["Delete", "Preset", "1", "Enter"], "level": "basic" },
+      { "action": "Donne le label 'Centre' au preset 1", "cmd": "Preset 1 Label \"Centre\" Enter", "keys": ["Preset", "1", "Label", "\"Centre\"", "Enter"], "level": "advanced" },
+      { "action": "Macro: Record prochaine palette Focus", "cmd": "Record Preset Enter", "keys": ["Record", "Preset", "Enter"], "level": "advanced" },
+      { "action": "Macro: Record prochaine palette Couleur", "cmd": "Record ColorPalette Enter", "keys": ["Record", "ColorPalette", "Enter"], "level": "advanced" },
+      { "action": "Macro: Record Focus XY seulement", "cmd": "Preset Pan Thru Tilt Record Preset 1 Enter", "keys": ["Preset", "Pan", "Thru", "Tilt", "Record", "Preset", "1", "Enter"], "level": "advanced" },
+      { "action": "Macro: Record Couleur RGB seulement", "cmd": "Color Red Thru Blue Record ColorPalette 1 Enter", "keys": ["Color", "Red", "Thru", "Blue", "Record", "ColorPalette", "1", "Enter"], "level": "advanced" },
+      { "action": "Macro: Record Beam Zoom seulement", "cmd": "Beam Zoom Record BeamPalette 1 Enter", "keys": ["Beam", "Zoom", "Record", "BeamPalette", "1", "Enter"], "level": "advanced" },
+      { "action": "Macro: Update dernière palette utilisée", "cmd": "Update Enter", "keys": ["Update", "Enter"], "level": "basic" },
+      { "action": "Macro: Update avec merge", "cmd": "Merge Preset 1 Enter", "keys": ["Merge", "Preset", "1", "Enter"], "level": "advanced" },
+      { "action": "Rappeller le preset 1 en écrasant position", "cmd": "Preset 1 Only Enter", "keys": ["Preset", "1", "Only", "Enter"], "level": "advanced" },
+      { "action": "Force la palette couleur 1, ignore les autres", "cmd": "ColorPalette 1 Only Enter", "keys": ["ColorPalette", "1", "Only", "Enter"], "level": "advanced" },
+      { "action": "Distribue la sélection en éventail sur l'axe Pan", "cmd": "Fan Pan Enter", "keys": ["Fan", "Pan", "Enter"], "level": "expert" }
+    ]
+  },
+  "effects": {
+    "Effets & Rate Masters": [
+      { "action": "Effet absolu intensité sinusoïdal", "cmd": "Effect 1 Chan 1 Thru 10 Absolute_Param Intens Form Sine Size 50 Offset 50 Cycles 1 Rate 120 Enter", "keys": ["Effect", "1", "Chan", "1", "Thru", "10", "Absolute_Param", "Intens", "Form", "Sine", "Size", "50", "Offset", "50", "Cycles", "1", "Rate", "120", "Enter"], "level": "expert" },
+      { "action": "Effet relatif pan triangulaire", "cmd": "Effect 2 Chan 1 Thru 10 Relative_Param Pan Form Triangle Size 30 Phase 360 Rate 60 Enter", "keys": ["Effect", "2", "Chan", "1", "Thru", "10", "Relative_Param", "Pan", "Form", "Triangle", "Size", "30", "Phase", "360", "Rate", "60", "Enter"], "level": "expert" },
+      { "action": "Arrêter l'effet 1", "cmd": "Effect 1 Stop Enter", "keys": ["Effect", "1", "Stop", "Enter"], "level": "basic" },
+      { "action": "Arrêter tous les effets", "cmd": "Effect * Stop Enter", "keys": ["Effect", "*", "Stop", "Enter"], "level": "basic" },
+      { "action": "Relâcher l'effet 1", "cmd": "Effect 1 Release Enter", "keys": ["Effect", "1", "Release", "Enter"], "level": "advanced" },
+      { "action": "Supprimer l'effet 1", "cmd": "Effect 1 Delete Enter", "keys": ["Effect", "1", "Delete", "Enter"], "level": "advanced" },
+      { "action": "Effacer l'effet 1", "cmd": "Effect 1 Clear Enter", "keys": ["Effect", "1", "Clear", "Enter"], "level": "advanced" },
+      { "action": "Assigne le Rate Master 1 à l'effet 1", "cmd": "Effect 1 Rate_Master 1 Enter", "keys": ["Effect", "1", "Rate_Master", "1", "Enter"], "level": "advanced" },
+      { "action": "Contrôle vitesse Rate Master 1 à 100%", "cmd": "Rate_Master 1 @ 100 Enter", "keys": ["Rate_Master", "1", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Double vitesse Rate Master 1", "cmd": "Rate_Master 1 @ 200 Enter", "keys": ["Rate_Master", "1", "@", "200", "Enter"], "level": "advanced" },
+      { "action": "Moitié vitesse Rate Master 1", "cmd": "Rate_Master 1 @ 50 Enter", "keys": ["Rate_Master", "1", "@", "50", "Enter"], "level": "advanced" },
+      { "action": "Tap tempo pour Rate Master 1", "cmd": "Rate_Master 1 Tap Enter", "keys": ["Rate_Master", "1", "Tap", "Enter"], "level": "advanced" },
+      { "action": "Arrêter effet 1 avec fade 2s et délai 1s", "cmd": "Effect 1 Stop Time 2 Delay 1 Enter", "keys": ["Effect", "1", "Stop", "Time", "2", "Delay", "1", "Enter"], "level": "expert" },
+      { "action": "Toggle Effect On/Off", "cmd": "Effect 1 Toggle Enter", "keys": ["Effect", "1", "Toggle", "Enter"], "level": "advanced" },
+      { "action": "Stop plage d'effets", "cmd": "Effect 1 Thru 10 Stop Enter", "keys": ["Effect", "1", "Thru", "10", "Stop", "Enter"], "level": "advanced" },
+      { "action": "Start All Effects", "cmd": "Effect 1 Enter\nEffect 2 Enter\nEffect 3 Enter", "keys": ["Effect", "1", "Effect", "2", "Effect", "3"], "level": "advanced" },
+      { "action": "Sync Musical (1:2:0.5:4)", "cmd": "Rate_Master 1 @ 100 Enter\nRate_Master 2 @ 200 Enter\nRate_Master 3 @ 50 Enter\nRate_Master 4 @ 400 Enter", "keys": ["Rate_Master", "1", "@", "100", "Rate_Master", "2", "@", "200", "Rate_Master", "3", "@", "50", "Rate_Master", "4", "@", "400"], "level": "expert" },
+      { "action": "Reset All Rate Masters", "cmd": "Rate_Master 1 @ 100 Enter\nRate_Master 2 @ 100 Enter\nRate_Master 3 @ 100 Enter\nRate_Master 4 @ 100 Enter", "keys": ["Rate_Master", "1", "@", "100", "Rate_Master", "2", "@", "100", "Rate_Master", "3", "@", "100", "Rate_Master", "4", "@", "100"], "level": "advanced" },
+      { "action": "Tap Tempo Universal", "cmd": "Rate_Master 1 Tap Enter\nRate_Master 2 Tap Enter\nRate_Master 3 Tap Enter\nRate_Master 4 Tap Enter", "keys": ["Rate_Master", "1", "Tap", "Rate_Master", "2", "Tap", "Rate_Master", "3", "Tap", "Rate_Master", "4", "Tap"], "level": "advanced" },
+      { "action": "Bloque l'effet 1 sans arrêter les autres", "cmd": "Effect 1 Inhibit Enter", "keys": ["Effect", "1", "Inhibit", "Enter"], "level": "advanced" },
+      { "action": "Types d'effets pour différents besoins", "cmd": "Absolute vs Relative Effects", "keys": ["Absolute_Param", "Relative_Param"], "level": "expert" }
+    ]
+  },
+  "submasters": {
+    "Submasters": [
+      { "action": "Assigne les cues 10-15 au submaster 1", "cmd": "Sub 1 Cue 10 Thru 15 Enter", "keys": ["Sub", "1", "Cue", "10", "Thru", "15", "Enter"], "level": "advanced" },
+      { "action": "Donne le label 'Wash' au submaster 1", "cmd": "Sub 1 Label \"Wash\" Enter", "keys": ["Sub", "1", "Label", "\"Wash\"", "Enter"], "level": "basic" },
+      { "action": "Relâcher le submaster 1", "cmd": "Sub 1 Release Enter", "keys": ["Sub", "1", "Release", "Enter"], "level": "basic" },
+      { "action": "Contrôle vitesse Rate Master via sub fader", "cmd": "Rate_Master 1 @ 100 Enter", "keys": ["Rate_Master", "1", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Tap tempo via sub bump button", "cmd": "Rate_Master 1 Tap Enter", "keys": ["Rate_Master", "1", "Tap", "Enter"], "level": "advanced" },
+      { "action": "Release All Subs", "cmd": "Sub * Release Enter", "keys": ["Sub", "*", "Release", "Enter"], "level": "advanced" },
+      { "action": "Boutons personnalisés sur subs", "cmd": "Sub Bumps personnalisés", "keys": ["Sub", "Bump", "Macro"], "level": "advanced" },
+      { "action": "Contrôles manuels (Layers, effets, flash)", "cmd": "SUBMASTERS: Layers, effets, flash", "keys": ["Sub", "Record"], "level": "basic" },
+      { "action": "Configuration UI pour contrôle vitesse", "cmd": "Sub avec effet lié à Rate Master", "keys": ["Sub", "Rate_Master"], "level": "advanced" },
+      { "action": "Assignation flexible", "cmd": "Sub pour contrôler Custom Faders", "keys": ["Sub", "Custom", "Fader"], "level": "advanced" }
+    ]
+  },
+  "macros": {
+    "Urgences": [
+      { "action": "Exécuter la macro 1", "cmd": "Macro 1 Enter", "keys": ["Macro", "1", "Enter"], "level": "basic" },
+      { "action": "Macro: Arrêter tous les effets", "cmd": "Effect * Stop Enter", "keys": ["Effect", "*", "Stop", "Enter"], "level": "basic" },
+      { "action": "Macro: Relâcher tout", "cmd": "Release Enter", "keys": ["Release", "Enter"], "level": "basic" },
+      { "action": "Macro: Effacer le programmer", "cmd": "Clear Enter", "keys": ["Clear", "Enter"], "level": "basic" },
+      { "action": "Macro: Grand Master à 0%", "cmd": "Grand @ 0 Enter", "keys": ["Grand", "@", "0", "Enter"], "level": "basic" },
+      { "action": "Macro: BLACKOUT TOTAL", "cmd": "Chan * @ 0 Enter", "keys": ["Chan", "*", "@", "0", "Enter"], "level": "basic" },
+      { "action": "Macro: Reset doux (Soft Reset)", "cmd": "Release Enter\nEffect * Stop Enter\nClear Enter\nGrand @ Full Enter", "keys": ["Release", "Effect", "*", "Stop", "Clear", "Grand", "@", "Full"], "level": "advanced" },
+      { "action": "Macro: PANIC MODE (Reset complet)", "cmd": "Release Enter\nEffect * Stop Enter\nClear Enter\nChan * @ 0 Enter\nGrand @ 0 Enter\n[Délai 2s]\nGrand @ Full Enter\nGoto Cue 1 Enter", "keys": ["Release", "Effect", "*", "Stop", "Clear", "Chan", "*", "@", "0", "Grand", "@", "0", "Grand", "@", "Full", "Goto", "Cue", "1"], "level": "expert" }
+    ],
+    "Record & Couleurs": [
+      { "action": "Macro: Quick Record tous types", "cmd": "Record Preset Enter\nRecord ColorPalette Enter\nRecord BeamPalette Enter", "keys": ["Record", "Preset", "Record", "ColorPalette", "Record", "BeamPalette"], "level": "advanced" },
+      { "action": "Macro: White Balance", "cmd": "Custom 1 @ 100 Custom 2 @ 100 Custom 3 @ 100 Enter", "keys": ["Custom", "1", "@", "100", "Custom", "2", "@", "100", "Custom", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Macro: Warm White", "cmd": "Custom 1 @ 100 Custom 2 @ 60 Custom 3 @ 20 Enter", "keys": ["Custom", "1", "@", "100", "Custom", "2", "@", "60", "Custom", "3", "@", "20", "Enter"], "level": "advanced" },
+      { "action": "Macro: Cool White", "cmd": "Custom 1 @ 80 Custom 2 @ 90 Custom 3 @ 100 Enter", "keys": ["Custom", "1", "@", "80", "Custom", "2", "@", "90", "Custom", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Macro: Primary Red", "cmd": "Custom 1 @ 100 Custom 2 @ 0 Custom 3 @ 0 Enter", "keys": ["Custom", "1", "@", "100", "Custom", "2", "@", "0", "Custom", "3", "@", "0", "Enter"], "level": "advanced" },
+      { "action": "Macro: Primary Green", "cmd": "Custom 1 @ 0 Custom 2 @ 100 Custom 3 @ 0 Enter", "keys": ["Custom", "1", "@", "0", "Custom", "2", "@", "100", "Custom", "3", "@", "0", "Enter"], "level": "advanced" },
+      { "action": "Macro: Primary Blue", "cmd": "Custom 1 @ 0 Custom 2 @ 0 Custom 3 @ 100 Enter", "keys": ["Custom", "1", "@", "0", "Custom", "2", "@", "0", "Custom", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Macro: Amber", "cmd": "Custom 1 @ 100 Custom 2 @ 50 Custom 3 @ 0 Enter", "keys": ["Custom", "1", "@", "100", "Custom", "2", "@", "50", "Custom", "3", "@", "0", "Enter"], "level": "advanced" },
+      { "action": "Macro: Cyan", "cmd": "Custom 1 @ 0 Custom 2 @ 100 Custom 3 @ 100 Enter", "keys": ["Custom", "1", "@", "0", "Custom", "2", "@", "100", "Custom", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Macro: Magenta", "cmd": "Custom 1 @ 100 Custom 2 @ 0 Custom 3 @ 100 Enter", "keys": ["Custom", "1", "@", "100", "Custom", "2", "@", "0", "Custom", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Macro: Yellow", "cmd": "Custom 1 @ 100 Custom 2 @ 100 Custom 3 @ 0 Enter", "keys": ["Custom", "1", "@", "100", "Custom", "2", "@", "100", "Custom", "3", "@", "0", "Enter"], "level": "advanced" },
+      { "action": "Macro: Pink", "cmd": "Custom 1 @ 100 Custom 2 @ 40 Custom 3 @ 70 Enter", "keys": ["Custom", "1", "@", "100", "Custom", "2", "@", "40", "Custom", "3", "@", "70", "Enter"], "level": "advanced" },
+      { "action": "Macro: Lavender", "cmd": "Custom 1 @ 80 Custom 2 @ 50 Custom 3 @ 100 Enter", "keys": ["Custom", "1", "@", "80", "Custom", "2", "@", "50", "Custom", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Macro: Deep Blue", "cmd": "Custom 1 @ 0 Custom 2 @ 20 Custom 3 @ 100 Enter", "keys": ["Custom", "1", "@", "0", "Custom", "2", "@", "20", "Custom", "3", "@", "100", "Enter"], "level": "advanced" },
+      { "action": "Macro: Orange", "cmd": "Custom 1 @ 100 Custom 2 @ 30 Custom 3 @ 0 Enter", "keys": ["Custom", "1", "@", "100", "Custom", "2", "@", "30", "Custom", "3", "@", "0", "Enter"], "level": "advanced" },
+      { "action": "Macro: Home All Movers", "cmd": "Chan 101 Thru 200 Preset Pan @ Home Preset Tilt @ Home Enter", "keys": ["Chan", "101", "Thru", "200", "Preset", "Pan", "@", "Home", "Preset", "Tilt", "@", "Home", "Enter"], "level": "advanced" },
+      { "action": "Macro: Home Zoom", "cmd": "Chan 101 Thru 200 Beam Zoom @ Home Enter", "keys": ["Chan", "101", "Thru", "200", "Beam", "Zoom", "@", "Home", "Enter"], "level": "advanced" },
+      { "action": "Macro: Home Focus", "cmd": "Chan 101 Thru 200 Beam Edge @ Home Enter", "keys": ["Chan", "101", "Thru", "200", "Beam", "Edge", "@", "Home", "Enter"], "level": "advanced" },
+      { "action": "Macro: Clear Highlight/Solo", "cmd": "Highlight\nHighlight", "keys": ["Highlight", "Highlight"], "level": "basic" },
+      { "action": "Macro: Standard Live View", "cmd": "Display_Part 1 Live Enter\nDisplay_Part 2 Blind Enter\nDisplay_Part 3 Magic_Sheet 1 Enter", "keys": ["Display_Part", "1", "Live", "Display_Part", "2", "Blind", "Display_Part", "3", "Magic_Sheet", "1"], "level": "advanced" },
+      { "action": "Macro: Programming View", "cmd": "Display_Part 1 Cue Enter\nDisplay_Part 2 Preset Enter\nDisplay_Part 3 ColorPalette Enter", "keys": ["Display_Part", "1", "Cue", "Display_Part", "2", "Preset", "Display_Part", "3", "ColorPalette"], "level": "advanced" },
+      { "action": "Macro: Copy Cue Range", "cmd": "Copy Cue 1 Thru 10 Enter Cue 101 Enter", "keys": ["Copy", "Cue", "1", "Thru", "10", "Enter", "Cue", "101", "Enter"], "level": "advanced" },
+      { "action": "Macro: Clear All Parks", "cmd": "Chan * Unpark Enter", "keys": ["Chan", "*", "Unpark", "Enter"], "level": "advanced" },
+      { "action": "Macro: Clear Programmer & Release", "cmd": "Clear Enter\nRelease Enter", "keys": ["Clear", "Release"], "level": "basic" },
+      { "action": "Macro: Refresh Outputs", "cmd": "Setup → Outputs → Refresh", "keys": ["Setup", "Outputs", "Refresh"], "level": "expert" },
+      { "action": "Automatisation des tâches répétitives", "cmd": "MACROS: Record rapide, urgences", "keys": ["Macro", "Record"], "level": "advanced" },
+      { "action": "Assignation boutons physiques aux macros", "cmd": "Learn Key pour macros", "keys": ["Learn", "Cue", "Macro"], "level": "expert" },
+      { "action": "EOS n'a pas de logique conditionnelle native", "cmd": "Macro conditionnelle (If/Then) non supportée", "keys": ["Macro", "If"], "level": "expert" },
+      { "action": "Contrôle rapide de tous les Custom Faders", "cmd": "Custom 1 Thru 16 @ 50 Enter", "keys": ["Custom", "1", "Thru", "16", "@", "50", "Enter"], "level": "advanced" },
+      { "action": "Macro: CUE FIN DE SPECTACLE", "cmd": "Goto Cue 999 Enter", "keys": ["Goto", "Cue", "999", "Enter"], "level": "expert" },
+      { "action": "Macro: CUE ENTRÉE SPECTATEURS", "cmd": "Goto Cue 0.5 Enter", "keys": ["Goto", "Cue", "0.5", "Enter"], "level": "expert" },
+      { "action": "Transition immédiate (utile en théâtre)", "cmd": "Cue 1 Follow 0 Enter", "keys": ["Cue", "1", "Follow", "0", "Enter"], "level": "advanced" },
+      { "action": "Bonnes pratiques : label explicite pour théâtre", "cmd": "Record Cue 1 Label \"Entrée acteur\" Enter", "keys": ["Record", "Cue", "1", "Label", "\"Entrée acteur\"", "Enter"], "level": "basic" },
+      { "action": "Programmer sans perturber le live (théâtre)", "cmd": "Blind\nRecord Cue 10\nLive", "keys": ["Blind", "Record", "Cue", "10", "Live"], "level": "expert" }
+    ]
+  },
+  "patch": {
+    "Adressage & Configuration": [
+      { "action": "Patcher un projecteur sur le canal 1", "cmd": "Patch Chan 1 Enter [Profil] Enter Address 1 Enter", "keys": ["Patch", "Chan", "1", "Enter", "[Profil]", "Enter", "Address", "1", "Enter"], "level": "advanced" },
+      { "action": "Patcher plusieurs canaux", "cmd": "Patch Chan 1 Thru 10 Enter [Profil] Enter Address 1 Enter", "keys": ["Patch", "Chan", "1", "Thru", "10", "Enter", "[Profil]", "Enter", "Address", "1", "Enter"], "level": "advanced" },
+      { "action": "Patch avec espacement d'adresses", "cmd": "Patch Chan 1 Thru 10 Enter [Profil] Enter Address 1 / 10 Enter", "keys": ["Patch", "Chan", "1", "Thru", "10", "Enter", "[Profil]", "Enter", "Address", "1", "/", "10", "Enter"], "level": "advanced" },
+      { "action": "Dépatcher le canal 1", "cmd": "Unpatch Chan 1 Enter", "keys": ["Unpatch", "Chan", "1", "Enter"], "level": "advanced" },
+      { "action": "Dépatcher une plage de canaux", "cmd": "Unpatch Chan 1 Thru 10 Enter", "keys": ["Unpatch", "Chan", "1", "Thru", "10", "Enter"], "level": "advanced" },
+      { "action": "Adressage DMX simple (adresse 1)", "cmd": "Address 1 Enter", "keys": ["Address", "1", "Enter"], "level": "basic" },
+      { "action": "Adressage univers 2, adresse 1", "cmd": "Address 2.1 Enter", "keys": ["Address", "2.1", "Enter"], "level": "advanced" },
+      { "action": "Auto-distribution multi-univers", "cmd": "Address 1.1 / 512 Enter", "keys": ["Address", "1.1", "/", "512", "Enter"], "level": "expert" },
+      { "action": "Renumérotation d'un canal", "cmd": "Move Chan 1 Enter Chan 101 Enter", "keys": ["Move", "Chan", "1", "Enter", "Chan", "101", "Enter"], "level": "advanced" },
+      { "action": "Renumérotation d'une plage", "cmd": "Move Chan 1 Thru 10 Enter Chan 101 Enter", "keys": ["Move", "Chan", "1", "Thru", "10", "Enter", "Chan", "101", "Enter"], "level": "advanced" },
+      { "action": "Insérer un canal (décimal)", "cmd": "Move Chan 5 Enter Chan 2.5 Enter", "keys": ["Move", "Chan", "5", "Enter", "Chan", "2.5", "Enter"], "level": "expert" },
+      { "action": "Échanger deux canaux", "cmd": "Swap Chan 1 Enter Chan 2 Enter", "keys": ["Swap", "Chan", "1", "Enter", "Chan", "2", "Enter"], "level": "advanced" },
+      { "action": "Label personnalisé pour canal 1", "cmd": "Chan 1 Label \"Lyres JD\" Enter", "keys": ["Chan", "1", "Label", "\"Lyres JD\"", "Enter"], "level": "basic" },
+      { "action": "Copier un label vers un autre canal", "cmd": "Copy Chan 1 Label Enter Chan 2 Enter", "keys": ["Copy", "Chan", "1", "Label", "Enter", "Chan", "2", "Enter"], "level": "advanced" },
+      { "action": "Prépositionne le canal avant la cue", "cmd": "Cue 2 Chan 1 Mark Enter", "keys": ["Cue", "2", "Chan", "1", "Mark", "Enter"], "level": "expert" },
+      { "action": "Retirer le park d'un canal", "cmd": "Chan 1 Unpark Enter", "keys": ["Chan", "1", "Unpark", "Enter"], "level": "expert" },
+      { "action": "Arrangement matrice 10x10 pixels", "cmd": "Chan 1 Thru 100 Arrange Grid Columns 10 Rows 10 Enter", "keys": ["Chan", "1", "Thru", "100", "Arrange", "Grid", "Columns", "10", "Rows", "10", "Enter"], "level": "expert" },
+      { "action": "Matrice pixels en serpentin", "cmd": "Chan 1 Thru 100 Arrange Grid Columns 10 Rows 10 Snake Enter", "keys": ["Chan", "1", "Thru", "100", "Arrange", "Grid", "Columns", "10", "Rows", "10", "Snake", "Enter"], "level": "expert" },
+      { "action": "Patch multi-part fixture (3 têtes)", "cmd": "Patch Chan 1 Enter [Profil] Enter Address 1 Enter Parts 3 Enter", "keys": ["Patch", "Chan", "1", "Enter", "[Profil]", "Enter", "Address", "1", "Enter", "Parts", "3", "Enter"], "level": "expert" },
+      { "action": "Contrôle partie 1 d'un fixture multi-part", "cmd": "Chan 1.1 @ 100 Enter", "keys": ["Chan", "1.1", "@", "100", "Enter"], "level": "expert" },
+      { "action": "Voir les détails du patch du canal", "cmd": "Query Chan 1 Enter", "keys": ["Query", "Chan", "1", "Enter"], "level": "advanced" },
+      { "action": "Première étape: préparation", "cmd": "PATCH → Labelliser → Groupes → Home Values", "keys": ["Patch", "Label", "Group", "Home"], "level": "basic" },
+      { "action": "Activer la sortie sACN", "cmd": "Setup → Patch → Outputs → Add Output → sACN", "keys": ["Setup", "Patch", "Outputs", "Add Output", "sACN"], "level": "expert" },
+      { "action": "Activer la sortie Art-Net", "cmd": "Setup → Patch → Outputs → Add Output → Art-Net", "keys": ["Setup", "Patch", "Outputs", "Add Output", "Art-Net"], "level": "expert" },
+      { "action": "Calcul univers Art-Net", "cmd": "Universe = (Net × 256) + (Subnet × 16) + Universe", "keys": ["Net", "Subnet", "Universe"], "level": "expert" },
+      { "action": "Adresse IP recommandée console", "cmd": "IP typique: 10.101.1.100", "keys": ["10.101.1.100"], "level": "expert" },
+      { "action": "Masque de sous-réseau standard", "cmd": "Subnet Mask: 255.255.255.0", "keys": ["255.255.255.0"], "level": "expert" },
+      { "action": "Passerelle réseau typique", "cmd": "Gateway: 10.101.1.1", "keys": ["10.101.1.1"], "level": "expert" },
+      { "action": "Rappelle les valeurs d'origine du canal 1", "cmd": "Chan 1 @ Home Enter", "keys": ["Chan", "1", "@", "Home", "Enter"], "level": "advanced" },
+      { "action": "Réinitialise tous les moving lights", "cmd": "Select Moving_Light Enter @ Home Enter", "keys": ["Select", "Moving_Light", "@", "Home", "Enter"], "level": "advanced" },
+      { "action": "Verrouille le show contre modification", "cmd": "Setup → System Settings → Show → Lock Show", "keys": ["Setup", "System Settings", "Show", "Lock Show"], "level": "expert" },
+      { "action": "Active la sauvegarde automatique", "cmd": "Setup → System Settings → Auto Save", "keys": ["Setup", "System Settings", "Auto Save"], "level": "expert" },
+      { "action": "Affiche erreurs DMX/patch", "cmd": "Setup → Diagnostics → DMX Status", "keys": ["Setup", "Diagnostics", "DMX Status"], "level": "expert" }
+    ]
+  },
+  "network": {
+    "OSC": [
+      { "action": "Accéder à la configuration réseau", "cmd": "Setup → System Settings → Network", "keys": ["Setup", "System Settings", "Network"], "level": "expert" },
+      { "action": "Activer OSC", "cmd": "Setup → System Settings → Show Control → OSC → Enable OSC: ON", "keys": ["Setup", "System Settings", "Show Control", "OSC", "Enable OSC"], "level": "expert" },
+      { "action": "Ports OSC par défaut", "cmd": "RX Port: 3032, TX Port: 3033", "keys": ["3032", "3033"], "level": "expert" },
+      { "action": "OSC: Sélectionner Canal 1", "cmd": "/eos/chan/1", "keys": ["/eos/chan/1"], "level": "expert" },
+      { "action": "OSC: Sélectionner Canaux 1-10", "cmd": "/eos/chan/1/10", "keys": ["/eos/chan/1/10"], "level": "expert" },
+      { "action": "OSC: Canal 1 @ 100%", "cmd": "/eos/chan/1/level/100", "keys": ["/eos/chan/1/level/100"], "level": "expert" },
+      { "action": "OSC: Lancer Cue 1", "cmd": "/eos/cue/1/fire", "keys": ["/eos/cue/1/fire"], "level": "expert" },
+      { "action": "OSC: Cue suivante (Go)", "cmd": "/eos/go", "keys": ["/eos/go"], "level": "expert" },
+      { "action": "OSC: Cue précédente (Back)", "cmd": "/eos/back", "keys": ["/eos/back"], "level": "expert" },
+      { "action": "OSC: Stop", "cmd": "/eos/stop", "keys": ["/eos/stop"], "level": "expert" },
+      { "action": "OSC: Cue 1 @ 50% intensité", "cmd": "/eos/cue/1/fire/0.5", "keys": ["/eos/cue/1/fire/0.5"], "level": "expert" },
+      { "action": "OSC: Rappeler Preset 1", "cmd": "/eos/preset/1", "keys": ["/eos/preset/1"], "level": "expert" },
+      { "action": "OSC: Rappeler Color Palette 5", "cmd": "/eos/color_palette/5", "keys": ["/eos/color_palette/5"], "level": "expert" },
+      { "action": "OSC: Rappeler Beam Palette 3", "cmd": "/eos/beam_palette/3", "keys": ["/eos/beam_palette/3"], "level": "expert" },
+      { "action": "OSC: Démarrer Effet 1", "cmd": "/eos/effect/1/start", "keys": ["/eos/effect/1/start"], "level": "expert" },
+      { "action": "OSC: Arrêter Effet 1", "cmd": "/eos/effect/1/stop", "keys": ["/eos/effect/1/stop"], "level": "expert" },
+      { "action": "OSC: Arrêter tous les effets", "cmd": "/eos/effect/all/stop", "keys": ["/eos/effect/all/stop"], "level": "expert" },
+      { "action": "OSC: Rate Master 1 @ 120 BPM", "cmd": "/eos/rate/1/set/120", "keys": ["/eos/rate/1/set/120"], "level": "expert" },
+      { "action": "OSC: Tap Tempo Rate Master 1", "cmd": "/eos/rate/1/tap", "keys": ["/eos/rate/1/tap"], "level": "expert" },
+      { "action": "OSC: Exécuter Macro 1", "cmd": "/eos/macro/1/fire", "keys": ["/eos/macro/1/fire"], "level": "expert" },
+      { "action": "OSC: Grand Master @ 100%", "cmd": "/eos/grandmaster/100", "keys": ["/eos/grandmaster/100"], "level": "expert" },
+      { "action": "OSC TX: Cue active (feedback)", "cmd": "/eos/out/active/cue", "keys": ["/eos/out/active/cue"], "level": "expert" },
+      { "action": "OSC TX: Cue en attente", "cmd": "/eos/out/pending/cue", "keys": ["/eos/out/pending/cue"], "level": "expert" },
+      { "action": "OSC TX: Cue lancée", "cmd": "/eos/out/event/cue/fire", "keys": ["/eos/out/event/cue/fire"], "level": "expert" }
+    ],
+    "MIDI & Timecode": [
+      { "action": "Activer MIDI", "cmd": "Setup → System Settings → Show Control → MIDI → Enable MIDI: ON", "keys": ["Setup", "System Settings", "Show Control", "MIDI", "Enable MIDI"], "level": "expert" },
+      { "action": "Mapping MIDI: Note → Cue", "cmd": "Note 60 (C3) → Cue 1 Fire", "keys": ["Note", "60", "C3"], "level": "expert" },
+      { "action": "Mapping MIDI: CC → Grand Master", "cmd": "CC 1 → Grand Master", "keys": ["CC", "1"], "level": "expert" },
+      { "action": "Mapping MIDI: CC → Submaster", "cmd": "CC 7 → Sub 1 Level", "keys": ["CC", "7"], "level": "expert" },
+      { "action": "Mapping MIDI: CC → Rate Master", "cmd": "CC 10 → Rate Master 1", "keys": ["CC", "10"], "level": "expert" },
+      { "action": "Mapping MIDI: CC → Custom Fader", "cmd": "CC 11 → Custom Fader 1", "keys": ["CC", "11"], "level": "expert" },
+      { "action": "Mapping MIDI: Program Change → Cue", "cmd": "Program 1 → Goto Cue 1", "keys": ["Program", "1"], "level": "expert" },
+      { "action": "Activer MIDI Show Control", "cmd": "Setup → MIDI → MSC Settings → Enable MSC: ON", "keys": ["Setup", "MIDI", "MSC Settings", "Enable MSC"], "level": "expert" },
+      { "action": "MSC: Commande GO", "cmd": "GO → Next Cue", "keys": ["GO"], "level": "expert" },
+      { "action": "MSC: Commande STOP", "cmd": "STOP → Stop", "keys": ["STOP"], "level": "expert" },
+      { "action": "MSC: Commande RESUME", "cmd": "RESUME → Resume", "keys": ["RESUME"], "level": "expert" },
+      { "action": "MSC: Commande TIMED_GO", "cmd": "TIMED_GO → Go avec temps", "keys": ["TIMED_GO"], "level": "expert" },
+      { "action": "Accéder configuration timecode", "cmd": "Setup → System Settings → Show Control → Timecode", "keys": ["Setup", "System Settings", "Show Control", "Timecode"], "level": "expert" },
+      { "action": "Sources timecode disponibles", "cmd": "Source: Internal / MIDI / LTC / Art-Net", "keys": ["Source", "Internal", "MIDI", "LTC", "Art-Net"], "level": "expert" },
+      { "action": "Réglages frame rate", "cmd": "Frame Rate: 25 fps (PAL) / 30 fps (NTSC)", "keys": ["25 fps", "30 fps"], "level": "expert" },
+      { "action": "Pixels 1 à 50", "cmd": "Pixel 1 Thru 50", "keys": ["Pixel", "1", "Thru", "50"], "level": "expert" },
+      { "action": "Carte pixel 1", "cmd": "Pixel Map 1", "keys": ["Pixel", "Map", "1"], "level": "expert" }
+    ]
+  },
+  "magicsheets": {
+    "Création & Contrôle": [
+      { "action": "Donne un label à la Magic Sheet 1", "cmd": "Magic.Sheet 1 Label \"Nom\" Enter", "keys": ["Magic.Sheet", "1", "Label", "\"Nom\"", "Enter"], "level": "advanced" },
+      { "action": "Créer une nouvelle Magic Sheet", "cmd": "[Displays] → Magic Sheet → [New]", "keys": ["[Displays]", "Magic Sheet", "[New]"], "level": "advanced" },
+      { "action": "Activer le mode édition", "cmd": "Mode Edit (Crayon)", "keys": ["[Crayon]"], "level": "basic" },
+      { "action": "Ajouter objets par glisser-déposer", "cmd": "Drag & Drop depuis fenêtre source", "keys": ["Drag", "Drop"], "level": "advanced" },
+      { "action": "Ajouter objets via palette", "cmd": "Object Palette → Sélectionner type", "keys": ["Object", "Palette"], "level": "advanced" },
+      { "action": "Copier-coller objets", "cmd": "Ctrl+C / Ctrl+V objets", "keys": ["Ctrl+C", "Ctrl+V"], "level": "basic" },
+      { "action": "Bouton de sélection rapide", "cmd": "Channel Button → Sélection canal", "keys": ["Channel", "Button"], "level": "advanced" },
+      { "action": "Bouton pour lancer des macros", "cmd": "Macro Button → Exécution macro", "keys": ["Macro", "Button"], "level": "advanced" },
+      { "action": "Fader de contrôle personnalisé", "cmd": "Fader → Contrôle intensité/paramètre", "keys": ["Fader"], "level": "advanced" },
+      { "action": "Bouton de sélection de groupe", "cmd": "Group Button → Sélection groupe", "keys": ["Group", "Button"], "level": "advanced" },
+      { "action": "Bouton de rappel de palette", "cmd": "Preset Button → Rappel palette", "keys": ["Preset", "Button"], "level": "advanced" },
+      { "action": "Zone de texte avec variables", "cmd": "Text Box → Texte statique/dynamique", "keys": ["Text", "Box"], "level": "advanced" },
+      { "action": "Bouton pour lancer des cues", "cmd": "Cue Button → Lancer cue", "keys": ["Cue", "Button"], "level": "advanced" },
+      { "action": "Bouton de contrôle submaster", "cmd": "Sub Button → Contrôle submaster", "keys": ["Sub", "Button"], "level": "advanced" },
+      { "action": "Importer images (PNG, JPG)", "cmd": "Image → Logo, plan, décor", "keys": ["Image"], "level": "advanced" },
+      { "action": "Formes géométriques", "cmd": "Shape → Rectangle, cercle, ligne", "keys": ["Shape"], "level": "advanced" },
+      { "action": "Texte dynamique - Cue active", "cmd": "Text : \"CUE: {Cue}\"", "keys": ["{Cue}"], "level": "expert" },
+      { "action": "Texte dynamique - BPM Rate Master", "cmd": "Text : \"BPM: {Rate_Master_1_BPM}\"", "keys": ["{Rate_Master_1_BPM}"], "level": "expert" },
+      { "action": "Texte dynamique - Sélection", "cmd": "Text : \"Selected: Ch {Channel} @ {Intensity}%\"", "keys": ["{Channel}", "{Intensity}"], "level": "expert" },
+      { "action": "Afficher la grille d'alignement", "cmd": "Clic droit → Show Grid", "keys": ["Show", "Grid"], "level": "basic" },
+      { "action": "Aligner à la grille", "cmd": "Clic droit → Snap to Grid", "keys": ["Snap", "Grid"], "level": "basic" },
+      { "action": "Aligner plusieurs objets", "cmd": "Sélectionner → Align → Left/Right/Center", "keys": ["Align"], "level": "advanced" },
+      { "action": "Répartir objets équitablement", "cmd": "Sélectionner → Distribute → Horizontal/Vertical", "keys": ["Distribute"], "level": "advanced" },
+      { "action": "Grouper des objets", "cmd": "Sélectionner → Group", "keys": ["Group"], "level": "advanced" },
+      { "action": "Sauvegarder les Magic Sheets", "cmd": "File → Save Show", "keys": ["File", "Save", "Show"], "level": "basic" },
+      { "action": "Exporter en image", "cmd": "File → Export → Magic Sheet Image", "keys": ["File", "Export", "Magic Sheet Image"], "level": "advanced" },
+      { "action": "Interface personnalisée", "cmd": "MAGIC SHEETS: Navigation, contrôle", "keys": ["Magic_Sheet"], "level": "advanced" },
+      { "action": "Enregistrement rapide depuis Magic Sheet", "cmd": "Quick Palettes dans Magic Sheets", "keys": ["Record", "Preset", "Enter"], "level": "advanced" },
+      { "action": "Contrôle direct permanent", "cmd": "Custom Fader Bank dans Magic Sheets", "keys": ["Custom", "Fader", "Setup"], "level": "advanced" },
+      { "action": "Positions en éventail automatique", "cmd": "Fan (éventail) positions", "keys": ["Fan", "Preset", "Pan"], "level": "expert" },
+      { "action": "Changements rapides de positions", "cmd": "Double Preset changes", "keys": ["Preset", "Mark", "Cue"], "level": "expert" },
+      { "action": "Programmation sans affecter le live", "cmd": "Blind pour préprogrammer", "keys": ["Blind", "Record", "Live"], "level": "expert" },
+      { "action": "Diagnostic précis des problèmes", "cmd": "Query pour debugger Magic Sheets", "keys": ["Query", "Cue", "Chan"], "level": "advanced" },
+      { "action": "Assignation physique depuis l'interface", "cmd": "Learn Key assigné sur Magic Sheet", "keys": ["Learn", "Macro", "Magic_Sheet"], "level": "expert" }
+    ]
+  },
+  "workflows": {
+    "Programmation": [
+      { "action": "Étapes classiques de programmation", "cmd": "WORKFLOW PROGRAMMATION", "keys": ["Patch", "Palettes", "Groupes", "Cues"], "level": "basic" },
+      { "action": "Première étape: préparation", "cmd": "PATCH → Labelliser → Groupes → Home Values", "keys": ["Patch", "Label", "Group", "Home"], "level": "basic" },
+      { "action": "Deuxième étape: palettes", "cmd": "PALETTES: 20-30 positions, 15-20 couleurs", "keys": ["Record", "Preset", "ColorPalette"], "level": "basic" },
+      { "action": "Organisation par groupes", "cmd": "GROUPES: Par type, zone, fonction", "keys": ["Record", "Group"], "level": "basic" },
+      { "action": "Structure des cues", "cmd": "CUE LIST: Cue 0 preset → Cues principales", "keys": ["Record", "Cue"], "level": "basic" },
+      { "action": "Contrôles manuels", "cmd": "SUBMASTERS: Layers, effets, flash", "keys": ["Sub", "Record"], "level": "basic" },
+      { "action": "Interface personnalisée", "cmd": "MAGIC SHEETS: Navigation, contrôle", "keys": ["Magic_Sheet"], "level": "advanced" },
+      { "action": "Automatisation", "cmd": "MACROS: Record rapide, urgences", "keys": ["Macro", "Record"], "level": "advanced" },
+      { "action": "Validation finale", "cmd": "TESTS: Vérifier cues, macros, backup", "keys": ["Goto", "Cue", "Macro"], "level": "basic" }
+    ],
+    "Scénarios": [
+      { "action": "Structure pour concerts", "cmd": "WORKFLOW CONCERT", "keys": ["Group", "Palette", "Cue"], "level": "advanced" },
+      { "action": "Structure pour théâtre", "cmd": "WORKFLOW THÉÂTRE", "keys": ["Track", "Time", "Cue"], "level": "advanced" },
+      { "action": "Structure pour événements", "cmd": "WORKFLOW CORPORATE", "keys": ["Sub", "Macro", "Magic_Sheet"], "level": "advanced" }
+    ],
+    "Optimisation": [
+      { "action": "Actions simultanées", "cmd": "UTILISER LES PARTS", "keys": ["Part", "Record"], "level": "expert" },
+      { "action": "Gestion des cues", "cmd": "COPIER/COLLER INTELLIGENT", "keys": ["Copy", "Cue"], "level": "advanced" },
+      { "action": "Modification centralisée", "cmd": "PROGRAMMER AVEC PALETTES", "keys": ["Preset", "ColorPalette"], "level": "basic" },
+      { "action": "Économie de programmation", "cmd": "TRACKING: Les valeurs persistent", "keys": ["Track"], "level": "advanced" },
+      { "action": "Blocage du tracking", "cmd": "Cue Block → Arrête tracking", "keys": ["Cue", "Block"], "level": "advanced" },
+      { "action": "Mode cue seulement", "cmd": "Cue Cue_Only → Pas de tracking", "keys": ["Cue", "Cue_Only"], "level": "advanced" },
+      { "action": "Changements rapides de positions", "cmd": "ASTUCE 1: Double Preset", "keys": ["Preset", "Mark", "Cue"], "level": "expert" },
+      { "action": "Types d'effets", "cmd": "ASTUCE 3: Absolute vs Relative", "keys": ["Absolute_Param", "Relative_Param"], "level": "expert" },
+      { "action": "Positions en éventail", "cmd": "ASTUCE 4: Fan (éventail)", "keys": ["Fan", "Preset", "Pan"], "level": "expert" },
+      { "action": "Boutons personnalisés", "cmd": "ASTUCE 5: Sub Bumps personnalisés", "keys": ["Sub", "Bump", "Macro"], "level": "advanced" },
+      { "action": "Enregistrement rapide", "cmd": "ASTUCE 6: Quick Palettes", "keys": ["Record", "Preset", "Enter"], "level": "advanced" },
+      { "action": "Assignation boutons", "cmd": "ASTUCE 7: Learn Key", "keys": ["Learn", "Cue", "Macro"], "level": "expert" },
+      { "action": "Diagnostic précis", "cmd": "ASTUCE 8: Query pour debugger", "keys": ["Query", "Cue", "Chan"], "level": "advanced" },
+      { "action": "Programmation sans affecter le live", "cmd": "ASTUCE 9: Blind pour préprogrammer", "keys": ["Blind", "Record", "Live"], "level": "expert" },
+      { "action": "Contrôle direct permanent", "cmd": "ASTUCE 10: Custom Fader Bank", "keys": ["Custom", "Fader", "Setup"], "level": "advanced" },
+      { "action": "Éventail sans interférer avec tracking", "cmd": "ASTUCE 11: Fan + Only", "keys": ["Fan", "Preset", "Only"], "level": "expert" },
+      { "action": "Synchronisation musicale fine", "cmd": "ASTUCE 12: Rate Master + Timing", "keys": ["Rate_Master", "Time", "Cue"], "level": "expert" },
+      { "action": "Sécurité avant diffusion", "cmd": "ASTUCE 13: Lock Show", "keys": ["Setup", "Lock Show"], "level": "expert" },
+      { "action": "Prévention perte données", "cmd": "ASTUCE 14: Auto Save", "keys": ["Setup", "Auto Save"], "level": "expert" },
+      { "action": "Détection erreurs en régie", "cmd": "ASTUCE 15: DMX Diagnostics", "keys": ["Setup", "DMX Status"], "level": "expert" }
+    ]
+  },
+  "theatre": {
+    "Préparation": [
+      { "action": "Ambiance salle – avant spectacle", "cmd": "Goto Cue 0.5 Enter", "keys": ["Goto", "Cue", "0.5", "Enter"], "level": "basic" },
+      { "action": "Début du spectacle", "cmd": "Goto Cue 1 Enter", "keys": ["Goto", "Cue", "1", "Enter"], "level": "basic" },
+      { "action": "Fin du spectacle – retour salle", "cmd": "Goto Cue 999 Enter", "keys": ["Goto", "Cue", "999", "Enter"], "level": "basic" },
+      { "action": "Transition immédiate (théâtre: entrée d'acteur)", "cmd": "Cue 1 Follow 0 Enter", "keys": ["Cue", "1", "Follow", "0", "Enter"], "level": "advanced" },
+      { "action": "Programmer sans perturber le live", "cmd": "Blind\nRecord Cue 10\nLive", "keys": ["Blind", "Record", "Cue", "10", "Live"], "level": "expert" },
+      { "action": "Cue sans tracking (utile pour effets isolés)", "cmd": "Track Off\nRecord Cue 5\nTrack On", "keys": ["Track", "Off", "Record", "Cue", "5", "Track", "On"], "level": "advanced" },
+      { "action": "Structure classique théâtre", "cmd": "Cue List: 1 → Acte I, 100 → Entracte, 200 → Acte II", "keys": ["Cue", "List"], "level": "advanced" },
+      { "action": "Contrôle salle indépendant", "cmd": "Sub 1 Label \"Lumières salle\" Enter", "keys": ["Sub", "1", "Label", "\"Lumières salle\"", "Enter"], "level": "basic" },
+      { "action": "Fin de spectacle : black + salle", "cmd": "Chan * @ 0 Enter\nSub 1 @ Full Enter", "keys": ["Chan", "*", "@", "0", "Sub", "1", "@", "Full"], "level": "expert" },
+      { "action": "Label explicite pour cue critique", "cmd": "Record Cue 50 Label \"Blackout scène\" Enter", "keys": ["Record", "Cue", "50", "Label", "\"Blackout scène\"", "Enter"], "level": "basic" },
+      { "action": "Verrouiller avant représentation", "cmd": "Setup → System Settings → Show → Lock Show", "keys": ["Setup", "System Settings", "Show", "Lock Show"], "level": "expert" },
+      { "action": "Préparation avant entrée régisseur invité", "cmd": "Clear Enter\nRelease Enter", "keys": ["Clear", "Release"], "level": "basic" },
+      { "action": "Vérification rapide des cues", "cmd": "Query Cue 1 Enter", "keys": ["Query", "Cue", "1", "Enter"], "level": "advanced" },
+      { "action": "Groupes par zone scénique", "cmd": "Group 1 Label \"Avant-scène\" Enter", "keys": ["Group", "1", "Label", "\"Avant-scène\"", "Enter"], "level": "basic" },
+      { "action": "Groupes par zone scénique", "cmd": "Group 2 Label \"Fond\" Enter", "keys": ["Group", "2", "Label", "\"Fond\"", "Enter"], "level": "basic" },
+      { "action": "Réinitialiser tempo avant représentation", "cmd": "Rate_Master 1 @ 100 Enter", "keys": ["Rate_Master", "1", "@", "100", "Enter"], "level": "basic" },
+      { "action": "Grand Master 100% avant début", "cmd": "Grand @ Full Enter", "keys": ["Grand", "@", "Full", "Enter"], "level": "basic" },
+      { "action": "Arrêter tous les effets avant début", "cmd": "Effect * Stop Enter", "keys": ["Effect", "*", "Stop", "Enter"], "level": "basic" },
+      { "action": "Copie acte I → acte II", "cmd": "Copy Cue 1 Thru 10 Enter Cue 201 Enter", "keys": ["Copy", "Cue", "1", "Thru", "10", "Enter", "Cue", "201", "Enter"], "level": "advanced" },
+      { "action": "Empêche tracking sur cue d'entrée", "cmd": "Cue 1 Block Enter", "keys": ["Cue", "1", "Block", "Enter"], "level": "advanced" },
+      { "action": "Palettes explicites pour acteurs", "cmd": "Preset 1 Label \"Position entrée\" Enter", "keys": ["Preset", "1", "Label", "\"Position entrée\"", "Enter"], "level": "basic" },
+      { "action": "Palettes explicites pour ambiance", "cmd": "ColorPalette 1 Label \"Ambiance nuit\" Enter", "keys": ["ColorPalette", "1", "Label", "\"Ambiance nuit\"", "Enter"], "level": "basic" },
+      { "action": "Magic Sheet simplifiée pour invités", "cmd": "Magic.Sheet 1 Label \"Régie accueil\" Enter", "keys": ["Magic.Sheet", "1", "Label", "\"Régie accueil\"", "Enter"], "level": "advanced" },
+      { "action": "Vue accueil : simple et lisible", "cmd": "Display_Part 1 Live Enter\nDisplay_Part 2 Magic_Sheet 1 Enter", "keys": ["Display_Part", "1", "Live", "Display_Part", "2", "Magic_Sheet", "1"], "level": "advanced" },
+      { "action": "Bouton blackout rapide pour régisseur invité", "cmd": "Sub 2 Label \"Blackout\" Enter\nSub 2 Cue 0.1 Enter", "keys": ["Sub", "2", "Label", "\"Blackout\"", "Sub", "2", "Cue", "0.1"], "level": "expert" },
+      { "action": "Macro explicite pour fin de show", "cmd": "Macro 5 Label \"Fin + Salle\" Enter", "keys": ["Macro", "5", "Label", "\"Fin + Salle\"", "Enter"], "level": "expert" },
+      { "action": "Raccourci physique pour fin de spectacle", "cmd": "Learn Key → Assign Macro 5 to Button", "keys": ["Learn", "Macro", "5"], "level": "expert" },
+      { "action": "Vérifier connexion avant spectacle", "cmd": "Setup → Diagnostics → DMX Status", "keys": ["Setup", "Diagnostics", "DMX Status"], "level": "expert" }
+    ]
+  },
+  "depannage": {
+    "Urgences": [
+      { "action": "BLACKOUT TOTAL - Tous canaux à 0%", "cmd": "Chan * @ 0 Enter", "keys": ["Chan", "*", "@", "0", "Enter"], "level": "basic" },
+      { "action": "Grand Master à 0%", "cmd": "Grand @ 0 Enter", "keys": ["Grand", "@", "0", "Enter"], "level": "basic" },
+      { "action": "Stop tous les effets", "cmd": "Effect * Stop Enter", "keys": ["Effect", "*", "Stop", "Enter"], "level": "basic" },
+      { "action": "Relâche tout", "cmd": "Release Enter", "keys": ["Release", "Enter"], "level": "basic" },
+      { "action": "Efface le programmer", "cmd": "Clear Enter", "keys": ["Clear", "Enter"], "level": "basic" },
+      { "action": "Voir le contenu de la cue 1", "cmd": "Query Cue 1 Enter", "keys": ["Query", "Cue", "1", "Enter"], "level": "advanced" },
+      { "action": "Voir le contenu de la palette 1", "cmd": "Query Preset 1 Enter", "keys": ["Query", "Preset", "1", "Enter"], "level": "advanced" },
+      { "action": "Voir les paramètres du canal 1", "cmd": "Query Chan 1 Enter", "keys": ["Query", "Chan", "1", "Enter"], "level": "advanced" },
+      { "action": "Voir les effets actifs", "cmd": "Query Effect Enter", "keys": ["Query", "Effect", "Enter"], "level": "advanced" },
+      { "action": "PANIC MODE (Reset complet)", "cmd": "Release Enter\nEffect * Stop Enter\nClear Enter\nChan * @ 0 Enter\nGrand @ 0 Enter\n[Délai 2s]\nGrand @ Full Enter\nGoto Cue 1 Enter", "keys": ["Release", "Effect", "*", "Stop", "Clear", "Chan", "*", "@", "0", "Grand", "@", "0", "Grand", "@", "Full", "Goto", "Cue", "1"], "level": "expert" },
+      { "action": "Clear All Parks", "cmd": "Chan * Unpark Enter", "keys": ["Chan", "*", "Unpark", "Enter"], "level": "advanced" },
+      { "action": "Release All Subs", "cmd": "Sub * Release Enter", "keys": ["Sub", "*", "Release", "Enter"], "level": "advanced" },
+      { "action": "Clear Programmer & Release", "cmd": "Clear Enter\nRelease Enter", "keys": ["Clear", "Release"], "level": "basic" },
+      { "action": "Refresh Outputs", "cmd": "Setup → Outputs → Refresh", "keys": ["Setup", "Outputs", "Refresh"], "level": "expert" },
+      { "action": "Solutions aux problèmes courants", "cmd": "RÉPARATION RAPIDE", "keys": ["Setup", "Outputs", "Refresh"], "level": "expert" }
+    ],
+    "Sécurité": [
+      { "action": "Sécurité en cas de problème majeur", "cmd": "PLAN B / CONTINGENCE", "keys": ["iRFR", "Backup", "Sub"], "level": "advanced" },
+      { "action": "Vérifications pré-show essentielles", "cmd": "CHECKLIST PRE-SHOW", "keys": ["Query", "Test", "Backup"], "level": "basic" },
+      { "action": "Sauvegarde sécurisée du show", "cmd": "BACKUP STRATÉGIE 3-2-1", "keys": ["File", "Save"], "level": "basic" },
+      { "action": "Nettoyage showfile pour performance", "cmd": "GESTION MÉMOIRE", "keys": ["Setup", "Patch", "Delete"], "level": "expert" },
+      { "action": "Optimisation performances console", "cmd": "RÉDUIRE LAG/LATENCE", "keys": ["Magic_Sheet"], "level": "expert" },
+      { "action": "Validation finale avant spectacle", "cmd": "TESTS: Vérifier cues, macros, backup", "keys": ["Goto", "Cue", "Macro"], "level": "basic" },
+      { "action": "Annuler la dernière action problématique", "cmd": "Undo pour annuler erreur", "keys": ["Ctrl+Z"], "level": "basic" },
+      { "action": "Examiner sans affecter le live", "cmd": "Blind pour diagnostiquer", "keys": ["Blind"], "level": "advanced" },
+      { "action": "Outils de diagnostic avancés", "cmd": "Query pour investiguer", "keys": ["Query"], "level": "advanced" },
+      { "action": "Empêche modification accidentelle en live", "cmd": "Setup → System Settings → Show → Lock Show", "keys": ["Setup", "Lock Show"], "level": "expert" },
+      { "action": "Sauvegarde automatique toutes les X minutes", "cmd": "Setup → System Settings → Auto Save", "keys": ["Setup", "Auto Save"], "level": "expert" },
+      { "action": "Liste des erreurs univers/patch", "cmd": "Setup → Diagnostics → DMX Status", "keys": ["Setup", "DMX Status"], "level": "expert" },
+      { "action": "Efface toutes les assignations Learn Key", "cmd": "Learn Key reset", "keys": ["Learn", "Clear"], "level": "advanced" },
+      { "action": "Redémarrage complet en cas de freeze", "cmd": "Reboot Console", "keys": ["[ON]", "[OFF]"], "level": "expert" }
+    ]
+  },
+  "optimisation": {
+    "Scénarios": [
+      { "action": "Structure optimisée pour concerts", "cmd": "WORKFLOW CONCERT", "keys": ["Group", "Palette", "Cue"], "level": "advanced" },
+      { "action": "Structure optimisée pour théâtre", "cmd": "WORKFLOW THÉÂTRE", "keys": ["Track", "Time", "Cue"], "level": "advanced" },
+      { "action": "Structure optimisée pour événements", "cmd": "WORKFLOW CORPORATE", "keys": ["Sub", "Macro", "Magic_Sheet"], "level": "advanced" }
+    ],
+    "Performance": [
+      { "action": "Optimisation performances", "cmd": "RÉDUIRE LAG/LATENCE", "keys": ["Magic_Sheet"], "level": "expert" },
+      { "action": "Nettoyage showfile", "cmd": "GESTION MÉMOIRE", "keys": ["Setup", "Patch", "Delete"], "level": "expert" },
+      { "action": "Sauvegarde sécurisée", "cmd": "BACKUP STRATÉGIE 3-2-1", "keys": ["File", "Save"], "level": "basic" },
+      { "action": "Vérifications pré-show", "cmd": "CHECKLIST PRE-SHOW", "keys": ["Query", "Test", "Backup"], "level": "basic" },
+      { "action": "Sécurité en cas de problème", "cmd": "PLAN B / CONTINGENCE", "keys": ["iRFR", "Backup", "Sub"], "level": "advanced" },
+      { "action": "Solutions aux problèmes", "cmd": "RÉPARATION RAPIDE", "keys": ["Setup", "Outputs", "Refresh"], "level": "expert" }
+    ],
+    "Organisation": [
+      { "action": "Structure recommandée 1-100 Focus, 101-200 Couleurs", "cmd": "ORGANISATION DES PALETTES", "keys": ["Record", "Preset", "ColorPalette"], "level": "advanced" },
+      { "action": "Structure 001-010 Urgences, 011-020 Navigation", "cmd": "ORGANISATION DES MACROS", "keys": ["Macro"], "level": "advanced" },
+      { "action": "Structure 1-10 Type, 11-20 Zone, 21-30 Usage", "cmd": "ORGANISATION DES GROUPES", "keys": ["Group"], "level": "advanced" }
+    ],
+    "Optimisation": [
+      { "action": "Optimisation programmation actions simultanées", "cmd": "UTILISER LES PARTS", "keys": ["Part", "Record"], "level": "expert" },
+      { "action": "Efficacité et modification centralisée", "cmd": "PROGRAMMER AVEC PALETTES", "keys": ["Preset", "ColorPalette"], "level": "basic" },
+      { "action": "Économie de programmation", "cmd": "TRACKING OPTIMISÉ", "keys": ["Track"], "level": "advanced" }
+    ]
+  }
+};
+
+    const categoryLabels = {
+      fundamentals: "Fondamentaux",
+      selection: "Sélection",
+      intensity: "Intensité",
+      cues: "Cues & Séquence",
+      timing: "Timing & Fades",
+      tracking: "Tracking",
+      palettes: "Palettes",
+      effects: "Effets & Rate Masters",
+      submasters: "Submasters",
+      macros: "Macros",
+      patch: "Patch",
+      network: "Réseau",
+      magicsheets: "Magic Sheets",
+      workflows: "Workflows",
+      theatre: "Théâtre",
+      depannage: "Dépannage",
+      optimisation: "Optimisation"
+    };
+
+    let currentCategory = null;
+    let currentSubcategory = null;
+    let dbState = JSON.parse(localStorage.getItem('eosModifiedDB') || JSON.stringify(db));
+
+    // === FONCTIONS ===
+    function renderCategories() {
+      const grid = document.getElementById('categoriesGrid');
+      grid.innerHTML = '';
+      for (const cat in dbState) {
+        const totalCount = Object.values(dbState[cat]).reduce((sum, cmds) => sum + cmds.length, 0);
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.innerHTML = `
+          <div class="label">${categoryLabels[cat] || cat}</div>
+          <div class="count">${totalCount}</div>
+        `;
+        bubble.onclick = () => showSubcategories(cat);
+        grid.appendChild(bubble);
+      }
+    }
+
+    function showSubcategories(category) {
+      currentCategory = category;
+      document.getElementById('categoriesView').classList.remove('active');
+      document.getElementById('subcategoriesView').classList.add('active');
+      document.getElementById('subcategoriesTitle').textContent = categoryLabels[category] || category;
+      renderSubcategories(category);
+    }
+
+    function renderSubcategories(category) {
+      const grid = document.getElementById('subcategoriesGrid');
+      grid.innerHTML = '';
+      const subs = dbState[category];
+      for (const sub in subs) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.innerHTML = `
+          <div class="label">${sub}</div>
+          <div class="count">${subs[sub].length}</div>
+        `;
+        bubble.onclick = () => showCommands(category, sub);
+        grid.appendChild(bubble);
+      }
+    }
+
+    function showCommands(category, subcategory) {
+      currentSubcategory = subcategory;
+      document.getElementById('subcategoriesView').classList.remove('active');
+      document.getElementById('commandsView').classList.add('active');
+      document.getElementById('commandsTitle').textContent = subcategory;
+      renderCommands(category, subcategory);
+    }
+
+    function renderCommands(category, subcategory) {
+      const list = document.getElementById('commandsList');
+      list.innerHTML = '';
+      const cmds = dbState[category][subcategory] || [];
+      cmds.forEach((cmd, index) => {
+        const card = document.createElement('div');
+        card.className = 'command-card';
+        const keyHTML = cmd.keys.map(k => {
+          let cls = 'special';
+          if (['Chan','Group','Cue','Setup','Patch','Select'].includes(k)) cls = 'blue';
+          else if (['Record','Delete','Lock','Stop','Back','Effect']) cls = 'red';
+          else if (['Go','Highlight','Solo','Only','Full','@']) cls = 'green';
+          else if (['Update','Merge','Time','Delay','Follow','Hang']) cls = 'orange';
+          else if (['Preset','ColorPalette','BeamPalette','Magic_Sheet','Macro']) cls = 'purple';
+          else if (['Enter']) cls = 'enter';
+          else if (k.startsWith('/eos/')) cls = 'cyan';
+          return `<div class="eos-key ${cls}">${k}</div>`;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="action-text">${cmd.action}</div>
+          <div class="console-keys">${keyHTML}</div>
+          <button class="more-actions">⋯</button>
+          <div class="actions-menu">
+            <button onclick="copyText(${JSON.stringify(cmd.cmd)})">Copier</button>
+            <button onclick="editCommand(${index})">Éditer</button>
+            <button onclick="deleteCommand(${index})">Supprimer</button>
+          </div>
+        `;
+        card.querySelector('.more-actions').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const menu = card.querySelector('.actions-menu');
+          menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+        });
+        document.addEventListener('click', (e) => {
+          if (!card.contains(e.target)) {
+            card.querySelector('.actions-menu').style.display = 'none';
+          }
+        });
+        card.addEventListener('click', () => showDetail(cmd, index));
+        list.appendChild(card);
+      });
+    }
+
+    function renderKeys(keys) {
+      return keys.map(k => {
+        let cls = 'special';
+        if (['Chan','Group','Cue','Setup','Patch','Select'].includes(k)) cls = 'blue';
+        else if (['Record','Delete','Lock','Stop','Back','Effect']) cls = 'red';
+        else if (['Go','Highlight','Solo','Only','Full','@']) cls = 'green';
+        else if (['Update','Merge','Time','Delay','Follow','Hang']) cls = 'orange';
+        else if (['Preset','ColorPalette','BeamPalette','Magic_Sheet','Macro']) cls = 'purple';
+        else if (['Enter']) cls = 'enter';
+        else if (k.startsWith('/eos/')) cls = 'cyan';
+        return `<div class="eos-key ${cls}">${k}</div>`;
+      }).join('');
+    }
+
+    function showDetail(cmd, index) {
+      const detailDiv = document.createElement('div');
+      detailDiv.className = 'card';
+      detailDiv.style.position = 'fixed';
+      detailDiv.style.top = '50%';
+      detailDiv.style.left = '50%';
+      detailDiv.style.transform = 'translate(-50%, -50%)';
+      detailDiv.style.zIndex = '1000';
+      detailDiv.style.maxWidth = '600px';
+      detailDiv.style.width = '90%';
+      detailDiv.style.background = 'var(--card)';
+      detailDiv.style.border = '2px solid var(--accent)';
+      detailDiv.style.borderRadius = '16px';
+      detailDiv.style.padding = '24px';
+      detailDiv.style.boxShadow = '0 10px 40px rgba(0,0,0,0.5)';
+      detailDiv.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3 style="color:var(--accent);margin:0;">${cmd.action}</h3>
+          <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;font-size:24px;color:#aaa;">×</button>
+        </div>
+        <div class="cmd-syntax">${cmd.cmd}</div>
+        <div class="console-keys">${renderKeys(cmd.keys)}</div>
+        <div style="margin:16px 0;color:#bbb;">${cmd.desc}</div>
+        <div class="level ${cmd.level}" style="display:inline-block;margin-top:8px;">${cmd.level}</div>
+        <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;">
+          <button class="edit-actions" style="background:var(--green);color:#000;padding:6px 12px;border:none;border-radius:4px;" onclick="editCommandFromDetail(${index})">Éditer</button>
+          <button class="edit-actions" style="background:var(--gray);color:white;padding:6px 12px;border:none;border-radius:4px;" onclick="this.parentElement.parentElement.parentElement.remove()">Fermer</button>
+        </div>
+      `;
+      document.body.appendChild(detailDiv);
+    }
+
+    function editCommandFromDetail(index) {
+      const cmd = dbState[currentCategory][currentSubcategory][index];
+      const form = prompt("Modifier la commande :\n\nSyntaxe :", cmd.cmd);
+      if (form !== null) {
+        cmd.cmd = form;
+        cmd.keys = form.split(' ');
+        saveDB();
+        renderCommands(currentCategory, currentSubcategory);
+        if (document.body.lastChild.className === 'card') document.body.lastChild.remove();
+      }
+    }
+
+    document.getElementById('backToCategories').onclick = () => {
+      document.getElementById('subcategoriesView').classList.remove('active');
+      document.getElementById('categoriesView').classList.add('active');
+    };
+    document.getElementById('backToSubcategories').onclick = () => {
+      document.getElementById('commandsView').classList.remove('active');
+      document.getElementById('subcategoriesView').classList.add('active');
+      renderSubcategories(currentCategory);
+    };
+
+    function copyText(text) { navigator.clipboard.writeText(text).then(() => alert('Copié !')); }
+    function addCommand() { alert("Fonction d'ajout temporairement simplifiée."); }
+    function editCommand(index) {
+      const cmd = dbState[currentCategory][currentSubcategory][index];
+      const form = prompt("Modifier la commande :\n\nSyntaxe :", cmd.cmd);
+      if (form !== null) {
+        cmd.cmd = form;
+        cmd.keys = form.split(' ');
+        saveDB();
+        renderCommands(currentCategory, currentSubcategory);
+      }
+    }
+    function deleteCommand(index) {
+      if (confirm('Supprimer cette commande ?')) {
+        dbState[currentCategory][currentSubcategory].splice(index, 1);
+        saveDB();
+        renderCommands(currentCategory, currentSubcategory);
+      }
+    }
+    function saveDB() { localStorage.setItem('eosModifiedDB', JSON.stringify(dbState)); }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      document.getElementById('themeToggle').textContent = next === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('eosTheme', next);
+    }
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    const savedTheme = localStorage.getItem('eosTheme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('themeToggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+    renderCategories();
+  </script>
+</body>
+</html>
