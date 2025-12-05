@@ -1,24 +1,340 @@
-<html>
-    <head>
-        <title>AC2N Project</title>
-    </head>
-    <body>
-        <div class="container">
-            <nav>
-                <ul>
-                    <li><a href="course-details.html">Course Details</a></li>
-                    <li><a href="payment.html">Payment</a></li>
-                </ul>
-            </nav>
-            <h1>Welcome!</h1>
-            <h2>This is the AC2N project for homeschooling</h2>
-            <p>We are excited to offer a selection of courses for homeschoolers.</p>
-            <ul>
-                <li>Math</li>
-                <li>Science</li>
-                <li>English</li>
-                <li>History</li>
-            </ul>
-        </div>
-    </body>
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0f1117">
+  <title>EOS Mind Navigator — Optimisé</title>
+
+  <style>
+    :root{
+      --bg:#0f1117; --card:#161822; --text:#e8eaed; --accent:#00d4ff;
+      --muted:#8a8d93; --border:#2b2f36; --radius:12px; --gap:18px;
+      --container:1200px;
+    }
+    [data-theme="light"]{
+      --bg:#f7f8fa; --card:#fff; --text:#111; --accent:#0066cc;
+      --muted:#6b6f75; --border:#e6e7ea;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:Inter, system-ui, sans-serif;
+      background:var(--bg); color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+
+    header{
+      position:sticky; top:0; z-index:60;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px;
+      background:linear-gradient(135deg,#001122,#000428);
+      box-shadow:0 6px 18px rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+    }
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:44px;height:44px;border-radius:10px;background:white;
+          color:var(--accent);display:grid;place-items:center;
+          font-weight:800;}
+
+    h1{font-size:clamp(14px,2vw,20px);margin:0;color:var(--accent)}
+    .controls{display:flex;gap:10px}
+    button.icon{
+      background:transparent;border:0;color:var(--text);
+      font-size:20px;cursor:pointer;padding:6px;
+      border-radius:8px;
+    }
+
+    .wrap{max-width:var(--container);margin:auto;padding:20px 16px}
+    .title{text-align:center;font-size:clamp(18px,3vw,28px);
+           color:var(--accent);margin-bottom:20px}
+
+    /* grid responsive */
+    .grid{display:grid;gap:var(--gap);
+          grid-template-columns:repeat(auto-fit,minmax(140px,1fr));}
+
+    .bubble{
+      background:var(--card); border:1px solid var(--border);
+      border-radius:999px; padding:14px; aspect-ratio:1/1;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      cursor:pointer; transition:transform .18s ease;
+    }
+    .bubble:hover{transform:translateY(-4px)}
+    .label{font-weight:700;font-size:clamp(12px,1.7vw,14px);text-align:center}
+    .count{font-size:12px;margin-top:6px;background:rgba(255,255,255,0.06);
+           padding:4px 8px;border-radius:10px;color:var(--muted)}
+
+    /* command cards */
+    .card-list{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:var(--radius);padding:16px;
+    }
+    .action{font-weight:700;color:var(--accent);margin-bottom:8px}
+    .cmd{font-family:monospace;font-size:13px;background:rgba(0,0,0,0.2);
+         padding:8px;border-radius:8px;white-space:pre-wrap}
+
+    .btn{
+      background:var(--accent); border:0; color:#001;
+      padding:8px 10px; border-radius:8px; cursor:pointer;
+      font-weight:700;
+    }
+    .secondary{
+      background:transparent; color:var(--text);
+      border:1px solid var(--border);
+    }
+    .card-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+
+    .toast{
+      position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+      background:#222;color:white;padding:10px 14px;border-radius:10px;
+      opacity:0;transition:.2s;pointer-events:none;
+    }
+    .toast.show{opacity:1;pointer-events:auto}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">EOS</div>
+      <h1>Mind Navigator</h1>
+    </div>
+    <div class="controls">
+      <button id="themeToggle" class="icon" aria-label="Changer le thème">🌙</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- CATEGORIES -->
+    <section id="viewCategories">
+      <h2 class="title">Catégories</h2>
+      <div id="categoriesGrid" class="grid"></div>
+    </section>
+
+    <!-- SUBCATEGORIES -->
+    <section id="viewSub" hidden>
+      <button class="btn secondary" id="backToCategories">← Catégories</button>
+      <h2 id="subTitle" class="title"></h2>
+      <div id="subGrid" class="grid"></div>
+    </section>
+
+    <!-- COMMANDS -->
+    <section id="viewCmd" hidden>
+      <button class="btn secondary" id="backToSub">← Sous-catégories</button>
+      <h2 id="cmdTitle" class="title"></h2>
+      <div id="cmdList" class="card-list"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- charge la base -->
+  <script src="db.js"></script>
+
+  <script>
+    /* ------------------------------------------
+       VARIABLES GLOBALES
+    ------------------------------------------ */
+    let dbState = JSON.parse(localStorage.getItem("eosModifiedDB") || JSON.stringify(db));
+    let currentCategory = null;
+    let currentSub = null;
+
+    const labels = {
+      fundamentals: "Fondamentaux",
+      selection: "Sélection",
+      intensity: "Intensité",
+      cues: "Cues & Séquences",
+      timing: "Timing & Fades",
+      tracking: "Tracking",
+      palettes: "Palettes",
+      effects: "Effets",
+      submasters: "Submasters",
+      macros: "Macros",
+      patch: "Patch",
+      depannage: "Dépannage",
+      optimisation: "Optimisation"
+    };
+
+    const $ = (x) => document.querySelector(x);
+
+    /* ------------------------------------------
+       TOAST UTILITAIRE
+    ------------------------------------------ */
+    function toast(msg, t = 1600) {
+      const el = $("#toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(el._t);
+      el._t = setTimeout(() => el.classList.remove("show"), t);
+    }
+
+    /* ------------------------------------------
+       RENDU DES CATEGORIES
+    ------------------------------------------ */
+    function renderCategories() {
+      const grid = $("#categoriesGrid");
+      grid.innerHTML = "";
+
+      Object.keys(dbState).forEach(cat => {
+        const total = Object.values(dbState[cat]).reduce((a, b) => a + b.length, 0);
+
+        const btn = document.createElement("button");
+        btn.className = "bubble";
+        btn.innerHTML = `
+          <div class="label">${labels[cat] || cat}</div>
+          <div class="count">${total}</div>
+        `;
+        btn.onclick = () => showSub(cat);
+
+        grid.appendChild(btn);
+      });
+    }
+
+    /* ------------------------------------------
+       SOUS-CATEGORIES
+    ------------------------------------------ */
+    function showSub(cat) {
+      currentCategory = cat;
+
+      $("#viewCategories").hidden = true;
+      $("#viewSub").hidden = false;
+      $("#viewCmd").hidden = false; // masqué plus bas
+
+      $("#subTitle").textContent = labels[cat] || cat;
+      renderSub(cat);
+    }
+
+    function renderSub(cat) {
+      const grid = $("#subGrid");
+      grid.innerHTML = "";
+
+      Object.keys(dbState[cat]).forEach(sub => {
+        const btn = document.createElement("button");
+        btn.className = "bubble";
+        btn.innerHTML = `
+          <div class="label">${sub}</div>
+          <div class="count">${dbState[cat][sub].length}</div>
+        `;
+        btn.onclick = () => showCommands(cat, sub);
+
+        grid.appendChild(btn);
+      });
+
+      $("#viewCmd").hidden = true;
+    }
+
+    /* ------------------------------------------
+       COMMANDES
+    ------------------------------------------ */
+    function showCommands(cat, sub) {
+      currentSub = sub;
+
+      $("#viewCategories").hidden = true;
+      $("#viewSub").hidden = true;
+      $("#viewCmd").hidden = false;
+
+      $("#cmdTitle").textContent = `${labels[cat] || cat} — ${sub}`;
+
+      renderCommands(cat, sub);
+    }
+
+    function renderCommands(cat, sub) {
+      const list = $("#cmdList");
+      list.innerHTML = "";
+
+      dbState[cat][sub].forEach((cmdObj, i) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div class="action">${cmdObj.action}</div>
+          <div class="cmd">${cmdObj.cmd}</div>
+          <div class="card-actions">
+            <button class="btn" data-copy>Copier</button>
+            <button class="btn secondary" data-edit>Modifier</button>
+            <button class="btn secondary" data-del>Supprimer</button>
+          </div>
+        `;
+
+        card.onclick = (e) => {
+          if (e.target.matches("[data-copy]")) copy(cmdObj.cmd);
+          if (e.target.matches("[data-edit]")) editCmd(cat, sub, i);
+          if (e.target.matches("[data-del]")) delCmd(cat, sub, i);
+        };
+
+        list.appendChild(card);
+      });
+    }
+
+    /* ------------------------------------------
+       FONCTIONS CRUD
+    ------------------------------------------ */
+    function copy(text) {
+      navigator.clipboard.writeText(text)
+        .then(() => toast("Copié !"))
+        .catch(() => toast("Impossible de copier"));
+    }
+
+    function editCmd(cat, sub, index) {
+      const item = dbState[cat][sub][index];
+      const n = prompt("Modifier :", item.cmd);
+      if (n === null) return;
+
+      item.cmd = n;
+      item.keys = n.split(/\s+/);
+      save();
+      renderCommands(cat, sub);
+      toast("Modifié");
+    }
+
+    function delCmd(cat, sub, index) {
+      if (!confirm("Supprimer ?")) return;
+      dbState[cat][sub].splice(index, 1);
+      save();
+      renderCommands(cat, sub);
+      toast("Supprimé");
+    }
+
+    function save() {
+      localStorage.setItem("eosModifiedDB", JSON.stringify(dbState));
+    }
+
+    /* ------------------------------------------
+       NAVIGATION
+    ------------------------------------------ */
+    $("#backToCategories").onclick = () => {
+      $("#viewCategories").hidden = false;
+      $("#viewSub").hidden = true;
+      $("#viewCmd").hidden = true;
+    };
+
+    $("#backToSub").onclick = () => {
+      $("#viewCategories").hidden = true;
+      $("#viewSub").hidden = false;
+      $("#viewCmd").hidden = true;
+      renderSub(currentCategory);
+    };
+
+    /* ------------------------------------------
+       THÈME
+    ------------------------------------------ */
+    const themeBtn = $("#themeToggle");
+    function applyTheme(t) {
+      document.documentElement.setAttribute("data-theme", t);
+      localStorage.setItem("theme", t);
+      themeBtn.textContent = t === "light" ? "🌙" : "☀️";
+    }
+    themeBtn.onclick = () => {
+      const now = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+      applyTheme(now);
+    };
+    applyTheme(localStorage.getItem("theme") || "dark");
+
+    /* ------------------------------------------
+       INIT
+    ------------------------------------------ */
+    renderCategories();
+  </script>
+</body>
 </html>
