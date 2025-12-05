@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover" />
+  <title>EOS Mind Navigator – Guide Régisseur Pro 2025</title>
+  <meta name="description" content="Guide interactif EOS sous forme de carte mentale avec sous-catégories et actions claires.">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #161822;
+      --text: #e8eaed;
+      --accent: #00d4ff;
+      --blue: #0066ff;
+      --green: #00ff88;
+      --red: #ff3b30;
+      --purple: #bb88ff;
+      --orange: #ff9500;
+      --gray: #555;
+      --border: #333;
+      --min-touch: 48px;
+    }
+    [data-theme="light"] {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #222222;
+      --accent: #0066cc;
+      --blue: #0044cc;
+      --green: #008844;
+      --red: #d93025;
+      --purple: #8e44ad;
+      --orange: #e67e22;
+      --gray: #999;
+      --border: #ddd;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html,body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    header {
+      background: linear-gradient(135deg, #001122, #000428);
+      padding: 10px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+    .logo { display:flex; align-items:center; gap:12px; }
+    .logo-icon { width:44px; height:44px; background: white; border-radius:10px; display:grid; place-items:center; font-weight:900; font-size:16px; color:var(--accent); }
+    h1 { font-size:16px; font-weight:800; color:var(--accent); margin-left:4px; }
+    .hdr-actions { display:flex; gap:8px; align-items:center; }
+    .hdr-actions button { padding:8px; border-radius:8px; border:none; cursor:pointer; background:rgba(255,255,255,0.03); color:var(--text); min-width:var(--min-touch); }
+    .container { max-width:1200px; margin:18px auto; padding:12px 16px; }
+
+    .view { display:none; }
+    .view.active { display:block; }
+
+    .title { text-align:center; font-size:20px; color:var(--accent); margin-bottom:20px; font-weight:700; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:18px; align-items:start; }
+    .bubble { background:var(--card); border:2px solid rgba(0,212,255,0.12); border-radius:50%; width:120px; height:120px; display:flex; flex-direction:column; justify-content:center; align-items:center; cursor:pointer; transition:transform .18s ease, box-shadow .18s ease; padding:10px; box-shadow:0 6px 16px rgba(0,0,0,0.25); user-select:none; }
+    .bubble .label { font-size:13px; font-weight:700; text-align:center; }
+    .bubble .count { background:rgba(255,255,255,0.06); padding:3px 8px; border-radius:10px; font-size:11px; margin-top:6px; }
+    .bubble:focus { outline:3px solid rgba(0,212,255,0.18); outline-offset:3px; transform:scale(1.04); }
+
+    .back-btn { background: rgba(0,212,255,0.12); color:var(--accent); border:none; border-radius:8px; padding:8px 12px; font-weight:700; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
+    .card-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+    .command-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; position:relative; transition:transform .12s ease; cursor:pointer; }
+    .action-text { font-size:15px; font-weight:700; margin-bottom:8px; color:var(--accent); }
+    .console-keys { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+    .eos-key { min-width:44px; height:32px; display:grid; place-items:center; border-radius:6px; font-size:11px; font-weight:700; color:#fff; padding:4px 6px; background:linear-gradient(145deg,#444,#333); }
+    .eos-key.blue { background: linear-gradient(145deg,var(--blue),#0055aa); }
+    .eos-key.red { background: linear-gradient(145deg,var(--red),#cc0000); }
+    .eos-key.green { background: linear-gradient(145deg,var(--green),#00aa00); color:#000; }
+    .eos-key.orange { background: linear-gradient(145deg,var(--orange),#cc7700); color:#000; }
+    .eos-key.purple { background: linear-gradient(145deg,var(--purple),#7700cc); }
+    .eos-key.cyan { background: linear-gradient(145deg,#00cccc,#00aaaa); }
+    .eos-key.enter { background: linear-gradient(145deg,#00cc00,#008800); font-weight:900; color:#000; }
+    .more-actions { position:absolute; top:10px; right:10px; background:none; border:none; color:var(--gray); font-size:20px; cursor:pointer; padding:6px; border-radius:8px; }
+    .actions-menu { position:absolute; top:40px; right:12px; background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.35); z-index:1200; display:none; flex-direction:column; min-width:140px; overflow:hidden; }
+    .actions-menu button { padding:10px 12px; text-align:left; background:none; border:none; color:var(--text); cursor:pointer; font-size:14px; }
+    #eos-toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--card); color:var(--text); border:1px solid var(--border); padding:8px 12px; border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,0.35); z-index:3000; opacity:0; transition:opacity .18s; }
+
+    /* import modal */
+    .modal { position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:2200; }
+    .modal .panel { width:95%; max-width:820px; background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:12px; color:var(--text); }
+
+    @media (max-width:900px) { .grid { grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); } .bubble{width:100px;height:100px;} .card-list{grid-template-columns:1fr;} }
+    @media (max-width:480px) { .grid{grid-template-columns:repeat(3,1fr);} .bubble{width:88px;height:88px;} .actions-menu{position:fixed; right:8px; left:8px; top:auto; bottom:16px; border-radius:12px;} header{padding:8px;} h1{font-size:15px;} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="logo-icon" aria-hidden="true">EOS</div>
+      <h1>EOS Mind Navigator</h1>
+    </div>
+    <div class="hdr-actions">
+      <button id="importBtn" title="Importer JSON">Importer JSON</button>
+      <button id="exportBtn" title="Exporter DB">Exporter DB</button>
+      <button id="themeToggle" aria-label="Basculer thème" title="Basculer thème">🌙</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="categoriesView" class="view active" aria-live="polite">
+      <h2 class="title">Catégories</h2>
+      <div class="grid" id="categoriesGrid" role="list"></div>
+    </div>
+
+    <div id="subcategoriesView" class="view" aria-hidden="true">
+      <button class="back-btn" id="backToCategories">← Catégories</button>
+      <h2 class="title" id="subcategoriesTitle"></h2>
+      <div class="grid" id="subcategoriesGrid" role="list"></div>
+    </div>
+
+    <div id="commandsView" class="view" aria-hidden="true">
+      <button class="back-btn" id="backToSubcategories">← Sous-catégories</button>
+      <h2 class="title" id="commandsTitle"></h2>
+      <div class="card-list" id="commandsList" role="list"></div>
+      <div style="margin-top:18px;">
+        <button class="back-btn" id="addCommandBtn" style="background:rgba(0,200,120,0.12);">+ Ajouter commande</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="eos-toast" role="status" aria-live="polite"></div>
+
+  <!-- Import modal placeholder -->
+  <div id="importModalHolder" aria-hidden="true"></div>
+
+  <script>
+    /* Single-file app with import/export to handle full DB even if original file is truncated.
+       Behavior:
+       - If localStorage.eosFullDB exists, uses it (allows sharing one file and each person loading full DB locally).
+       - If embedded db variable (in file) contains placeholders "[...]" it triggers import suggestion.
+       - Import supports paste of JSON or file upload; it validates JSON and checks for literal "[...]" placeholders.
+    */
+
+    // --- Minimal sample DB used if no full DB loaded
+    const sampleDB = {
+      "fundamentals": { "Base": [ { "action":"Allumer/éteindre la console","cmd":"[ON] → [OFF]","keys":["[ON]","[OFF]"],"level":"basic" } ] },
+      "depannage": { "Urgences": [ { "action":"BLACKOUT TOTAL - Tous canaux à 0%","cmd":"Chan * @ 0 Enter","keys":["Chan","*","@","0","Enter"],"level":"basic" } ] }
+    };
+
+    // Try to get embedded db variable from original file if present (some copies may have "db" already defined).
+    // NOTE: if your repo file has an actual 'db' variable (complete), the code below will pick it up.
+    // If it's truncated and contains "[...]" placeholders, we detect that and prompt import.
+    let embeddedDB = (typeof db !== 'undefined') ? db : null;
+
+    // If embeddedDB contains the literal string "[...]" anywhere, consider it invalid/truncated.
+    function containsPlaceholders(obj) {
+      try {
+        const s = JSON.stringify(obj);
+        return s.includes('[...]') || s.includes('[...]') || s.includes('...') && s.indexOf('[...]') !== -1;
+      } catch (e) { return true; }
+    }
+
+    // Decide initial dbState:
+    let dbState = null;
+    try {
+      const stored = localStorage.getItem('eosFullDB');
+      if (stored) {
+        dbState = JSON.parse(stored);
+      } else if (embeddedDB && !containsPlaceholders(embeddedDB)) {
+        dbState = embeddedDB;
+      } else {
+        // fallback sample
+        dbState = sampleDB;
+      }
+    } catch (e) {
+      console.warn('DB load error', e);
+      dbState = sampleDB;
+    }
+
+    // Category labels as before
+    const categoryLabels = {
+      fundamentals: "Fondamentaux", selection: "Sélection", intensity: "Intensité",
+      cues: "Cues & Séquence", timing: "Timing & Fades", tracking: "Tracking",
+      palettes: "Palettes", effects: "Effets & Rate Masters", submasters: "Submasters",
+      macros: "Macros", patch: "Patch", network: "Réseau",
+      magicsheets: "Magic Sheets", workflows: "Workflows", theatre: "Théâtre",
+      depannage: "Dépannage", optimisation: "Optimisation"
+    };
+
+    let currentCategory = null;
+    let currentSubcategory = null;
+
+    // Utility
+    function safeText(t){ return t==null?'':String(t); }
+
+    // Rendering functions (keyboard accessible, delegated menus)
+    function createBubble(labelText, count){ const bubble=document.createElement('div'); bubble.className='bubble'; bubble.tabIndex=0; bubble.role='button'; const l=document.createElement('div'); l.className='label'; l.textContent=labelText; const c=document.createElement('div'); c.className='count'; c.textContent=String(count); bubble.appendChild(l); bubble.appendChild(c); return bubble; }
+
+    function renderCategories(){
+      const grid = document.getElementById('categoriesGrid'); grid.innerHTML='';
+      for(const cat in dbState){
+        const totalCount = Object.values(dbState[cat]||{}).reduce((s,arr)=>(s+(arr?arr.length:0)),0);
+        const bubble = createBubble(categoryLabels[cat]||cat, totalCount);
+        bubble.addEventListener('click', ()=> showSubcategories(cat));
+        bubble.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showSubcategories(cat);} });
+        grid.appendChild(bubble);
+      }
+    }
+
+    function showSubcategories(category){
+      currentCategory = category;
+      document.getElementById('categoriesView').classList.remove('active');
+      document.getElementById('categoriesView').setAttribute('aria-hidden','true');
+      document.getElementById('subcategoriesView').classList.add('active');
+      document.getElementById('subcategoriesView').removeAttribute('aria-hidden');
+      document.getElementById('subcategoriesTitle').textContent = categoryLabels[category]||category;
+      renderSubcategories(category);
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function renderSubcategories(category){
+      const grid=document.getElementById('subcategoriesGrid'); grid.innerHTML='';
+      const subs = dbState[category] || {};
+      for(const sub in subs){
+        const bubble = createBubble(sub, subs[sub].length || 0);
+        bubble.addEventListener('click', ()=> showCommands(category, sub));
+        bubble.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showCommands(category, sub);} });
+        grid.appendChild(bubble);
+      }
+    }
+
+    function showCommands(category, subcategory){
+      currentSubcategory = subcategory;
+      document.getElementById('subcategoriesView').classList.remove('active');
+      document.getElementById('subcategoriesView').setAttribute('aria-hidden','true');
+      document.getElementById('commandsView').classList.add('active');
+      document.getElementById('commandsView').removeAttribute('aria-hidden');
+      document.getElementById('commandsTitle').textContent = subcategory;
+      renderCommands(category, subcategory);
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function keyClassFor(k){
+      if(!k) return 'special';
+      const s=String(k);
+      if (['Chan','Group','Cue','Setup','Patch','Select','Magic.Sheet'].includes(s)) return 'blue';
+      if (['Record','Delete','Lock','Stop','Back','Effect','Copy','Move'].includes(s)) return 'red';
+      if (['Go','Highlight','Solo','Only','Full','@','Release'].includes(s)) return 'green';
+      if (['Update','Merge','Time','Delay','Follow','Hang'].includes(s)) return 'orange';
+      if (['Preset','ColorPalette','BeamPalette','Magic_Sheet','Macro','Rate_Master'].includes(s)) return 'purple';
+      if (s==='Enter') return 'enter';
+      if (s.startsWith('/eos/')) return 'cyan';
+      return 'special';
+    }
+
+    function renderKeysHTML(keys){
+      return (keys||[]).map(k => `<div class="eos-key ${keyClassFor(k)}">${String(k)}</div>`).join('');
+    }
+
+    function renderCommands(category, subcategory){
+      const list = document.getElementById('commandsList'); list.innerHTML='';
+      const cmds = (dbState[category] && dbState[category][subcategory]) || [];
+      cmds.forEach((cmd, index) => {
+        const card = document.createElement('div'); card.className='command-card'; card.tabIndex=0; card.dataset.index = index;
+        const action = document.createElement('div'); action.className='action-text'; action.textContent = safeText(cmd.action);
+        const keysWrap = document.createElement('div'); keysWrap.className='console-keys'; keysWrap.innerHTML = renderKeysHTML(cmd.keys||[]);
+        const moreBtn = document.createElement('button'); moreBtn.className='more-actions'; moreBtn.innerHTML='⋯'; moreBtn.title='Plus d’actions';
+        const menu = document.createElement('div'); menu.className='actions-menu';
+        const copyBtn = document.createElement('button'); copyBtn.type='button'; copyBtn.textContent='Copier'; copyBtn.addEventListener('click', (e)=>{ e.stopPropagation(); copyText(cmd.cmd || cmd.action); hideAllMenus(); });
+        const editBtn = document.createElement('button'); editBtn.type='button'; editBtn.textContent='Éditer'; editBtn.addEventListener('click',(e)=>{ e.stopPropagation(); openEditor(category, subcategory, index); hideAllMenus(); });
+        const deleteBtn = document.createElement('button'); deleteBtn.type='button'; deleteBtn.textContent='Supprimer'; deleteBtn.addEventListener('click',(e)=>{ e.stopPropagation(); deleteCommand(category, subcategory, index); hideAllMenus(); });
+        menu.appendChild(copyBtn); menu.appendChild(editBtn); menu.appendChild(deleteBtn);
+        moreBtn.addEventListener('click', (e)=>{ e.stopPropagation(); const open = menu.style.display==='flex'; hideAllMenus(); if(!open){ menu.style.display='flex'; moreBtn.setAttribute('aria-expanded','true'); } else { menu.style.display='none'; moreBtn.setAttribute('aria-expanded','false'); } });
+        card.appendChild(action); card.appendChild(keysWrap); card.appendChild(moreBtn); card.appendChild(menu);
+        card.addEventListener('click', (e)=>{ if (e.target.closest('.more-actions')||e.target.closest('.actions-menu')) return; showDetail(cmd,index); });
+        card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showDetail(cmd,index); } });
+        list.appendChild(card);
+      });
+    }
+
+    // global menu handlers
+    function hideAllMenus(){ document.querySelectorAll('.actions-menu').forEach(m=>m.style.display='none'); document.querySelectorAll('.more-actions').forEach(b=>b.setAttribute('aria-expanded','false')); }
+    document.addEventListener('click', function(e){ if(e.target.closest && (e.target.closest('.more-actions')||e.target.closest('.actions-menu'))) return; hideAllMenus(); }, {passive:true});
+    document.addEventListener('touchstart', function(e){ if(e.target.closest && (e.target.closest('.more-actions')||e.target.closest('.actions-menu'))) return; hideAllMenus(); }, {passive:true});
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ hideAllMenus(); const ov = document.getElementById('importModalHolder'); if(ov) ov.innerHTML=''; const detail = document.getElementById('detailOverlay'); if(detail) detail.remove(); } });
+
+    // detail overlay
+    function showDetail(cmd,index){
+      const existing = document.getElementById('detailOverlay'); if(existing) existing.remove();
+      const overlay = document.createElement('div'); overlay.id='detailOverlay'; overlay.style.position='fixed'; overlay.style.left='0'; overlay.style.top='0'; overlay.style.right='0'; overlay.style.bottom='0'; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center'; overlay.style.zIndex='2000'; overlay.style.background='rgba(0,0,0,0.45)'; overlay.addEventListener('click', ()=> overlay.remove());
+      const card = document.createElement('div'); card.style.background='var(--card)'; card.style.border='2px solid var(--accent)'; card.style.color='var(--text)'; card.style.borderRadius='12px'; card.style.padding='18px'; card.style.maxWidth='820px'; card.style.width='94%'; card.addEventListener('click', e=>e.stopPropagation());
+      const h = document.createElement('div'); h.style.fontWeight='800'; h.style.fontSize='18px'; h.style.color='var(--accent)'; h.textContent = cmd.action || 'Détail';
+      const keysWrap = document.createElement('div'); keysWrap.className='console-keys'; keysWrap.style.marginTop='12px'; keysWrap.innerHTML = renderKeysHTML(cmd.keys||[]);
+      const syntax = document.createElement('pre'); syntax.className='cmd-syntax'; syntax.style.whiteSpace='pre-wrap'; syntax.style.background='rgba(0,0,0,0.25)'; syntax.textContent = cmd.cmd || '';
+      const btns = document.createElement('div'); btns.style.display='flex'; btns.style.gap='8px'; btns.style.justifyContent='flex-end'; btns.style.marginTop='12px';
+      const copyBtn = document.createElement('button'); copyBtn.className='back-btn'; copyBtn.textContent='Copier'; copyBtn.addEventListener('click', ()=> copyText(cmd.cmd || cmd.action));
+      const closeBtn = document.createElement('button'); closeBtn.className='back-btn'; closeBtn.textContent='Fermer'; closeBtn.addEventListener('click', ()=> overlay.remove());
+      btns.appendChild(copyBtn); btns.appendChild(closeBtn);
+      card.appendChild(h); card.appendChild(keysWrap); card.appendChild(syntax); card.appendChild(btns); overlay.appendChild(card); document.body.appendChild(overlay); closeBtn.focus();
+    }
+
+    // CRUD (local only)
+    function persistDB(){ try { localStorage.setItem('eosModifiedDB', JSON.stringify(dbState)); } catch(e){ console.warn('persist failed',e); } }
+    // on load, if modified exists, prefer it
+    try {
+      const modified = localStorage.getItem('eosModifiedDB');
+      if (modified) { const parsed = JSON.parse(modified); if(parsed && typeof parsed==='object') dbState = parsed; }
+    } catch(e){}
+
+    function openEditor(category, subcategory, index){
+      const cmd = (dbState[category] && dbState[category][subcategory] && dbState[category][subcategory][index]) || {};
+      const holder = document.getElementById('importModalHolder'); holder.innerHTML = '';
+      const modal = document.createElement('div'); modal.className='modal';
+      const panel = document.createElement('div'); panel.className='panel';
+      const title = document.createElement('div'); title.style.fontWeight='800'; title.style.color='var(--accent)'; title.textContent='Éditer commande';
+      const inputAction = document.createElement('input'); inputAction.value = cmd.action || ''; inputAction.placeholder='Action (libellé)'; inputAction.style.width='100%'; inputAction.style.marginTop='6px';
+      const inputCmd = document.createElement('input'); inputCmd.value = cmd.cmd || ''; inputCmd.placeholder='Commande (texte)'; inputCmd.style.width='100%'; inputCmd.style.marginTop='6px';
+      const inputKeys = document.createElement('textarea'); inputKeys.value = (cmd.keys||[]).join(' '); inputKeys.placeholder='Clés séparées par espaces'; inputKeys.style.width='100%'; inputKeys.style.marginTop='6px';
+      const actions = document.createElement('div'); actions.style.display='flex'; actions.style.gap='8px'; actions.style.justifyContent='flex-end'; actions.style.marginTop='8px';
+      const saveBtn = document.createElement('button'); saveBtn.className='back-btn'; saveBtn.textContent='Enregistrer';
+      saveBtn.addEventListener('click', ()=>{ const newCmd = { action: inputAction.value.trim()||'Sans titre', cmd: inputCmd.value.trim()||'', keys: inputKeys.value.trim()? inputKeys.value.trim().split(/\s+/):[] }; dbState[category][subcategory][index] = newCmd; persistDB(); renderCommands(category, subcategory); holder.innerHTML=''; showToast('Modifications enregistrées'); });
+      const cancelBtn = document.createElement('button'); cancelBtn.className='back-btn'; cancelBtn.textContent='Annuler'; cancelBtn.addEventListener('click', ()=> holder.innerHTML='');
+      actions.appendChild(cancelBtn); actions.appendChild(saveBtn);
+      panel.appendChild(title); panel.appendChild(inputAction); panel.appendChild(inputCmd); panel.appendChild(inputKeys); panel.appendChild(actions);
+      modal.appendChild(panel); holder.appendChild(modal);
+      inputAction.focus();
+    }
+
+    function deleteCommand(category, subcategory, index){
+      if(!confirm('Supprimer cette commande ?')) return;
+      dbState[category][subcategory].splice(index,1);
+      persistDB();
+      renderCommands(category, subcategory);
+      showToast('Commande supprimée');
+    }
+
+    document.getElementById('addCommandBtn').addEventListener('click', ()=>{
+      if(!currentCategory || !currentSubcategory){ alert('Sélectionnez d\'abord une catégorie et une sous-catégorie.'); return; }
+      const arr = dbState[currentCategory][currentSubcategory];
+      if(!Array.isArray(arr)){ dbState[currentCategory][currentSubcategory] = []; }
+      const newIndex = dbState[currentCategory][currentSubcategory].length;
+      dbState[currentCategory][currentSubcategory].push({ action:'Nouvelle commande', cmd:'', keys:[] });
+      persistDB();
+      renderCommands(currentCategory, currentSubcategory);
+      openEditor(currentCategory, currentSubcategory, newIndex);
+    });
+
+    document.getElementById('backToCategories').addEventListener('click', ()=>{
+      document.getElementById('subcategoriesView').classList.remove('active');
+      document.getElementById('subcategoriesView').setAttribute('aria-hidden','true');
+      document.getElementById('categoriesView').classList.add('active');
+      document.getElementById('categoriesView').removeAttribute('aria-hidden');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+    document.getElementById('backToSubcategories').addEventListener('click', ()=>{
+      document.getElementById('commandsView').classList.remove('active');
+      document.getElementById('commandsView').setAttribute('aria-hidden','true');
+      document.getElementById('subcategoriesView').classList.add('active');
+      document.getElementById('subcategoriesView').removeAttribute('aria-hidden');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    // clipboard copy w/ fallback
+    function fallbackCopyText(text){
+      try{
+        const ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly',''); ta.style.position='absolute'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast('Copié dans le presse-papier');
+      }catch(e){ alert('Copie impossible. Sélectionnez et copiez manuellement.'); }
+    }
+    window.copyText = function(text){
+      if(!text) return;
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(()=> showToast('Copié dans le presse-papier')).catch(()=> fallbackCopyText(text));
+      } else fallbackCopyText(text);
+    };
+
+    // toast
+    function showToast(msg, timeout=1400){
+      const t = document.getElementById('eos-toast'); if(!t) return; t.textContent = msg; t.style.opacity = '1'; clearTimeout(t._timer); t._timer = setTimeout(()=> t.style.opacity = '0', timeout);
+    }
+
+    // theme
+    const themeToggle = document.getElementById('themeToggle');
+    function applyTheme(name){ if(name==='light') document.documentElement.setAttribute('data-theme','light'); else document.documentElement.removeAttribute('data-theme'); localStorage.setItem('eosTheme', name==='light'?'light':'dark'); themeToggle.textContent = (name==='light') ? '☀️' : '🌙'; themeToggle.setAttribute('aria-pressed', name==='light'?'true':'false'); }
+    (function initTheme(){ const stored = localStorage.getItem('eosTheme'); if(stored) applyTheme(stored==='light'?'light':'dark'); else { const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches; applyTheme(prefersLight ? 'light' : 'dark'); } })();
+    themeToggle.addEventListener('click', ()=>{ const isLight = document.documentElement.getAttribute('data-theme')==='light'; applyTheme(isLight ? 'dark' : 'light'); });
+
+    // Import / Export functionality
+    function openImportModal(){
+      const holder = document.getElementById('importModalHolder'); holder.innerHTML = '';
+      const modal = document.createElement('div'); modal.className='modal';
+      const panel = document.createElement('div'); panel.className='panel';
+      const title = document.createElement('div'); title.style.fontWeight='800'; title.style.color='var(--accent)'; title.textContent='Importer JSON (coller ou charger un fichier)';
+      const fileInput = document.createElement('input'); fileInput.type='file'; fileInput.accept='.json,application/json'; fileInput.style.marginTop='8px';
+      const pasteArea = document.createElement('textarea'); pasteArea.placeholder='Collez ici le JSON complet de la variable db'; pasteArea.style.width='100%'; pasteArea.style.height='180px'; pasteArea.style.marginTop='8px';
+      const actions = document.createElement('div'); actions.style.display='flex'; actions.style.gap='8px'; actions.style.justifyContent='flex-end'; actions.style.marginTop='8px';
+      const loadFromPasteBtn = document.createElement('button'); loadFromPasteBtn.className='back-btn'; loadFromPasteBtn.textContent='Charger depuis le texte';
+      const cancelBtn = document.createElement('button'); cancelBtn.className='back-btn'; cancelBtn.textContent='Fermer';
+      const loadFromFileBtn = document.createElement('button'); loadFromFileBtn.className='back-btn'; loadFromFileBtn.textContent='Charger fichier';
+      loadFromFileBtn.addEventListener('click', ()=> { fileInput.click(); });
+      fileInput.addEventListener('change', (e)=> {
+        const f = e.target.files && e.target.files[0]; if(!f) return;
+        const reader = new FileReader(); reader.onload = function(ev){ try{ const parsed = JSON.parse(ev.target.result); if(containsPlaceholders(parsed)){ alert('Le fichier contient des placeholders \"[...]\" — fournissez un JSON complet et valide.'); return; } localStorage.setItem('eosFullDB', JSON.stringify(parsed)); dbState = parsed; persistDB(); holder.innerHTML=''; renderCategories(); showToast('DB importée depuis fichier'); }catch(err){ alert('JSON invalide dans le fichier : ' + err.message); } }; reader.readAsText(f); });
+      loadFromPasteBtn.addEventListener('click', ()=> {
+        const txt = pasteArea.value.trim();
+        if(!txt){ alert('Collez le JSON avant de charger.'); return; }
+        try{
+          const parsed = JSON.parse(txt);
+          if(containsPlaceholders(parsed)){ alert('Le JSON contient des placeholders \"[...]\" — fournissez le JSON complet.'); return; }
+          localStorage.setItem('eosFullDB', JSON.stringify(parsed));
+          dbState = parsed; persistDB(); holder.innerHTML=''; renderCategories(); showToast('DB importée'); 
+        }catch(err){
+          alert('JSON invalide : ' + err.message);
+        }
+      });
+      cancelBtn.addEventListener('click', ()=> holder.innerHTML='');
+      actions.appendChild(loadFromFileBtn); actions.appendChild(loadFromPasteBtn); actions.appendChild(cancelBtn);
+      panel.appendChild(title); panel.appendChild(fileInput); panel.appendChild(pasteArea); panel.appendChild(actions); modal.appendChild(panel); holder.appendChild(modal);
+      pasteArea.focus();
+    }
+
+    function exportDB(){
+      try{
+        const blob = new Blob([JSON.stringify(dbState, null, 2)], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'eos_db_export.json'; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 5000);
+      }catch(e){ alert('Export impossible: ' + e.message); }
+    }
+
+    document.getElementById('importBtn').addEventListener('click', openImportModal);
+    document.getElementById('exportBtn').addEventListener('click', exportDB);
+
+    // If embedded DB exists but contains placeholders, show a small notice and open import modal
+    (function checkEmbedded(){
+      if (embeddedDB && containsPlaceholders(embeddedDB) && !localStorage.getItem('eosFullDB')){
+        // brief notification, then open import modal so user can load full DB
+        setTimeout(()=>{ if(confirm('La DB embarquée dans ce fichier semble tronquée (contient \"[...]\"). Voulez-vous importer un JSON complet maintenant ?')) openImportModal(); }, 300);
+      }
+    })();
+
+    // If a full DB is present (localStorage), use it preferentially
+    try{
+      const full = localStorage.getItem('eosFullDB');
+      if(full){ dbState = JSON.parse(full); }
+    }catch(e){ console.warn('parse eosFullDB failed', e); }
+
+    // initial render
+    renderCategories();
+
+    // Helpful note printed to console for power users
+    console.log('EOS Guide ready. Pour charger une DB complète: Importer JSON (bouton). Pour distribuer un single-file complet, fournissez la variable db complète et je l’intégrerai.');
+  </script>
+</body>
+</html>
