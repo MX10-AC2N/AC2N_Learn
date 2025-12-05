@@ -1,0 +1,246 @@
+{
+  "eos_house_operator_guide_v3": {
+    "version": "3.0.1",
+    "source": [
+      "Eos Family v3.0.0 Operations Manual (pp.1–659)",
+      "EosFamily_MSInt_Workbook_v3.0.1A.pdf"
+    ],
+    "last_updated": "2025-12-06",
+    "description": "Base de données complète pour un guide HTML destiné au régisseur d'accueil sur console Eos. Inclut syntaxes, trucs, subtilités, et bonnes pratiques.",
+    "commands": [
+      {
+        "action": "Allumer des canaux (lumières d'accueil)",
+        "description": "Active des canaux conventionnels à pleine intensité. Fonctionne uniquement en [Live].",
+        "syntaxes": ["[1][Thru][10][At][Full][Enter]"],
+        "examples": ["Allumer les fronts (canaux 1–10) à 100 %."],
+        "tips": [
+          "Les canaux deviennent rouges dans Live (données manuelles).",
+          "Utiliser [+] pour des canaux discontinus : [1][+][3][+][5][At][80][Enter].",
+          "En [Blind], aucune sortie DMX n’est générée."
+        ]
+      },
+      {
+        "action": "Éteindre proprement sans couper le show",
+        "description": "Désactive les lumières d’accueil sans affecter les Cues actifs.",
+        "syntaxes": ["[Sub][101][Out][Enter]"],
+        "examples": ["Éteindre le Sub House Lights avant le début du spectacle."],
+        "tips": [
+          "Les Submasters sont HTP → leur extinction ne touche pas les Cues LTP.",
+          "Éviter [Go To Cue][0] : il éteint toutes les intensités non protégées.",
+          "Si le Sub est en {Hold}, [Out] le force à s’éteindre."
+        ]
+      },
+      {
+        "action": "Créer un Submaster d'accueil",
+        "description": "Stocker un look fixe dans un Submaster pour accès rapide et fiable.",
+        "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Select Last][Record][Sub][101][Label] House[Enter]"],
+        "examples": ["Sub 101 = House Lights, avec fondu 1s/1s."],
+        "tips": [
+          "Ajouter [Time][1][Time][Time][1][Enter] pour Up/Down = 1s.",
+          "Utiliser {Hold}[Enter] pour maintenir le Sub actif même après un Go To Cue.",
+          "Préférer les Submasters aux commandes manuelles : plus stables, nommables, intégrables dans Magic Sheets."
+        ]
+      },
+      {
+        "action": "Désactiver le Sneak",
+        "description": "Le Sneak permet des changements discrets. S’il est actif, il peut éteindre les lumières sans que l’opérateur le sache.",
+        "syntaxes": ["[Clear][Sneak][Enter]"],
+        "examples": ["Désactiver Sneak après une manipulation imprévue."],
+        "tips": [
+          "Exécuter via <U0> pour ne pas interrompre la ligne : <U0> Clear Sneak 1 Enter",
+          "Le Sneak est souvent activé par des macros ou erreurs de frappe.",
+          "Le Playback Status Display affiche un compteur rouge quand Sneak est actif."
+        ]
+      },
+      {
+        "action": "Utiliser User 0 (<U0>) pour commandes silencieuses",
+        "description": "Exécute des commandes système sans affecter la ligne de commande visible.",
+        "syntaxes": ["<U0> Clear Sneak 1 Enter"],
+        "examples": ["Bouton 'Sneak All' sur Magic Sheet qui nettoie discrètement."],
+        "tips": [
+          "U0 = User 0, utilisateur invisible. Idéal pour maintenance.",
+          "Ne laisse aucune trace dans l’historique.",
+          "Syntaxe : <U0>$ [commande] → toujours inclure le $ et un espace après <U0>."
+        ]
+      },
+      {
+        "action": "Créer un indicateur visuel pour Submaster",
+        "description": "Affiche visuellement si un Sub est actif (car les Submasters ne changent pas d’état graphique).",
+        "syntaxes": [
+          "Patch : Channel 9101 = MS Indicator (pas d’adresse DMX)",
+          "[Blind][Sub][101][Enter] → [9101][At][Full][Enter]"
+        ],
+        "examples": ["Rectangle gris = Sub ON, transparent = OFF."],
+        "tips": [
+          "Utiliser deux objets groupés : (1) Submaster (transparent), (2) rectangle lié à Channel 9101 (gris si intensité > 0).",
+          "Le canal indicateur ne doit jamais avoir d’adresse DMX.",
+          "Fonctionne aussi pour Cues, Presets, etc."
+        ]
+      },
+      {
+        "action": "Vérifier un projecteur (Channel Check)",
+        "description": "Test visuel temporaire d’un canal sans affecter la scène.",
+        "syntaxes": ["[1][At][7]<0>{Chan Check}[Enter]"],
+        "examples": ["Amener le canal 1 à 70 %, puis [Next] pour passer au suivant."],
+        "tips": [
+          "Les valeurs reviennent automatiquement à leur état précédent.",
+          "Ne fonctionne que sur les canaux patchés.",
+          "Idéal pour les checks avant spectacle."
+        ]
+      },
+      {
+        "action": "Réinitialiser les paramètres non-intensité (Home)",
+        "description": "Ramène les projecteurs à leur position de base sans éteindre l’intensité.",
+        "syntaxes": ["[Home][Enter]"],
+        "examples": ["[Home][Enter] pour remettre shutters, zoom, couleur à leur home."],
+        "tips": [
+          "[Home] ne touche pas l’intensité → parfait pour les ML.",
+          "Cibler : [Group][10][Color][Home][Enter].",
+          "À utiliser avec prudence en contexte d’accueil."
+        ]
+      },
+      {
+        "action": "Flash temporaire",
+        "description": "Active un canal brièvement tant que la touche est enfoncée.",
+        "syntaxes": ["[1][Flash]"],
+        "examples": ["Appuyer sur [1][Flash] pour identifier le projecteur 1."],
+        "tips": [
+          "Ne laisse aucune trace dans les données.",
+          "Fonctionne uniquement en [Live].",
+          "Idéal pour l’identification rapide."
+        ]
+      },
+      {
+        "action": "Basculer entre Live et Blind",
+        "description": "Live = sortie active, Blind = édition sans impact.",
+        "syntaxes": ["[Live]", "[Blind]"],
+        "examples": ["Modifier un Sub en [Blind] pour tester sans éteindre les lumières."],
+        "tips": [
+          "Fond **bleu en Blind**, **doré en Live**.",
+          "Les éditions en Blind sont sauvegardées dès la fin de la commande.",
+          "Essentiel pour ne pas perturber le show."
+        ]
+      },
+      {
+        "action": "Utiliser Go To Cue de manière sécurisée",
+        "description": "Permet d’aller à un cue spécifique, mais risqué si mal utilisé.",
+        "syntaxes": ["[Go To Cue][0][Enter]", "[Go To Cue][Out][Enter]"],
+        "examples": ["[Go To Cue][0] éteint les intensités manuelles, mais pas les Cues actifs."],
+        "tips": [
+          "[Go To Cue][0] n’affecte **pas** les canaux contrôlés par un Submaster HTP ou un autre Cue List.",
+          "[Go To Cue][Out] réinitialise **tous** les paramètres → à éviter en représentation.",
+          "En contexte d’accueil, préférez les Submasters."
+        ]
+      },
+      {
+        "action": "Gérer les Submasters (Hold, Bump, Release)",
+        "description": "Comportement des Submasters en contexte d’accueil.",
+        "syntaxes": [
+          "[Sub][101][Enter] → activer",
+          "[Sub][101][Out][Enter] → désactiver",
+          "{Hold}[Enter] → maintien actif"
+        ],
+        "examples": ["Sub 101 = House Lights, toujours en HTP, avec Hold activé."],
+        "tips": [
+          "Les Submasters sont **HTP par défaut** → ne peuvent pas être écrasés par un cue LTP.",
+          "Activer {Hold} pour éviter l’extinction automatique.",
+          "Éviter les Submasters en LTP en contexte d’accueil."
+        ]
+      },
+      {
+        "action": "Utiliser Assert pour reprendre le contrôle",
+        "description": "Force la relecture d’un Sub ou Cue, même si d’autres sources ont pris le contrôle.",
+        "syntaxes": ["[Sub][101][Assert][Enter]"],
+        "examples": ["Si les lumières ne répondent plus, Assert le Sub House."],
+        "tips": [
+          "À réserver aux cas de dépannage.",
+          "En contexte d’accueil, rarement nécessaire si Subs sont en HTP."
+        ]
+      },
+      {
+        "action": "Utiliser Release pour masquer des données",
+        "description": "Masque des données dans un cue sans les supprimer.",
+        "syntaxes": ["[1][Release][Enter]"],
+        "examples": ["Release l’intensité du canal 1 dans le cue courant."],
+        "tips": [
+          "Les données restent enregistrées mais ne sortent plus.",
+          "Peut être annulé avec [Assert].",
+          "À éviter en contexte d’accueil : préférer les Submasters."
+        ]
+      },
+      {
+        "action": "Utiliser Block pour figer des paramètres",
+        "description": "Empêche qu’un paramètre soit modifié par les cues suivants.",
+        "syntaxes": ["[1][Block][Enter]"],
+        "examples": ["Block l’intensité du canal 1 pour qu’elle ne change plus."],
+        "tips": [
+          "Très puissant mais dangereux si mal utilisé.",
+          "Peut être annulé avec [Release] ou [Assert].",
+          "À éviter en contexte d’accueil."
+        ]
+      },
+      {
+        "action": "Créer une page d'accueil (Home Tab)",
+        "description": "Page simple, centrée sur les fonctions d’accueil.",
+        "syntaxes": [],
+        "examples": ["Magic Sheet 501 avec Sub 101 (House), bouton Help → MS 501.1, logo."],
+        "tips": [
+          "Ne jamais inclure de fonctions comme Update, Move, Blind.",
+          "Utiliser un popup d’aide avec contacts du programmeur.",
+          "Idéal pour les remplacements."
+        ]
+      },
+      {
+        "action": "Naviguer entre Magic Sheets via macros",
+        "description": "Changer de page rapidement sans ouvrir le navigateur.",
+        "syntaxes": ["Macro 501 → Magic Sheet 501"],
+        "examples": ["Menu latéral avec boutons Home, Movers, Control…"],
+        "tips": [
+          "Utiliser des **Background Macros**.",
+          "Mettre en surbrillance le bouton de la page active.",
+          "Nommer clairement : MS 501 = Home, MS 508 = Control."
+        ]
+      },
+      {
+        "action": "Utiliser le Help interactif",
+        "description": "Affiche la fonction, la description et des exemples pour n’importe quelle touche.",
+        "syntaxes": ["[Help] + [touche]"],
+        "examples": ["[Help] + [Sub] affiche la syntaxe de création, rappel, etc."],
+        "tips": [
+          "Fonctionne aussi sur les objets Magic Sheet.",
+          "Outil indispensable pour les opérateurs occasionnels."
+        ]
+      },
+      {
+        "action": "Afficher un statut système (ex: RFR On/Off)",
+        "description": "Utilise un canal indicateur + Color Palettes pour un état binaire.",
+        "syntaxes": [
+          "Patch Channel 9290 = Generic RGB LED",
+          "CP 290.1 = On (vert), CP 290.2 = Off (rouge)",
+          "Macro 291 → RFR enable + Blind Color_Palette 290 + 9290 Recall_From CP 290.1"
+        ],
+        "examples": ["Carré vert = RFR activé, rouge = désactivé sur MS 508."],
+        "tips": [
+          "Préférer les **Color Palettes** aux Submasters pour les indicateurs.",
+          "Toujours utiliser [Blind] dans la macro.",
+          "Le canal indicateur doit être hors DMX."
+        ]
+      },
+      {
+        "action": "Configurer un démarrage automatique personnalisé",
+        "description": "Affiche un écran de bienvenue au lancement de la console.",
+        "syntaxes": [
+          "Magic Sheet 599.1 = logo, 599.2 = bouton 'Press to Begin'",
+          "Snapshot 599 = configuration d’écrans",
+          "Macro 599 = Background Macro → Fire Snapshot 599",
+          "Setup > System > System Startup Macro = Macro 599"
+        ],
+        "examples": ["Au boot, deux écrans apparaissent : logo + bouton pour lancer l’interface."],
+        "tips": [
+          "Sur un système multi-console, seul le Primary exécute la macro au démarrage.",
+          "Utiliser le mode 'Limited Expand' pour masquer la barre d’état."
+        ]
+      }
+    ]
+  }
+}
