@@ -422,49 +422,962 @@
         { "id": "file-base", "name": "Base", "parentId": "file", "type": "base" },
         { "id": "file-user", "name": "Utilisateur", "parentId": "file", "type": "user" }
       ],
-      "commands": [
-        { "id": "hard-key", "subcat": "syntax-base", "action": "Touche physique [ ]", "description": "Représente une touche matérielle sur la console.", "syntaxes": ["[At]", "[1]", "[Thru]", "[Full]"], "examples": ["[1][Thru][10][At][Full][Enter]"], "tips": ["Toujours nécessite [Enter] sauf pour [Full][Full]."] },
-        { "id": "softkey", "subcat": "syntax-base", "action": "Softkey { }", "description": "Bouton à l’écran, accessible via les touches sous l’écran.", "syntaxes": ["{Hold}", "{Solo}", "{Make Absolute}"], "examples": ["{Hold} après enregistrement d'un submaster."], "tips": ["Les softkeys changent selon le contexte."] },
-        { "id": "user-0", "subcat": "syntax-base", "action": "Utilisateur en arrière-plan <U0>", "description": "Exécute une commande sans apparaître sur la ligne principale.", "syntaxes": ["<U0> Clear Sneak 1 Enter"], "examples": ["Bouton 'Clean Sneak' sur Magic Sheet."], "tips": ["Syntaxe : `<U0>$ [commande]` (espace après `$`)."] },
-        { "id": "direct-select", "subcat": "syntax-base", "action": "Direct Select « »", "description": "Boutons physiques en haut de la console.", "syntaxes": ["« 1 »", "« House »"], "examples": ["Stocker la palette 'Open' sur le Direct Select 1."], "tips": ["Configurer via Setup > Direct Selects."] },
-        { "id": "enter", "subcat": "syntax-base", "action": "Touche [Enter]", "description": "Valide la commande. Certaines commandes s’auto-valident.", "syntaxes": ["[Full][Full]", "[Out][Out]", "[At][Enter]"], "examples": ["[1][Thru][10][Full][Full] = allume à 100 % sans [Enter]."], "tips": ["[Full][Full] = [At][Full][Enter] en raccourci."] },
-        { "id": "live-mode", "subcat": "live-blind-base", "action": "Basculer en mode Live", "description": "Active la sortie DMX.", "syntaxes": ["[Live]"], "examples": ["[Live] → fond doré, sortie active."], "tips": ["Fond **doré** en Live."] },
-        { "id": "blind-mode", "subcat": "live-blind-base", "action": "Basculer en mode Blind", "description": "Édition sans sortie DMX.", "syntaxes": ["[Blind]"], "examples": ["[Blind] → fond bleu, édition sécurisée."], "tips": ["Fond **bleu** en Blind."] },
-        { "id": "select-last", "subcat": "live-blind-base", "action": "Sélectionner la dernière sélection", "description": "Rappelle les 5 dernières sélections.", "syntaxes": ["[Select Last]"], "examples": ["[Select Last] après [Record] pour rééditer."], "tips": ["Stocke jusqu’à 5 sélections."] },
-        { "id": "select-active", "subcat": "live-blind-base", "action": "Sélectionner les canaux actifs", "description": "Sélectionne les canaux non à 0 %.", "syntaxes": ["[Select Active]"], "examples": ["[Select Active][Flash] → flasher les projecteurs allumés."], "tips": ["Très utile pour les corrections ciblées."] },
-        { "id": "channel-check", "subcat": "live-blind-base", "action": "Channel Check", "description": "Test visuel temporaire d’un canal.", "syntaxes": ["[1][At][7]<0>{Chan Check}[Enter]"], "examples": ["[1][At][7]<0>{Chan Check}[Enter] → amène à 70 %."], "tips": ["Les valeurs reviennent à leur état d’origine."] },
-        { "id": "flash", "subcat": "live-blind-base", "action": "Flash temporaire", "description": "Active un canal tant que la touche est enfoncée.", "syntaxes": ["[1][Flash]"], "examples": ["[1][Flash] → identifie le projecteur 1."], "tips": ["Ne laisse aucune trace.", "Fonctionne uniquement en [Live]."] },
-        { "id": "patch-conv", "subcat": "patch-base", "action": "Patcher un projecteur conventionnel", "description": "Associe une adresse DMX à un canal.", "syntaxes": ["[1][Patch][1][Enter]"], "examples": ["Canal 1 = dimmer DMX 1."], "tips": ["Les conventionnels n’ont qu’un paramètre."] },
-        { "id": "patch-auto", "subcat": "patch-base", "action": "Patcher un projecteur automatisé", "description": "Associe plusieurs adresses DMX à un canal.", "syntaxes": ["[101][Patch]{Type} → choisir le modèle"], "examples": ["Canal 101 = VL4000 avec adresses 101–108."], "tips": ["Toujours utiliser le bon profil de fixture."] },
-        { "id": "multicell", "subcat": "patch-base", "action": "Utiliser les fixtures multicell (5.2)", "description": "Contrôle des cellules individuelles.", "syntaxes": ["[5][.][2][At][Full][Enter]"], "examples": ["Canal 5.2 = cellule 2 du fixture 5."], "tips": ["Les fixtures multicell ont un canal parent (5) et des cellules (5.1, 5.2, etc.)."] },
-        { "id": "group-create", "subcat": "groups-base", "action": "Créer un Group", "description": "Stocke une sélection de canaux pour rappel rapide.", "syntaxes": ["[1][Thru][10][Group][1][Enter]"], "examples": ["Group 1 = fronts 1 à 10."], "tips": ["Utiliser [Offset] pour créer des colonnes."] },
-        { "id": "palette-create", "subcat": "palettes-base", "action": "Créer une Palette", "description": "Stocke une valeur de paramètre (intensité, couleur, etc.).", "syntaxes": ["[1][Thru][10][Color][Red][Enter] → [Record][Color Palette][1][Enter]"], "examples": ["CP 1 = rouge."], "tips": ["Les palettes sont HTP par défaut."] },
-        { "id": "sub-create", "subcat": "submasters-base", "action": "Créer un Submaster", "description": "Stocke un look dans un Submaster.", "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Select Last][Record][Sub][101][Enter]"], "examples": ["Sub 101 = house lights à 100 %."], "tips": ["Les Submasters sont HTP par défaut."] },
-        { "id": "cue-record", "subcat": "cues-base", "action": "Enregistrer un Cue", "description": "Stocke l’état actuel dans un cue.", "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Record][Cue][1][Enter]"], "examples": ["Cue 1 = fronts à 100 %."], "tips": ["Par défaut, les données trackent."] },
-        { "id": "effect-apply", "subcat": "effects-base", "action": "Appliquer un Effect", "description": "Crée ou applique un effet (gobo rotate, dimmer chase, etc.).", "syntaxes": ["[1][Thru][4][Effect][1][Enter]"], "examples": ["Appliquer l’effet 1 (gobo rotate) aux canaux 1 à 4."], "tips": ["Les effets sont stockés dans la liste Effects (Tab 31)."] },
-        { "id": "macro-learn", "subcat": "macros-base", "action": "Enregistrer une Macro avec [Learn]", "description": "Capture une séquence de touches.", "syntaxes": ["[Learn] → [1][Enter][Go To Cue][Out][Enter] → [Learn]"], "examples": ["Macro 1 = éteint la scène proprement."], "tips": ["Ne pas utiliser [Clear] pendant l’enregistrement."] },
-        { "id": "ms-create", "subcat": "magic-sheets-base", "action": "Créer un Magic Sheet", "description": "Page personnalisée pour accès rapide.", "syntaxes": ["[Displays]{Magic Sheet}{+} → Magic Sheet 501[Enter]"], "examples": ["MS 501 = page d’accueil."], "tips": ["Utiliser des objets 'Command' pour exécuter des macros."] },
-        { "id": "about-channel", "subcat": "diagnostics-base", "action": "Utiliser [About] Channel", "description": "Affiche les erreurs, adresses, et statut d’un canal.", "syntaxes": ["[1][About]"], "examples": ["Vérifier l’état d’un projecteur HS."], "tips": ["Affiche les erreurs RDM."] },
-        { "id": "emergency-home", "subcat": "emergency-base", "action": "Réinitialiser les paramètres non-intensité (Home)", "description": "Ramène les projecteurs à leur position de base sans éteindre.", "syntaxes": ["[Home][Enter]"], "examples": ["[Home][Enter] pour remettre shutters, zoom, gobo à leur home."], "tips": ["[Home] ne touche pas l’intensité → sécurisé en pleine scène."] },
-        { "id": "copy-to", "subcat": "advanced-base", "action": "Utiliser [Copy To]", "description": "Copie des valeurs entre canaux, groupes ou palettes.", "syntaxes": ["[1][Copy To][2][Enter]"], "examples": ["Copier la couleur du canal 1 vers le canal 2."], "tips": ["Très utile pour uniformiser un système."] },
-        { "id": "sacn-input", "subcat": "show-control-base", "action": "sACN Input Monitor", "description": "Affiche les valeurs sACN entrantes en temps réel.", "syntaxes": ["Cible = Address → ex: 8/1"], "examples": ["Afficher les valeurs RGB(A) d’un univers sACN."], "tips": ["Les objets sACN se mettent à jour en temps réel."] },
-        { "id": "pixel-map", "subcat": "pixels-base", "action": "Créer une Pixel Map", "description": "Définit une grille de pixels pour les projecteurs LED.", "syntaxes": ["[Displays]{Pixel Map}{+} → Pixel Map 1[Enter]"], "examples": ["Map 1 = grille 10x10 pour un mur de pixels."], "tips": ["Utiliser le Pixel Map Editor pour définir la géométrie."] },
-        { "id": "multi-console", "subcat": "network-base", "action": "Configurer un système multi-console", "description": "Permet de partager un show entre plusieurs consoles.", "syntaxes": ["Setup > System > System Type → Primary / Backup"], "examples": ["Console 1 = Primary, Console 2 = Backup."], "tips": ["Le Primary gère les sauvegardes."] },
-        { "id": "partition-create", "subcat": "partition-base", "action": "Créer une Partition", "description": "Isole une partie du show pour un utilisateur spécifique.", "syntaxes": ["[Displays]{Partition}{+} → Partition 1[Enter]"], "examples": ["Partition 1 = cues pour le DJ."], "tips": ["Les utilisateurs ne voient que leur partition."] },
-        { "id": "file-save", "subcat": "file-base", "action": "Sauvegarder un fichier show", "description": "Enregistre le show dans la mémoire interne ou sur clé USB.", "syntaxes": ["[File][Save][Enter]"], "examples": ["[File][Save][Enter] → sauvegarde le show actuel."], "tips": ["Utiliser [Save As] pour créer une copie."] },
-        { "id": "rem-dim", "subcat": "cues-base", "action": "Utiliser Remainder Dim (Rem Dim)", "description": "Supprime le tracking d’intensité pour les canaux non sélectionnés.", "syntaxes": ["[1][Thru][5][Rem Dim][Enter]"], "examples": ["Supprime le tracking des canaux 6–10."], "tips": ["Essentiel pour éviter les intensités fantômes."] },
-        { "id": "cue-mark", "subcat": "cues-base", "action": "Système de Marks (M/m) et AutoMark", "description": "Prépare des mouvements non-intensité avant que l’intensité ne revienne.", "syntaxes": ["[1][Thru][10][Mark][Enter] → [Record][Cue][12][Enter]"], "examples": ["Dans le cue 12, les canaux 1–10 sont marqués (M rouge)."], "tips": ["Un 'm' minuscule = mark non utilisé."] },
-        { "id": "dark-move", "subcat": "cues-base", "action": "Gérer les Dark Moves (`--`)", "description": "Cue où les paramètres non-intensité bougent, mais l’intensité est à 0%.", "syntaxes": ["[1][Thru][10][At][0][Enter] → [Pan][100][Enter] → [Record][Cue][20][Enter]"], "examples": ["Le cue 20 est un dark move (indiqué par `--`)."], "tips": ["Permet de préparer des positions sans lumière."] },
-        { "id": "block", "subcat": "cues-base", "action": "Utiliser [Block]", "description": "Empêche qu’un paramètre soit modifié par les cues suivants.", "syntaxes": ["[1][Block][Enter]"], "examples": ["Block l’intensité du canal 1 pour qu’elle ne change plus."], "tips": ["Très puissant mais dangereux si mal utilisé."] },
-        { "id": "assert", "subcat": "emergency-base", "action": "Utiliser [Assert]", "description": "Force la relecture d’un cue ou submaster.", "syntaxes": ["[Sub][101][Assert][Enter]"], "examples": ["Si les lumières ne répondent plus, Assert le Sub House."], "tips": ["À réserver aux cas de dépannage."] },
-        { "id": "release", "subcat": "cues-base", "action": "Utiliser [Release]", "description": "Masque des données dans un cue sans les supprimer.", "syntaxes": ["[1][Release][Enter]"], "examples": ["Release l’intensité du canal 1 dans le cue courant."], "tips": ["Les données restent enregistrées."] },
-        { "id": "undo", "subcat": "advanced-base", "action": "Utiliser [Undo]", "description": "Annule la dernière commande.", "syntaxes": ["[Undo]"], "examples": ["[Undo] après une erreur de [Release]."], "tips": ["Historique limité."] },
-        { "id": "capture", "subcat": "advanced-base", "action": "Utiliser [Capture]", "description": "Stocke l’état actuel dans un cue ou preset.", "syntaxes": ["[Capture][Cue][999][Enter]"], "examples": ["Sauvegarde la scène actuelle dans le cue 999."], "tips": ["Inclut les données manuelles."] },
-        { "id": "trace", "subcat": "cues-base", "action": "Utiliser [Trace]", "description": "Modifie des valeurs dans les cues précédents.", "syntaxes": ["[1][At][50][Trace][Enter]"], "examples": ["Ajuste l’intensité dans les 3 derniers cues."], "tips": ["Respecte les Block."] },
-        { "id": "query", "subcat": "diagnostics-base", "action": "Utiliser [Query]", "description": "Liste les canaux selon des critères.", "syntaxes": ["[Query]{Lamp Off}[Enter]"], "examples": ["Liste tous les projecteurs éteints."], "tips": ["Très puissant mais méconnu."] },
-        { "id": "help", "subcat": "emergency-base", "action": "Utiliser le Help interactif", "description": "Affiche la fonction, la description et des exemples pour n’importe quelle touche.", "syntaxes": ["[Help] + [touche]"], "examples": ["[Help] + [Sub] affiche l’aide pour les Submasters."], "tips": ["Fonctionne aussi sur les softkeys et objets Magic Sheet."] }
-      ]
-    };
+     "commands": [
+  // === SYNTAXE & SYMBOLES ===
+  {
+    "id": "hard-key",
+    "subcat": "syntax-base",
+    "action": "Touche physique [ ]",
+    "description": "Représente une touche matérielle sur la console.",
+    "syntaxes": ["[At]", "[1]", "[Thru]", "[Full]"],
+    "examples": ["[1][Thru][10][At][Full][Enter]"],
+    "tips": ["Toujours nécessite [Enter] sauf pour [Full][Full]."]
+  },
+  {
+    "id": "softkey",
+    "subcat": "syntax-base",
+    "action": "Softkey { }",
+    "description": "Bouton à l’écran, accessible via les touches sous l’écran.",
+    "syntaxes": ["{Hold}", "{Solo}", "{Make Absolute}"],
+    "examples": ["{Hold} après enregistrement d'un submaster."],
+    "tips": ["Les softkeys changent selon le contexte."]
+  },
+  {
+    "id": "user-0",
+    "subcat": "syntax-base",
+    "action": "Utilisateur en arrière-plan <U0>",
+    "description": "Exécute une commande sans apparaître sur la ligne principale.",
+    "syntaxes": ["<U0> Clear Sneak 1 Enter"],
+    "examples": ["Bouton 'Clean Sneak' sur Magic Sheet."],
+    "tips": ["Syntaxe : `<U0>$ [commande]` (espace après `$`)."]
+  },
+  {
+    "id": "direct-select",
+    "subcat": "syntax-base",
+    "action": "Direct Select « »",
+    "description": "Boutons physiques en haut de la console.",
+    "syntaxes": ["« 1 »", "« House »"],
+    "examples": ["Stocker la palette 'Open' sur le Direct Select 1."],
+    "tips": ["Configurer via Setup > Direct Selects."]
+  },
+  {
+    "id": "enter",
+    "subcat": "syntax-base",
+    "action": "Touche [Enter]",
+    "description": "Valide la commande. Certaines commandes s’auto-valident.",
+    "syntaxes": ["[Full][Full]", "[Out][Out]", "[At][Enter]"],
+    "examples": ["[1][Thru][10][Full][Full] = allume à 100 % sans [Enter]."],
+    "tips": ["[Full][Full] = [At][Full][Enter] en raccourci."]
+  },
+  {
+    "id": "format",
+    "subcat": "syntax-base",
+    "action": "Basculer le format d'affichage [Format]",
+    "description": "Passe d’un affichage détaillé à un affichage simplifié.",
+    "syntaxes": ["[Format]"],
+    "examples": ["[Format] en Live pour voir uniquement l’intensité."],
+    "tips": ["Utile pour les régisseurs d’accueil."]
+  },
+  {
+    "id": "help",
+    "subcat": "syntax-base",
+    "action": "Aide contextuelle [Help]",
+    "description": "Affiche la fonction, description, et syntaxe d’une touche.",
+    "syntaxes": ["[Help] + [touche]"],
+    "examples": ["[Help] + [Sub] affiche l’aide pour les Submasters."],
+    "tips": ["Fonctionne sur les softkeys et objets Magic Sheet."]
+  },
+  {
+    "id": "clear",
+    "subcat": "syntax-base",
+    "action": "Effacer la ligne de commande [Clear]",
+    "description": "Annule la commande en cours.",
+    "syntaxes": ["[Clear]"],
+    "examples": ["[1][Thru][10][Clear] → annule la sélection."],
+    "tips": ["Ne supprime pas les données stockées."]
+  },
+
+  // === LIVE / BLIND ===
+  {
+    "id": "live-mode",
+    "subcat": "live-blind-base",
+    "action": "Basculer en mode Live",
+    "description": "Active la sortie DMX.",
+    "syntaxes": ["[Live]"],
+    "examples": ["[Live] → fond doré, sortie active."],
+    "tips": ["Fond **doré** en Live."]
+  },
+  {
+    "id": "blind-mode",
+    "subcat": "live-blind-base",
+    "action": "Basculer en mode Blind",
+    "description": "Édition sans sortie DMX.",
+    "syntaxes": ["[Blind]"],
+    "examples": ["[Blind] → fond bleu, édition sécurisée."],
+    "tips": ["Fond **bleu** en Blind."]
+  },
+  {
+    "id": "select-last",
+    "subcat": "live-blind-base",
+    "action": "Sélectionner la dernière sélection",
+    "description": "Rappelle les 5 dernières sélections.",
+    "syntaxes": ["[Select Last]"],
+    "examples": ["[Select Last] après [Record] pour rééditer."],
+    "tips": ["Stocke jusqu’à 5 sélections."]
+  },
+  {
+    "id": "select-active",
+    "subcat": "live-blind-base",
+    "action": "Sélectionner les canaux actifs",
+    "description": "Sélectionne les canaux non à 0 %.",
+    "syntaxes": ["[Select Active]"],
+    "examples": ["[Select Active][Flash] → flasher les projecteurs allumés."],
+    "tips": ["Très utile pour les corrections ciblées."]
+  },
+  {
+    "id": "channel-check",
+    "subcat": "live-blind-base",
+    "action": "Channel Check",
+    "description": "Test visuel temporaire d’un canal.",
+    "syntaxes": ["[1][At][7]<0>{Chan Check}[Enter]"],
+    "examples": ["[1][At][7]<0>{Chan Check}[Enter] → amène à 70 %."],
+    "tips": ["Les valeurs reviennent à leur état d’origine."]
+  },
+  {
+    "id": "address-at-level",
+    "subcat": "live-blind-base",
+    "action": "Address At Level",
+    "description": "Permet de piloter une adresse DMX directement.",
+    "syntaxes": ["[Address][513][At][50][Enter]"],
+    "examples": ["[Address][513][At][50][Enter] → met l’adresse 513 à 50 %."],
+    "tips": ["Utile pour le diagnostic."]
+  },
+  {
+    "id": "address-check",
+    "subcat": "live-blind-base",
+    "action": "Address Check",
+    "description": "Vérifie la valeur d’une adresse DMX.",
+    "syntaxes": ["[Address][513][At][Check][Enter]"],
+    "examples": ["[Address][513][At][Check][Enter] → affiche la valeur actuelle."],
+    "tips": ["Ne modifie pas la valeur."]
+  },
+  {
+    "id": "flash",
+    "subcat": "live-blind-base",
+    "action": "Flash temporaire",
+    "description": "Active un canal tant que la touche est enfoncée.",
+    "syntaxes": ["[1][Flash]"],
+    "examples": ["[1][Flash] → identifie le projecteur 1."],
+    "tips": ["Ne laisse aucune trace.", "Fonctionne uniquement en [Live]."]
+  },
+  {
+    "id": "staging-mode",
+    "subcat": "live-blind-base",
+    "action": "Staging Mode",
+    "description": "Permet de préparer des looks sans affecter la scène.",
+    "syntaxes": ["[Staging]"],
+    "examples": ["[Staging] → modifier des cues sans les jouer."],
+    "tips": ["Disponible sur Eos Ti, Eos, Gio."]
+  },
+  {
+    "id": "highlight",
+    "subcat": "live-blind-base",
+    "action": "Highlight",
+    "description": "Augmente temporairement l’intensité d’un canal.",
+    "syntaxes": ["[1][Highlight][Enter]"],
+    "examples": ["[1][Highlight][Enter] → intensité à 100 % temporairement."],
+    "tips": ["Ne stocke pas la valeur."]
+  },
+  {
+    "id": "lowlight",
+    "subcat": "live-blind-base",
+    "action": "Lowlight",
+    "description": "Diminue temporairement l’intensité d’un canal.",
+    "syntaxes": ["[1][Lowlight][Enter]"],
+    "examples": ["[1][Lowlight][Enter] → intensité à 10 % temporairement."],
+    "tips": ["Ne stocke pas la valeur."]
+  },
+
+  // === PATCH & FIXTURES ===
+  {
+    "id": "patch-conv",
+    "subcat": "patch-base",
+    "action": "Patcher un projecteur conventionnel",
+    "description": "Associe une adresse DMX à un canal.",
+    "syntaxes": ["[1][Patch][1][Enter]"],
+    "examples": ["Canal 1 = dimmer DMX 1."],
+    "tips": ["Les conventionnels n’ont qu’un paramètre."]
+  },
+  {
+    "id": "patch-auto",
+    "subcat": "patch-base",
+    "action": "Patcher un projecteur automatisé",
+    "description": "Associe plusieurs adresses DMX à un canal.",
+    "syntaxes": ["[101][Patch]{Type} → choisir le modèle"],
+    "examples": ["Canal 101 = VL4000 avec adresses 101–108."],
+    "tips": ["Toujours utiliser le bon profil de fixture."]
+  },
+  {
+    "id": "multicell",
+    "subcat": "patch-base",
+    "action": "Utiliser les fixtures multicell (5.2)",
+    "description": "Contrôle des cellules individuelles.",
+    "syntaxes": ["[5][.][2][At][Full][Enter]"],
+    "examples": ["Canal 5.2 = cellule 2 du fixture 5."],
+    "tips": ["Les fixtures multicell ont un canal parent (5) et des cellules (5.1, 5.2, etc.)."]
+  },
+  {
+    "id": "lamp-controls",
+    "subcat": "patch-base",
+    "action": "Configurer les Lamp Controls",
+    "description": "Définir les commandes d’alimentation des projecteurs.",
+    "syntaxes": ["[1][Lamp Ctrls]{Strike Lamp}[Enter]"],
+    "examples": ["[1][Lamp Ctrls]{Douse Lamp}[Enter] → éteint la lampe."],
+    "tips": ["Disponible dans le Fixture Editor."]
+  },
+  {
+    "id": "patch-1-to-1",
+    "subcat": "patch-base",
+    "action": "Clear Patch (1-to-1)",
+    "description": "Supprime tout le patch.",
+    "syntaxes": ["[Clear]{Patch 1 to 1}[Enter]"],
+    "examples": ["[Clear]{Patch 1 to 1}[Enter] → efface tout le patch."],
+    "tips": ["À utiliser avec prudence."]
+  },
+  {
+    "id": "device-list",
+    "subcat": "patch-base",
+    "action": "Utiliser Device List",
+    "description": "Affiche la liste des dispositifs patchés.",
+    "syntaxes": ["{Device List}"],
+    "examples": ["{Device List} → ouvre la liste des fixtures."],
+    "tips": ["Utile pour le diagnostic RDM."]
+  },
+  {
+    "id": "swap-channels",
+    "subcat": "patch-base",
+    "action": "Swapper deux canaux",
+    "description": "Échange les adresses DMX de deux canaux.",
+    "syntaxes": ["[1]{Swap}[2][Enter]"],
+    "examples": ["[1]{Swap}[2][Enter] → échange les adresses de 1 et 2."],
+    "tips": ["Utile pour réorganiser un patch existant."]
+  },
+  {
+    "id": "unpatch",
+    "subcat": "patch-base",
+    "action": "Dépatcher un canal",
+    "description": "Supprime l’adresse DMX d’un canal.",
+    "syntaxes": ["[1][Unpatch][Enter]"],
+    "examples": ["[1][Unpatch][Enter] → supprime l’adresse du canal 1."],
+    "tips": ["Le canal devient non patché mais reste dans la liste."]
+  },
+
+  // === GROUPS ===
+  {
+    "id": "group-create",
+    "subcat": "groups-base",
+    "action": "Créer un Group",
+    "description": "Stocke une sélection de canaux pour rappel rapide.",
+    "syntaxes": ["[1][Thru][10][Group][1][Enter]"],
+    "examples": ["Group 1 = fronts 1 à 10."],
+    "tips": ["Utiliser [Offset] pour créer des colonnes."]
+  },
+  {
+    "id": "group-num",
+    "subcat": "groups-base",
+    "action": "Group Num",
+    "description": "Crée des sous-groupes automatiques.",
+    "syntaxes": ["[1][Thru][12]{Num Groups}[3][Enter]"],
+    "examples": ["Crée 3 groupes de 4 canaux : (1–4), (5–8), (9–12)."],
+    "tips": ["Utile pour les systèmes symétriques."]
+  },
+  {
+    "id": "group-offset",
+    "subcat": "groups-base",
+    "action": "Group Offset",
+    "description": "Créé des groupes avec décalage.",
+    "syntaxes": ["[1][Thru][4]{Offset}[5][Enter]"],
+    "examples": ["Group = (1,6), (2,7), (3,8), (4,9)."],
+    "tips": ["Idéal pour les colonnes de projecteurs."]
+  },
+  {
+    "id": "group-auto",
+    "subcat": "groups-base",
+    "action": "Auto Group",
+    "description": "Crée des groupes basés sur le type de fixture.",
+    "syntaxes": ["{Auto Group}"],
+    "examples": ["{Auto Group} → crée des groupes par type (spots, wash, etc.)."],
+    "tips": ["Disponible dans le Group List."]
+  },
+
+  // === PALETTES ===
+  {
+    "id": "palette-create",
+    "subcat": "palettes-base",
+    "action": "Créer une Palette",
+    "description": "Stocke une valeur de paramètre (intensité, couleur, etc.).",
+    "syntaxes": ["[1][Thru][10][Color][Red][Enter] → [Record][Color Palette][1][Enter]"],
+    "examples": ["CP 1 = rouge."],
+    "tips": ["Les palettes sont HTP par défaut."]
+  },
+  {
+    "id": "make-absolute",
+    "subcat": "palettes-base",
+    "action": "Utiliser {Make Absolute}",
+    "description": "Convertit les valeurs référencées en valeurs absolues.",
+    "syntaxes": ["[1][Thru][5]{Make Absolute}[Enter]"],
+    "examples": ["Casse la référence à la palette de couleur."],
+    "tips": ["À utiliser avant un [Update]."]
+  },
+  {
+    "id": "make-null",
+    "subcat": "palettes-base",
+    "action": "Utiliser {Make Null}",
+    "description": "Supprime les valeurs d’un paramètre sans affecter les autres.",
+    "syntaxes": ["[1]{Color}{Make Null}[Enter]"],
+    "examples": ["Efface la couleur du canal 1 sans toucher à l’intensité."],
+    "tips": ["Ne fonctionne pas sur l’intensité."]
+  },
+  {
+    "id": "by-type",
+    "subcat": "palettes-base",
+    "action": "Utiliser By Type Palettes",
+    "description": "Rappelle les palettes par type de fixture.",
+    "syntaxes": ["[Group][1][Recall From][By Type][Color][1][Enter]"],
+    "examples": ["Applique la palette 1 uniquement aux fixtures de type 'Front'."],
+    "tips": ["Très utile pour les systèmes hétérogènes."]
+  },
+  {
+    "id": "palette-lock",
+    "subcat": "palettes-base",
+    "action": "Verrouiller une Palette",
+    "description": "Empêche la modification accidentelle d’une palette.",
+    "syntaxes": ["{Locked}[Enter] après l’enregistrement"],
+    "examples": ["Palette 1 est verrouillée contre les modifications."],
+    "tips": ["Visible dans la liste des palettes (icône de cadenas)."]
+  },
+
+  // === SUBMASTERS ===
+  {
+    "id": "sub-create",
+    "subcat": "submasters-base",
+    "action": "Créer un Submaster",
+    "description": "Stocke un look dans un Submaster.",
+    "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Select Last][Record][Sub][101][Enter]"],
+    "examples": ["Sub 101 = house lights à 100 %."],
+    "tips": ["Les Submasters sont HTP par défaut."]
+  },
+  {
+    "id": "sub-hold",
+    "subcat": "submasters-base",
+    "action": "Activer le mode Hold",
+    "description": "Empêche le Submaster de s’éteindre automatiquement.",
+    "syntaxes": ["{Hold}[Enter] après l’enregistrement"],
+    "examples": ["Après avoir enregistré Sub 101, appuyer sur {Hold}."],
+    "tips": ["Essentiel pour les house lights."]
+  },
+  {
+    "id": "sub-solo",
+    "subcat": "submasters-base",
+    "action": "Utiliser le mode Solo",
+    "description": "Isole un Submaster pour édition.",
+    "syntaxes": ["[Sub][101]{Solo}[Enter]"],
+    "examples": ["Seul le Sub 101 est actif."],
+    "tips": ["À utiliser avec prudence en spectacle."]
+  },
+  {
+    "id": "execute-list",
+    "subcat": "submasters-base",
+    "action": "Utiliser Execute List",
+    "description": "Affiche la liste des Submasters actifs.",
+    "syntaxes": ["[Displays]{Execute List}"],
+    "examples": ["{Execute List} → ouvre la liste des Submasters."],
+    "tips": ["Utile pour le diagnostic."]
+  },
+  {
+    "id": "sub-fade",
+    "subcat": "submasters-base",
+    "action": "Configurer les temps de fondu d’un Submaster",
+    "description": "Définit les temps Up/Down pour un Submaster.",
+    "syntaxes": ["[Sub][101][Time][2][Time][2][Enter]"],
+    "examples": ["Sub 101 : Up=2s, Down=2s."],
+    "tips": ["Visible dans la Submaster List."]
+  },
+
+  // === CUES & CUE LISTS ===
+  {
+    "id": "cue-record",
+    "subcat": "cues-base",
+    "action": "Enregistrer un Cue",
+    "description": "Stocke l’état actuel dans un cue.",
+    "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Record][Cue][1][Enter]"],
+    "examples": ["Cue 1 = fronts à 100 %."],
+    "tips": ["Par défaut, les données trackent."]
+  },
+  {
+    "id": "cue-update",
+    "subcat": "cues-base",
+    "action": "Mettre à jour un Cue",
+    "description": "Modifie un cue avec les valeurs actuelles.",
+    "syntaxes": ["[1][At][50][Enter] → [Update][Cue][1][Enter]"],
+    "examples": ["Modifier l’intensité du canal 1 dans le Cue 1."],
+    "tips": ["[Q Only] met à jour uniquement l’intensité."]
+  },
+  {
+    "id": "go-to-cue",
+    "subcat": "cues-base",
+    "action": "Aller à un Cue",
+    "description": "Joue un cue existant.",
+    "syntaxes": ["[Go To Cue][5][Enter]"],
+    "examples": ["[Go To Cue][1][Enter] pour le premier cue."],
+    "tips": ["Double pression = [Go To Cue Complete]."]
+  },
+  {
+    "id": "cue-mark",
+    "subcat": "cues-base",
+    "action": "Système de Marks (M/m) et AutoMark",
+    "description": "Prépare des mouvements non-intensité avant que l’intensité ne revienne.",
+    "syntaxes": ["[1][Thru][10][Mark][Enter] → [Record][Cue][12][Enter]"],
+    "examples": ["Dans le cue 12, les canaux 1–10 sont marqués (M rouge)."],
+    "tips": ["Un 'm' minuscule = mark non utilisé."]
+  },
+  {
+    "id": "dark-move",
+    "subcat": "cues-base",
+    "action": "Gérer les Dark Moves (`--`)",
+    "description": "Cue où les paramètres non-intensité bougent, mais l’intensité est à 0%.",
+    "syntaxes": ["[1][Thru][10][At][0][Enter] → [Pan][100][Enter] → [Record][Cue][20][Enter]"],
+    "examples": ["Le cue 20 est un dark move (indiqué par `--`)."],
+    "tips": ["Permet de préparer des positions sans lumière."]
+  },
+  {
+    "id": "minus-links",
+    "subcat": "cues-base",
+    "action": "Utiliser {Minus Links} dans Go To Cue",
+    "description": "Exécute un cue sans déclencher ses liens.",
+    "syntaxes": ["[Go To Cue][4]{Minus Links}[Enter]"],
+    "examples": ["Joue le cue 4 sans déclencher le cue suivant lié."],
+    "tips": ["Utile pour tester un cue isolément."]
+  },
+  {
+    "id": "complete-cue",
+    "subcat": "cues-base",
+    "action": "Utiliser {Complete} dans Go To Cue",
+    "description": "Exécute un cue et tous ses liens en chaîne.",
+    "syntaxes": ["[Go To Cue][4]{Complete}[Enter]"],
+    "examples": ["Joue le cue 4, puis 5, puis 6 si liés."],
+    "tips": ["Simule une exécution normale."]
+  },
+  {
+    "id": "use-marks",
+    "subcat": "cues-base",
+    "action": "Utiliser {Use Marks} dans Go To Cue",
+    "description": "Force l’utilisation des marks même si l’intensité n’est pas à 0%.",
+    "syntaxes": ["[Go To Cue][5]{Use Marks}[Enter]"],
+    "examples": ["Déclenche le mark même si les projecteurs sont allumés."],
+    "tips": ["À utiliser avec prudence."]
+  },
+  {
+    "id": "cue-timing",
+    "subcat": "cues-base",
+    "action": "Gérer le Timing au niveau du Cue",
+    "description": "Définit les temps Up/Down, Delay, etc.",
+    "syntaxes": ["[Cue][5][Time][1][Time][2][Enter]"],
+    "examples": ["Cue 5 : Up=1s, Down=2s."],
+    "tips": ["Visible dans la colonne 'Timing'."]
+  },
+  {
+    "id": "track-vs-cue-only",
+    "subcat": "cues-base",
+    "action": "Comprendre Tracking vs Cue Only",
+    "description": "Le tracking fait persister les valeurs ; Cue Only n’enregistre que les données manuelles.",
+    "syntaxes": ["[Record Only][Cue][5][Enter]"],
+    "examples": ["Enregistre uniquement les données manuelles."],
+    "tips": ["Utiliser [Rem Dim] pour supprimer le tracking."]
+  },
+  {
+    "id": "rem-dim",
+    "subcat": "cues-base",
+    "action": "Utiliser Remainder Dim (Rem Dim)",
+    "description": "Supprime le tracking d’intensité pour les canaux non sélectionnés.",
+    "syntaxes": ["[1][Thru][5][Rem Dim][Enter]"],
+    "examples": ["Supprime le tracking des canaux 6–10."],
+    "tips": ["Essentiel pour éviter les intensités fantômes."]
+  },
+  {
+    "id": "preheat",
+    "subcat": "cues-base",
+    "action": "Utiliser Preheat",
+    "description": "Chauffe les filaments avant un fondu montant.",
+    "syntaxes": ["[1][Preheat][Enter]"],
+    "examples": ["[1][Preheat][Enter] → active le preheat pour le canal 1."],
+    "tips": ["Disponible dans le Patch."]
+  },
+  {
+    "id": "flags",
+    "subcat": "cues-base",
+    "action": "Utiliser les Flags de Cue",
+    "description": "Indicateurs visuels dans la liste des cues.",
+    "syntaxes": [],
+    "examples": ["'M' = cue marqué, 'R' = cue qui référence un mark, '--' = dark move."],
+    "tips": ["Un 'm' minuscule = mark non utilisé → à nettoyer."]
+  },
+  {
+    "id": "go-to-cue-0",
+    "subcat": "cues-base",
+    "action": "Utiliser Go To Cue 0",
+    "description": "Éteint les intensités manuelles sans affecter les Cues actifs.",
+    "syntaxes": ["[Go To Cue][0][Enter]"],
+    "examples": ["[Go To Cue][0] éteint les house lights si elles sont manuelles."],
+    "tips": ["N’affecte pas les canaux contrôlés par un Submaster HTP."]
+  },
+  {
+    "id": "go-to-cue-out",
+    "subcat": "cues-base",
+    "action": "Utiliser Go To Cue Out",
+    "description": "Réinitialise tous les paramètres et revient au premier cue.",
+    "syntaxes": ["[Go To Cue][Out][Enter]"],
+    "examples": ["[Go To Cue][Out] → réinitialise la scène."],
+    "tips": ["À éviter en représentation."]
+  },
+
+  // === EFFECTS ===
+  {
+    "id": "effect-apply",
+    "subcat": "effects-base",
+    "action": "Appliquer un Effect",
+    "description": "Crée ou applique un effet (gobo rotate, dimmer chase, etc.).",
+    "syntaxes": ["[1][Thru][4][Effect][1][Enter]"],
+    "examples": ["Appliquer l’effet 1 (gobo rotate) aux canaux 1 à 4."],
+    "tips": ["Les effets sont stockés dans la liste Effects (Tab 31)."]
+  },
+  {
+    "id": "stop-effect",
+    "subcat": "effects-base",
+    "action": "Arrêter tous les effets",
+    "description": "Arrête tous les effets actifs sur tous les canaux.",
+    "syntaxes": ["[Stop Effect][Enter]"],
+    "examples": ["[Stop Effect][Enter] → arrête tous les effets."],
+    "tips": ["N’affecte pas les intensités."]
+  },
+  {
+    "id": "effect-create",
+    "subcat": "effects-base",
+    "action": "Créer un Effect",
+    "description": "Enregistre un effet personnalisé.",
+    "syntaxes": ["[1][Thru][4][Effect][Record][1][Enter]"],
+    "examples": ["Effect 1 = rotation de gobo sur les canaux 1–4."],
+    "tips": ["Utiliser le Effect Editor (Tab 32) pour plus de contrôle."]
+  },
+
+  // === MACROS ===
+  {
+    "id": "macro-learn",
+    "subcat": "macros-base",
+    "action": "Enregistrer une Macro avec [Learn]",
+    "description": "Capture une séquence de touches.",
+    "syntaxes": ["[Learn] → [1][Enter][Go To Cue][Out][Enter] → [Learn]"],
+    "examples": ["Macro 1 = éteint la scène proprement."],
+    "tips": ["Ne pas utiliser [Clear] pendant l’enregistrement."]
+  },
+  {
+    "id": "macro-background",
+    "subcat": "macros-base",
+    "action": "Exécuter une macro en arrière-plan",
+    "description": "Permet d’exécuter des commandes sans perturber la ligne principale.",
+    "syntaxes": ["<U0> Macro 1 Enter"],
+    "examples": ["Bouton 'Clean Sneak' sur Magic Sheet."],
+    "tips": ["Syntaxe : `<U0>$ Macro [num] Enter`."]
+  },
+  {
+    "id": "macro-wait",
+    "subcat": "macros-base",
+    "action": "Utiliser {Wait} dans une Macro",
+    "description": "Ajoute une pause dans une macro.",
+    "syntaxes": ["[Learn] → [1][Enter] → {Wait} → [5] → [2][Enter] → [Learn]"],
+    "examples": ["Macro attend 5 secondes avant d’allumer le canal 2."],
+    "tips": ["{Wait} en secondes."]
+  },
+  {
+    "id": "macro-loop",
+    "subcat": "macros-base",
+    "action": "Utiliser {Loop} dans une Macro",
+    "description": "Crée une boucle dans une macro.",
+    "syntaxes": ["[Learn] → {Loop Begin} → [1][At][50][Enter] → {Loop End} → [Loop Num][3][Enter] → [Learn]"],
+    "examples": ["Macro clignote le canal 1 trois fois."],
+    "tips": ["Disponible dans le Macro Editor."]
+  },
+
+  // === MAGIC SHEETS ===
+  {
+    "id": "ms-create",
+    "subcat": "magic-sheets-base",
+    "action": "Créer un Magic Sheet",
+    "description": "Page personnalisée pour accès rapide.",
+    "syntaxes": ["[Displays]{Magic Sheet}{+} → Magic Sheet 501[Enter]"],
+    "examples": ["MS 501 = page d’accueil."],
+    "tips": ["Utiliser des objets 'Command' pour exécuter des macros."]
+  },
+  {
+    "id": "ms-indicator",
+    "subcat": "magic-sheets-base",
+    "action": "Créer un indicateur visuel",
+    "description": "Affiche visuellement si un Submaster est actif.",
+    "syntaxes": ["Patch Channel 9101 = MS Indicator", "[Blind][Sub][101][Enter] → [9101][At][Full][Enter]"],
+    "examples": ["Rectangle gris = Sub actif."],
+    "tips": ["Le canal indicateur ne doit jamais avoir d’adresse DMX."]
+  },
+  {
+    "id": "home-tab",
+    "subcat": "magic-sheets-base",
+    "action": "Créer une page d'accueil (Home Tab)",
+    "description": "Page Magic Sheet simple, centrée sur les fonctions d’accueil.",
+    "syntaxes": [],
+    "examples": ["Magic Sheet 501 avec Sub 101 (House), bouton Help → MS 501.1."],
+    "tips": ["Ne jamais inclure de fonctions comme Update, Move, ou Blind."]
+  },
+  {
+    "id": "ms-nav",
+    "subcat": "magic-sheets-base",
+    "action": "Naviguer entre Magic Sheets via macros",
+    "description": "Permet de changer de page Magic Sheet rapidement.",
+    "syntaxes": ["Macro 501 → Magic Sheet 501"],
+    "examples": ["Menu latéral avec 8 boutons (Home, Movers, Control…)."],
+    "tips": ["Utiliser des **Background Macros**."]
+  },
+  {
+    "id": "popup-ms",
+    "subcat": "magic-sheets-base",
+    "action": "Utiliser un Popup Magic Sheet",
+    "description": "Affiche un Magic Sheet en popup par-dessus l’écran actuel.",
+    "syntaxes": ["[Displays]{Popup Magic Sheet}"],
+    "examples": ["Popup avec les groups fréquemment utilisés."],
+    "tips": ["Configurer via Setup > User > Displays > Popup Magic Sheet."]
+  },
+
+  // === DIAGNOSTICS ===
+  {
+    "id": "about-channel",
+    "subcat": "diagnostics-base",
+    "action": "Utiliser [About] Channel",
+    "description": "Affiche les erreurs, adresses, et statut d’un canal.",
+    "syntaxes": ["[1][About]"],
+    "examples": ["Vérifier l’état d’un projecteur HS."],
+    "tips": ["Affiche les erreurs RDM."]
+  },
+  {
+    "id": "about-system",
+    "subcat": "diagnostics-base",
+    "action": "Utiliser [About] System",
+    "description": "Affiche les informations réseau et logicielles.",
+    "syntaxes": ["[About]{System}"],
+    "examples": ["[About]{System} → ouvre la liste des consoles connectées."],
+    "tips": ["Utile pour le multi-console."]
+  },
+  {
+    "id": "query",
+    "subcat": "diagnostics-base",
+    "action": "Utiliser [Query]",
+    "description": "Liste les canaux selon des critères.",
+    "syntaxes": ["[Query]{Lamp Off}[Enter]"],
+    "examples": ["Liste tous les projecteurs éteints."],
+    "tips": ["Très puissant mais méconnu."]
+  },
+  {
+    "id": "channel-check-advanced",
+    "subcat": "diagnostics-base",
+    "action": "Channel Check avancé avec Next/Last",
+    "description": "Parcourt les canaux un par un en Channel Check.",
+    "syntaxes": ["[1][At][7]<0>{Chan Check}[Enter] → [Next]"],
+    "examples": ["Passe au canal suivant après vérification."],
+    "tips": ["Les valeurs reviennent automatiquement à leur état précédent."]
+  },
+
+  // === COMMANDES D’URGENCE ===
+  {
+    "id": "emergency-home",
+    "subcat": "emergency-base",
+    "action": "Réinitialiser les paramètres non-intensité (Home)",
+    "description": "Ramène les projecteurs à leur position de base sans éteindre.",
+    "syntaxes": ["[Home][Enter]"],
+    "examples": ["[Home][Enter] pour remettre shutters, zoom, gobo à leur home."],
+    "tips": ["[Home] ne touche pas l’intensité → sécurisé en pleine scène."]
+  },
+  {
+    "id": "emergency-flash",
+    "subcat": "emergency-base",
+    "action": "Flash temporaire",
+    "description": "Active un canal brièvement tant que la touche est enfoncée.",
+    "syntaxes": ["[1][Flash]"],
+    "examples": ["Identifier brièvement le projecteur 1."],
+    "tips": ["Ne laisse aucune trace dans les données du show."]
+  },
+  {
+    "id": "help",
+    "subcat": "emergency-base",
+    "action": "Utiliser le Help interactif",
+    "description": "Affiche la fonction, la description et des exemples pour n’importe quelle touche.",
+    "syntaxes": ["[Help] + [touche]"],
+    "examples": ["[Help] + [Sub] affiche la syntaxe de création de Submaster."],
+    "tips": ["Fonctionne aussi sur les softkeys et objets Magic Sheet."]
+  },
+  {
+    "id": "allfade",
+    "subcat": "emergency-base",
+    "action": "Utiliser [Allfade]",
+    "description": "Fait fondre progressivement toute la scène à 0 %.",
+    "syntaxes": ["[Allfade][Enter]"],
+    "examples": ["[Allfade][Enter] → fin de spectacle douce."],
+    "tips": ["Le Allfade Master se configure dans Setup > Timings."]
+  },
+  {
+    "id": "grandmaster",
+    "subcat": "emergency-base",
+    "action": "Utiliser le Grandmaster",
+    "description": "Contrôle global de l’intensité.",
+    "syntaxes": ["[Grandmaster][50][Enter]"],
+    "examples": ["[Grandmaster][50][Enter] → met le GM à 50 %."],
+    "tips": ["Les Submasters peuvent être exclus du GM."]
+  },
+  {
+    "id": "grandmaster-exempt",
+    "subcat": "submasters-base",
+    "action": "Exclure du Grandmaster",
+    "description": "Empêche un canal/submaster d’être affecté par le Grandmaster.",
+    "syntaxes": ["[Sub][101]{Exclude From Grandmaster}[Enter]"],
+    "examples": ["Les house lights ne sont pas affectées par le GM."],
+    "tips": ["Option dans les propriétés du Submaster."]
+  },
+  {
+    "id": "freeze",
+    "subcat": "cues-base",
+    "action": "Utiliser [Freeze]",
+    "description": "Gèle les valeurs actuelles.",
+    "syntaxes": ["[Freeze][Enter]"],
+    "examples": ["[Freeze][Enter] → fige la scène actuelle."],
+    "tips": ["Utile pour les arrêts d’urgence."]
+  },
+
+  // === CONTRÔLE AVANCÉ ===
+  {
+    "id": "copy-to",
+    "subcat": "advanced-base",
+    "action": "Utiliser [Copy To]",
+    "description": "Copie des valeurs entre canaux, groupes ou palettes.",
+    "syntaxes": ["[1][Copy To][2][Enter]"],
+    "examples": ["Copier la couleur du canal 1 vers le canal 2."],
+    "tips": ["Très utile pour uniformiser un système."]
+  },
+  {
+    "id": "recall-from",
+    "subcat": "advanced-base",
+    "action": "Utiliser [Recall From]",
+    "description": "Rappelle des données d’un autre endroit.",
+    "syntaxes": ["[1][Recall From][Cue][5][Enter]"],
+    "examples": ["Rappelle l’état du canal 1 dans le cue 5."],
+    "tips": ["Peut être utilisé avec [Sneak] pour un fondu."]
+  },
+  {
+    "id": "undo",
+    "subcat": "advanced-base",
+    "action": "Utiliser [Undo]",
+    "description": "Annule la dernière commande.",
+    "syntaxes": ["[Undo]"],
+    "examples": ["[Undo] après une erreur de [Release]."],
+    "tips": ["Historique limité."]
+  },
+  {
+    "id": "capture",
+    "subcat": "advanced-base",
+    "action": "Utiliser [Capture]",
+    "description": "Stocke l’état actuel dans un cue ou preset.",
+    "syntaxes": ["[Capture][Cue][999][Enter]"],
+    "examples": ["Sauvegarde la scène actuelle dans le cue 999."],
+    "tips": ["Inclut les données manuelles."]
+  },
+  {
+    "id": "trace",
+    "subcat": "cues-base",
+    "action": "Utiliser [Trace]",
+    "description": "Modifie des valeurs dans les cues précédents.",
+    "syntaxes": ["[1][At][50][Trace][Enter]"],
+    "examples": ["Ajuste l’intensité dans les 3 derniers cues."],
+    "tips": ["Respecte les Block."]
+  },
+  {
+    "id": "block",
+    "subcat": "cues-base",
+    "action": "Utiliser [Block]",
+    "description": "Empêche qu’un paramètre soit modifié.",
+    "syntaxes": ["[1][Block][Enter]"],
+    "examples": ["Block l’intensité du canal 1 pour qu’elle ne change plus."],
+    "tips": ["Très puissant mais dangereux si mal utilisé."]
+  },
+  {
+    "id": "assert",
+    "subcat": "emergency-base",
+    "action": "Utiliser [Assert]",
+    "description": "Force la relecture d’un cue ou submaster.",
+    "syntaxes": ["[Sub][101][Assert][Enter]"],
+    "examples": ["Si les lumières ne répondent plus, Assert le Sub House."],
+    "tips": ["À réserver aux cas de dépannage."]
+  },
+  {
+    "id": "release",
+    "subcat": "cues-base",
+    "action": "Utiliser [Release]",
+    "description": "Masque des données dans un cue.",
+    "syntaxes": ["[1][Release][Enter]"],
+    "examples": ["Release l’intensité du canal 1 dans le cue courant."],
+    "tips": ["Les données restent enregistrées."]
+  },
+  {
+    "id": "release-all",
+    "subcat": "cues-base",
+    "action": "Utiliser [Release All]",
+    "description": "Masque toutes les données manuelles.",
+    "syntaxes": ["[Release All][Enter]"],
+    "examples": ["[Release All][Enter] → nettoie la scène."],
+    "tips": ["Peut être annulé avec [Assert All]."]
+  },
+
+  // === SHOW CONTROL ===
+  {
+    "id": "sacn-input",
+    "subcat": "show-control-base",
+    "action": "sACN Input Monitor",
+    "description": "Affiche les valeurs sACN entrantes en temps réel.",
+    "syntaxes": ["Cible = Address → ex: 8/1"],
+    "examples": ["Afficher les valeurs RGB(A) d’un univers sACN."],
+    "tips": ["Les objets sACN se mettent à jour en temps réel."]
+  },
+  {
+    "id": "midi-show-control",
+    "subcat": "show-control-base",
+    "action": "Utiliser MIDI Show Control",
+    "description": "Contrôle Eos via MIDI.",
+    "syntaxes": ["Go 1", "Fire 10"],
+    "examples": ["Go 1 → joue le cue 1.", "Fire 10 → exécute la macro 10."],
+    "tips": ["Supporte les commandes Go, Stop, Resume, Fire."]
+  },
+  {
+    "id": "osc",
+    "subcat": "show-control-base",
+    "action": "Utiliser Open Sound Control (OSC)",
+    "description": "Contrôle Eos via OSC.",
+    "syntaxes": ["/eos/cue/1/1/fire"],
+    "examples": ["/eos/cue/1/1/fire → joue le cue 1.1."],
+    "tips": ["Supporte l’envoi et la réception de données OSC."]
+  },
+  {
+    "id": "timecode",
+    "subcat": "show-control-base",
+    "action": "Utiliser le Time Code",
+    "description": "Synchronise Eos avec un signal Time Code.",
+    "syntaxes": ["Setup > Show Control > Time Code → Enable"],
+    "examples": ["Active le Time Code pour la synchronisation."],
+    "tips": ["Supporte LTC, MTC, et Art-Net Time Code."]
+  },
+
+  // === PIXELS & MEDIA ===
+  {
+    "id": "pixel-map",
+    "subcat": "pixels-base",
+    "action": "Créer une Pixel Map",
+    "description": "Définit une grille de pixels pour les projecteurs LED.",
+    "syntaxes": ["[Displays]{Pixel Map}{+} → Pixel Map 1[Enter]"],
+    "examples": ["Map 1 = grille 10x10 pour un mur de pixels."],
+    "tips": ["Utiliser le Pixel Map Editor pour définir la géométrie."]
+  },
+  {
+    "id": "pixel-preview",
+    "subcat": "pixels-base",
+    "action": "Utiliser Pixel Preview",
+    "description": "Affiche un aperçu visuel des pixels.",
+    "syntaxes": ["[Displays]{Pixel Preview}"],
+    "examples": ["[Displays]{Pixel Preview} → ouvre la vue pixels."],
+    "tips": ["Utile pour le mapping et la programmation."]
+  },
+
+  // === RÉSEAU & MULTI-CONSOLE ===
+  {
+    "id": "multi-console",
+    "subcat": "network-base",
+    "action": "Configurer un système multi-console",
+    "description": "Permet de partager un show entre plusieurs consoles.",
+    "syntaxes": ["Setup > System > System Type → Primary / Backup"],
+    "examples": ["Console 1 = Primary, Console 2 = Backup."],
+    "tips": ["Le Primary gère les sauvegardes."]
+  },
+  {
+    "id": "user-id",
+    "subcat": "network-base",
+    "action": "Configurer l’User ID",
+    "description": "Définit l’identifiant utilisateur pour le partage de données.",
+    "syntaxes": ["Setup > System > User ID → 1"],
+    "examples": ["User ID 1 = opérateur principal."],
+    "tips": ["Permet de voir les données des autres utilisateurs en bleu."]
+  },
+
+  // === PARTITIONS ===
+  {
+    "id": "partition-create",
+    "subcat": "partition-base",
+    "action": "Créer une Partition",
+    "description": "Isole une partie du show pour un utilisateur spécifique.",
+    "syntaxes": ["[Displays]{Partition}{+} → Partition 1[Enter]"],
+    "examples": ["Partition 1 = cues pour le DJ."],
+    "tips": ["Les utilisateurs ne voient que leur partition."]
+  },
+  {
+    "id": "partition-select",
+    "subcat": "partition-base",
+    "action": "Sélectionner une Partition",
+    "description": "Passe à une partition spécifique.",
+    "syntaxes": ["{Partition}[1][Enter]"],
+    "examples": ["{Partition}[1][Enter] → active la partition 1."],
+    "tips": ["Partition 901 = accès à tous les canaux."]
+  },
+
+  // === FICHIERS ===
+  {
+    "id": "file-save",
+    "subcat": "file-base",
+    "action": "Sauvegarder un fichier show",
+    "description": "Enregistre le show dans la mémoire interne ou sur clé USB.",
+    "syntaxes": ["[File][Save][Enter]"],
+    "examples": ["[File][Save][Enter] → sauvegarde le show actuel."],
+    "tips": ["Utiliser [Save As] pour créer une copie."]
+  },
+  {
+    "id": "clear-functions",
+    "subcat": "file-base",
+    "action": "Utiliser les fonctions Clear",
+    "description": "Supprime des parties du show.",
+    "syntaxes": ["[Clear]{Clear Show}[Enter]"],
+    "examples": ["[Clear]{Clear Show}[Enter] → efface tout le show."],
+    "tips": ["À utiliser avec prudence."]
+  },
+  {
+    "id": "import-show",
+    "subcat": "file-base",
+    "action": "Importer un fichier show",
+    "description": "Importe un show depuis une clé USB ou le réseau.",
+    "syntaxes": ["[File][Open][Show File Archive][1][Select]"],
+    "examples": ["Ouvre le show 1 depuis l’archive."],
+    "tips": ["Supporte les formats ESF, ESF2, ESF3."]
+  },
+  {
+    "id": "quick-save",
+    "subcat": "file-base",
+    "action": "Quick Save (Shift + Update)",
+    "description": "Sauvegarde rapidement le show dans l’archive interne.",
+    "syntaxes": ["[Shift][Update]"],
+    "examples": ["Appuyer [Shift][Update] à la fin de chaque session."],
+    "tips": ["Sauvegarde automatiquement dans Show File Archive."]
+  }
+] 
+   };
 
     let state = JSON.parse(localStorage.getItem('eos_guide_state')) || null;
     let currentView = 'home';
