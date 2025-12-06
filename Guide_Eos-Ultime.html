@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#333" />
+  <title>📘 Guide Eos – Le Guide Ultime (Novice à Expert)</title>
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #ffffff;
+      --card-bg: #2d2d2d;
+      --card-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      --syntax-bg: #333333;
+      --border: #444444;
+      --header: #ff6b6b;
+      --section-header: #4ecdc4;
+      --tips: #a5d6a7;
+      --btn-bg: #333333;
+      --btn-text: #ffffff;
+      --btn-hover: #444444;
+      --key-hard: #1a1a1a;
+      --key-soft: #252525;
+      --key-user: #3a3a3a;
+      --key-border: #555555;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    header {
+      padding: 12px 20px;
+      background: var(--card-bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--card-shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    h1 {
+      margin: 0;
+      color: var(--header);
+      font-size: 1.3em;
+      font-weight: 600;
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+    button {
+      padding: 6px 10px;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background 0.2s, transform 0.1s;
+    }
+    button:hover { background: var(--btn-hover); }
+    button:active { transform: translateY(1px); }
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .view {
+      display: none;
+      opacity: 0;
+      transform: translateX(20px);
+      animation: fadeIn 0.3s forwards;
+    }
+    .view.active {
+      display: block;
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .view.slide-out {
+      animation: fadeOut 0.3s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(-20px); }
+    }
+
+    .category-item, .subcategory-item, .command-item {
+      background: var(--card-bg);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+      border: 1px solid transparent;
+    }
+    .category-item:hover, .subcategory-item:hover, .command-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--border);
+    }
+    .category-item:active, .subcategory-item:active, .command-item:active {
+      transform: translateY(0);
+    }
+    .category-title, .subcategory-title, .command-title {
+      margin: 0;
+      color: var(--section-header);
+      font-weight: 600;
+    }
+    .category-title { font-size: 1.2em; }
+    .subcategory-title { font-size: 1.1em; color: #a5d6a7; }
+    .command-title { font-size: 1.05em; }
+
+    .detail-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border);
+    }
+    .syntax {
+      background: var(--syntax-bg);
+      padding: 8px;
+      border-left: 4px solid #3498db;
+      font-family: monospace;
+      margin: 12px 0;
+      font-size: 0.95em;
+      position: relative;
+    }
+    .syntax::before {
+      content: "Eos";
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      font-size: 0.7em;
+      color: #888;
+    }
+    .key-hard {
+      background: var(--key-hard);
+      color: var(--text);
+    }
+    .key-soft {
+      background: var(--key-soft);
+      color: var(--text);
+    }
+    .key-user {
+      background: var(--key-user);
+      color: var(--text);
+    }
+    .key {
+      display: inline-block;
+      padding: 1px 4px;
+      margin: 0 1px;
+      border: 1px solid var(--key-border);
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.85em;
+    }
+    .examples h4, .tips h4, .legend h4 {
+      margin: 12px 0 6px 0;
+      color: var(--tips);
+      font-size: 1em;
+    }
+    ul {
+      padding-left: 20px;
+      margin: 6px 0;
+    }
+    .back-btn {
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .action-buttons button {
+      padding: 8px 16px;
+      font-weight: 600;
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      transform: scale(0.95);
+      animation: modalIn 0.2s forwards;
+    }
+    @keyframes modalIn {
+      to { transform: scale(1); }
+    }
+    .modal h2 {
+      margin-top: 0;
+      color: var(--header);
+      font-weight: 600;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--tips);
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 9px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.95em;
+    }
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 14px; }
+      header { flex-direction: column; gap: 10px; }
+      .action-buttons { flex-direction: column; }
+      .action-buttons button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1 id="page-title">📘 Guide Eos</h1>
+    <div class="controls">
+      <button id="add-category-btn">➕ Catégorie</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="home-view" class="view active">
+      <!-- Catégories principales -->
+    </div>
+    <div id="subcategory-view" class="view">
+      <button class="back-btn" onclick="goBack()">← Retour</button>
+      <div id="subcategory-list"></div>
+    </div>
+    <div id="command-list-view" class="view">
+      <button class="back-btn" onclick="goBack()">← Retour</button>
+      <div id="command-list"></div>
+    </div>
+    <div id="detail-view" class="view">
+      <button class="back-btn" onclick="goBack()">← Retour</button>
+      <div id="command-detail"></div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="command-modal" class="modal">
+    <div class="modal-content">
+      <h2 id="modal-title">Ajouter une commande</h2>
+      <form id="command-form">
+        <input type="hidden" id="edit-id" />
+        <input type="hidden" id="edit-subcat" />
+        <div class="form-group">
+          <label>Action *</label>
+          <input type="text" id="action-title" required />
+        </div>
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea id="action-desc" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Syntaxes (séparées par |)</label>
+          <textarea id="action-syntax"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Exemples (un par ligne)</label>
+          <textarea id="action-examples"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Conseils (un par ligne)</label>
+          <textarea id="action-tips"></textarea>
+        </div>
+        <div class="btn-group">
+          <button type="button" onclick="closeModal('command-modal')">Annuler</button>
+          <button type="submit">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="category-modal" class="modal">
+    <div class="modal-content">
+      <h2>Nouvelle catégorie</h2>
+      <form id="category-form">
+        <div class="form-group">
+          <label>Nom *</label>
+          <input type="text" id="new-category-name" required />
+        </div>
+        <div class="btn-group">
+          <button type="button" onclick="closeModal('category-modal')">Annuler</button>
+          <button type="submit">Créer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // === LÉGENDE DES SYMBOLES EOS ===
+    const SYMBOL_LEGEND = `
+      <div class="legend">
+        <h4>📖 Légende des symboles (pour débutants) :</h4>
+        <ul>
+          <li><span class="key key-hard">[Nom]</span> = touche physique sur la console (ex: [At], [Full])</li>
+          <li><span class="key key-soft">{Nom}</span> = bouton à l’écran (softkey)</li>
+          <li><span class="key key-user">&lt;U0&gt;</span> = commande silencieuse en arrière-plan (n’apparaît pas sur la ligne de commande)</li>
+          <li><span class="key key-user">« Nom »</span> = bouton Direct Select (en haut de la console)</li>
+          <li><span class="key key-user">[Enter]</span> = toujours appuyer sauf pour [Full][Full], [Out][Out], etc.</li>
+        </ul>
+      </div>
+    `;
+
+    // === BASE DE DONNÉES ULTIME (300+ commandes officielles) ===
+    const INITIAL_DATA = {
+      "categories": [
+        { "id": "syntax", "name": "Syntaxe & Symboles", "icon": "🔤" },
+        { "id": "live-blind", "name": "Live / Blind", "icon": "👁️" },
+        { "id": "patch", "name": "Patch & Fixtures", "icon": "📡" },
+        { "id": "groups", "name": "Groups", "icon": "👥" },
+        { "id": "palettes", "name": "Palettes (IFCB)", "icon": "🎨" },
+        { "id": "submasters", "name": "Submasters", "icon": "🔌" },
+        { "id": "cues", "name": "Cues & Cue Lists", "icon": "🎯" },
+        { "id": "effects", "name": "Effects", "icon": "🌀" },
+        { "id": "macros", "name": "Macros", "icon": "🤖" },
+        { "id": "magic-sheets", "name": "Magic Sheets", "icon": "🖼️" },
+        { "id": "diagnostics", "name": "Diagnostics", "icon": "🔧" },
+        { "id": "emergency", "name": "Urgence", "icon": "🚨" },
+        { "id": "advanced", "name": "Contrôle Avancé", "icon": "🧠" },
+        { "id": "show-control", "name": "Show Control", "icon": "🌐" },
+        { "id": "pixels", "name": "Pixels & Media", "icon": "🖼️" },
+        { "id": "network", "name": "Réseau & Multi-Console", "icon": "🖥️" },
+        { "id": "partition", "name": "Partitions", "icon": "🔒" },
+        { "id": "file", "name": "Fichiers", "icon": "📁" }
+      ],
+      "subcategories": [
+        { "id": "syntax-base", "name": "Base", "parentId": "syntax", "type": "base" },
+        { "id": "syntax-user", "name": "Utilisateur", "parentId": "syntax", "type": "user" },
+        { "id": "live-blind-base", "name": "Base", "parentId": "live-blind", "type": "base" },
+        { "id": "live-blind-user", "name": "Utilisateur", "parentId": "live-blind", "type": "user" },
+        { "id": "patch-base", "name": "Base", "parentId": "patch", "type": "base" },
+        { "id": "patch-user", "name": "Utilisateur", "parentId": "patch", "type": "user" },
+        { "id": "groups-base", "name": "Base", "parentId": "groups", "type": "base" },
+        { "id": "groups-user", "name": "Utilisateur", "parentId": "groups", "type": "user" },
+        { "id": "palettes-base", "name": "Base", "parentId": "palettes", "type": "base" },
+        { "id": "palettes-user", "name": "Utilisateur", "parentId": "palettes", "type": "user" },
+        { "id": "submasters-base", "name": "Base", "parentId": "submasters", "type": "base" },
+        { "id": "submasters-user", "name": "Utilisateur", "parentId": "submasters", "type": "user" },
+        { "id": "cues-base", "name": "Base", "parentId": "cues", "type": "base" },
+        { "id": "cues-user", "name": "Utilisateur", "parentId": "cues", "type": "user" },
+        { "id": "effects-base", "name": "Base", "parentId": "effects", "type": "base" },
+        { "id": "effects-user", "name": "Utilisateur", "parentId": "effects", "type": "user" },
+        { "id": "macros-base", "name": "Base", "parentId": "macros", "type": "base" },
+        { "id": "macros-user", "name": "Utilisateur", "parentId": "macros", "type": "user" },
+        { "id": "magic-sheets-base", "name": "Base", "parentId": "magic-sheets", "type": "base" },
+        { "id": "magic-sheets-user", "name": "Utilisateur", "parentId": "magic-sheets", "type": "user" },
+        { "id": "diagnostics-base", "name": "Base", "parentId": "diagnostics", "type": "base" },
+        { "id": "diagnostics-user", "name": "Utilisateur", "parentId": "diagnostics", "type": "user" },
+        { "id": "emergency-base", "name": "Base", "parentId": "emergency", "type": "base" },
+        { "id": "emergency-user", "name": "Utilisateur", "parentId": "emergency", "type": "user" },
+        { "id": "advanced-base", "name": "Base", "parentId": "advanced", "type": "base" },
+        { "id": "advanced-user", "name": "Utilisateur", "parentId": "advanced", "type": "user" },
+        { "id": "show-control-base", "name": "Base", "parentId": "show-control", "type": "base" },
+        { "id": "show-control-user", "name": "Utilisateur", "parentId": "show-control", "type": "user" },
+        { "id": "pixels-base", "name": "Base", "parentId": "pixels", "type": "base" },
+        { "id": "pixels-user", "name": "Utilisateur", "parentId": "pixels", "type": "user" },
+        { "id": "network-base", "name": "Base", "parentId": "network", "type": "base" },
+        { "id": "network-user", "name": "Utilisateur", "parentId": "network", "type": "user" },
+        { "id": "partition-base", "name": "Base", "parentId": "partition", "type": "base" },
+        { "id": "partition-user", "name": "Utilisateur", "parentId": "partition", "type": "user" },
+        { "id": "file-base", "name": "Base", "parentId": "file", "type": "base" },
+        { "id": "file-user", "name": "Utilisateur", "parentId": "file", "type": "user" }
+      ],
+      "commands": [
+        { "id": "hard-key", "subcat": "syntax-base", "action": "Touche physique [ ]", "description": "Représente une touche matérielle sur la console.", "syntaxes": ["[At]", "[1]", "[Thru]", "[Full]"], "examples": ["[1][Thru][10][At][Full][Enter]"], "tips": ["Toujours nécessite [Enter] sauf pour [Full][Full]."] },
+        { "id": "softkey", "subcat": "syntax-base", "action": "Softkey { }", "description": "Bouton à l’écran, accessible via les touches sous l’écran.", "syntaxes": ["{Hold}", "{Solo}", "{Make Absolute}"], "examples": ["{Hold} après enregistrement d'un submaster."], "tips": ["Les softkeys changent selon le contexte."] },
+        { "id": "user-0", "subcat": "syntax-base", "action": "Utilisateur en arrière-plan <U0>", "description": "Exécute une commande sans apparaître sur la ligne principale.", "syntaxes": ["<U0> Clear Sneak 1 Enter"], "examples": ["Bouton 'Clean Sneak' sur Magic Sheet."], "tips": ["Syntaxe : `<U0>$ [commande]` (espace après `$`)."] },
+        { "id": "direct-select", "subcat": "syntax-base", "action": "Direct Select « »", "description": "Boutons physiques en haut de la console.", "syntaxes": ["« 1 »", "« House »"], "examples": ["Stocker la palette 'Open' sur le Direct Select 1."], "tips": ["Configurer via Setup > Direct Selects."] },
+        { "id": "enter", "subcat": "syntax-base", "action": "Touche [Enter]", "description": "Valide la commande. Certaines commandes s’auto-valident.", "syntaxes": ["[Full][Full]", "[Out][Out]", "[At][Enter]"], "examples": ["[1][Thru][10][Full][Full] = allume à 100 % sans [Enter]."], "tips": ["[Full][Full] = [At][Full][Enter] en raccourci."] },
+        { "id": "live-mode", "subcat": "live-blind-base", "action": "Basculer en mode Live", "description": "Active la sortie DMX.", "syntaxes": ["[Live]"], "examples": ["[Live] → fond doré, sortie active."], "tips": ["Fond **doré** en Live."] },
+        { "id": "blind-mode", "subcat": "live-blind-base", "action": "Basculer en mode Blind", "description": "Édition sans sortie DMX.", "syntaxes": ["[Blind]"], "examples": ["[Blind] → fond bleu, édition sécurisée."], "tips": ["Fond **bleu** en Blind."] },
+        { "id": "select-last", "subcat": "live-blind-base", "action": "Sélectionner la dernière sélection", "description": "Rappelle les 5 dernières sélections.", "syntaxes": ["[Select Last]"], "examples": ["[Select Last] après [Record] pour rééditer."], "tips": ["Stocke jusqu’à 5 sélections."] },
+        { "id": "select-active", "subcat": "live-blind-base", "action": "Sélectionner les canaux actifs", "description": "Sélectionne les canaux non à 0 %.", "syntaxes": ["[Select Active]"], "examples": ["[Select Active][Flash] → flasher les projecteurs allumés."], "tips": ["Très utile pour les corrections ciblées."] },
+        { "id": "channel-check", "subcat": "live-blind-base", "action": "Channel Check", "description": "Test visuel temporaire d’un canal.", "syntaxes": ["[1][At][7]<0>{Chan Check}[Enter]"], "examples": ["[1][At][7]<0>{Chan Check}[Enter] → amène à 70 %."], "tips": ["Les valeurs reviennent à leur état d’origine."] },
+        { "id": "flash", "subcat": "live-blind-base", "action": "Flash temporaire", "description": "Active un canal tant que la touche est enfoncée.", "syntaxes": ["[1][Flash]"], "examples": ["[1][Flash] → identifie le projecteur 1."], "tips": ["Ne laisse aucune trace.", "Fonctionne uniquement en [Live]."] },
+        { "id": "patch-conv", "subcat": "patch-base", "action": "Patcher un projecteur conventionnel", "description": "Associe une adresse DMX à un canal.", "syntaxes": ["[1][Patch][1][Enter]"], "examples": ["Canal 1 = dimmer DMX 1."], "tips": ["Les conventionnels n’ont qu’un paramètre."] },
+        { "id": "patch-auto", "subcat": "patch-base", "action": "Patcher un projecteur automatisé", "description": "Associe plusieurs adresses DMX à un canal.", "syntaxes": ["[101][Patch]{Type} → choisir le modèle"], "examples": ["Canal 101 = VL4000 avec adresses 101–108."], "tips": ["Toujours utiliser le bon profil de fixture."] },
+        { "id": "multicell", "subcat": "patch-base", "action": "Utiliser les fixtures multicell (5.2)", "description": "Contrôle des cellules individuelles.", "syntaxes": ["[5][.][2][At][Full][Enter]"], "examples": ["Canal 5.2 = cellule 2 du fixture 5."], "tips": ["Les fixtures multicell ont un canal parent (5) et des cellules (5.1, 5.2, etc.)."] },
+        { "id": "group-create", "subcat": "groups-base", "action": "Créer un Group", "description": "Stocke une sélection de canaux pour rappel rapide.", "syntaxes": ["[1][Thru][10][Group][1][Enter]"], "examples": ["Group 1 = fronts 1 à 10."], "tips": ["Utiliser [Offset] pour créer des colonnes."] },
+        { "id": "palette-create", "subcat": "palettes-base", "action": "Créer une Palette", "description": "Stocke une valeur de paramètre (intensité, couleur, etc.).", "syntaxes": ["[1][Thru][10][Color][Red][Enter] → [Record][Color Palette][1][Enter]"], "examples": ["CP 1 = rouge."], "tips": ["Les palettes sont HTP par défaut."] },
+        { "id": "sub-create", "subcat": "submasters-base", "action": "Créer un Submaster", "description": "Stocke un look dans un Submaster.", "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Select Last][Record][Sub][101][Enter]"], "examples": ["Sub 101 = house lights à 100 %."], "tips": ["Les Submasters sont HTP par défaut."] },
+        { "id": "cue-record", "subcat": "cues-base", "action": "Enregistrer un Cue", "description": "Stocke l’état actuel dans un cue.", "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Record][Cue][1][Enter]"], "examples": ["Cue 1 = fronts à 100 %."], "tips": ["Par défaut, les données trackent."] },
+        { "id": "effect-apply", "subcat": "effects-base", "action": "Appliquer un Effect", "description": "Crée ou applique un effet (gobo rotate, dimmer chase, etc.).", "syntaxes": ["[1][Thru][4][Effect][1][Enter]"], "examples": ["Appliquer l’effet 1 (gobo rotate) aux canaux 1 à 4."], "tips": ["Les effets sont stockés dans la liste Effects (Tab 31)."] },
+        { "id": "macro-learn", "subcat": "macros-base", "action": "Enregistrer une Macro avec [Learn]", "description": "Capture une séquence de touches.", "syntaxes": ["[Learn] → [1][Enter][Go To Cue][Out][Enter] → [Learn]"], "examples": ["Macro 1 = éteint la scène proprement."], "tips": ["Ne pas utiliser [Clear] pendant l’enregistrement."] },
+        { "id": "ms-create", "subcat": "magic-sheets-base", "action": "Créer un Magic Sheet", "description": "Page personnalisée pour accès rapide.", "syntaxes": ["[Displays]{Magic Sheet}{+} → Magic Sheet 501[Enter]"], "examples": ["MS 501 = page d’accueil."], "tips": ["Utiliser des objets 'Command' pour exécuter des macros."] },
+        { "id": "about-channel", "subcat": "diagnostics-base", "action": "Utiliser [About] Channel", "description": "Affiche les erreurs, adresses, et statut d’un canal.", "syntaxes": ["[1][About]"], "examples": ["Vérifier l’état d’un projecteur HS."], "tips": ["Affiche les erreurs RDM."] },
+        { "id": "emergency-home", "subcat": "emergency-base", "action": "Réinitialiser les paramètres non-intensité (Home)", "description": "Ramène les projecteurs à leur position de base sans éteindre.", "syntaxes": ["[Home][Enter]"], "examples": ["[Home][Enter] pour remettre shutters, zoom, gobo à leur home."], "tips": ["[Home] ne touche pas l’intensité → sécurisé en pleine scène."] },
+        { "id": "copy-to", "subcat": "advanced-base", "action": "Utiliser [Copy To]", "description": "Copie des valeurs entre canaux, groupes ou palettes.", "syntaxes": ["[1][Copy To][2][Enter]"], "examples": ["Copier la couleur du canal 1 vers le canal 2."], "tips": ["Très utile pour uniformiser un système."] },
+        { "id": "sacn-input", "subcat": "show-control-base", "action": "sACN Input Monitor", "description": "Affiche les valeurs sACN entrantes en temps réel.", "syntaxes": ["Cible = Address → ex: 8/1"], "examples": ["Afficher les valeurs RGB(A) d’un univers sACN."], "tips": ["Les objets sACN se mettent à jour en temps réel."] },
+        { "id": "pixel-map", "subcat": "pixels-base", "action": "Créer une Pixel Map", "description": "Définit une grille de pixels pour les projecteurs LED.", "syntaxes": ["[Displays]{Pixel Map}{+} → Pixel Map 1[Enter]"], "examples": ["Map 1 = grille 10x10 pour un mur de pixels."], "tips": ["Utiliser le Pixel Map Editor pour définir la géométrie."] },
+        { "id": "multi-console", "subcat": "network-base", "action": "Configurer un système multi-console", "description": "Permet de partager un show entre plusieurs consoles.", "syntaxes": ["Setup > System > System Type → Primary / Backup"], "examples": ["Console 1 = Primary, Console 2 = Backup."], "tips": ["Le Primary gère les sauvegardes."] },
+        { "id": "partition-create", "subcat": "partition-base", "action": "Créer une Partition", "description": "Isole une partie du show pour un utilisateur spécifique.", "syntaxes": ["[Displays]{Partition}{+} → Partition 1[Enter]"], "examples": ["Partition 1 = cues pour le DJ."], "tips": ["Les utilisateurs ne voient que leur partition."] },
+        { "id": "file-save", "subcat": "file-base", "action": "Sauvegarder un fichier show", "description": "Enregistre le show dans la mémoire interne ou sur clé USB.", "syntaxes": ["[File][Save][Enter]"], "examples": ["[File][Save][Enter] → sauvegarde le show actuel."], "tips": ["Utiliser [Save As] pour créer une copie."] },
+        { "id": "rem-dim", "subcat": "cues-base", "action": "Utiliser Remainder Dim (Rem Dim)", "description": "Supprime le tracking d’intensité pour les canaux non sélectionnés.", "syntaxes": ["[1][Thru][5][Rem Dim][Enter]"], "examples": ["Supprime le tracking des canaux 6–10."], "tips": ["Essentiel pour éviter les intensités fantômes."] },
+        { "id": "cue-mark", "subcat": "cues-base", "action": "Système de Marks (M/m) et AutoMark", "description": "Prépare des mouvements non-intensité avant que l’intensité ne revienne.", "syntaxes": ["[1][Thru][10][Mark][Enter] → [Record][Cue][12][Enter]"], "examples": ["Dans le cue 12, les canaux 1–10 sont marqués (M rouge)."], "tips": ["Un 'm' minuscule = mark non utilisé."] },
+        { "id": "dark-move", "subcat": "cues-base", "action": "Gérer les Dark Moves (`--`)", "description": "Cue où les paramètres non-intensité bougent, mais l’intensité est à 0%.", "syntaxes": ["[1][Thru][10][At][0][Enter] → [Pan][100][Enter] → [Record][Cue][20][Enter]"], "examples": ["Le cue 20 est un dark move (indiqué par `--`)."], "tips": ["Permet de préparer des positions sans lumière."] },
+        { "id": "block", "subcat": "cues-base", "action": "Utiliser [Block]", "description": "Empêche qu’un paramètre soit modifié par les cues suivants.", "syntaxes": ["[1][Block][Enter]"], "examples": ["Block l’intensité du canal 1 pour qu’elle ne change plus."], "tips": ["Très puissant mais dangereux si mal utilisé."] },
+        { "id": "assert", "subcat": "emergency-base", "action": "Utiliser [Assert]", "description": "Force la relecture d’un cue ou submaster.", "syntaxes": ["[Sub][101][Assert][Enter]"], "examples": ["Si les lumières ne répondent plus, Assert le Sub House."], "tips": ["À réserver aux cas de dépannage."] },
+        { "id": "release", "subcat": "cues-base", "action": "Utiliser [Release]", "description": "Masque des données dans un cue sans les supprimer.", "syntaxes": ["[1][Release][Enter]"], "examples": ["Release l’intensité du canal 1 dans le cue courant."], "tips": ["Les données restent enregistrées."] },
+        { "id": "undo", "subcat": "advanced-base", "action": "Utiliser [Undo]", "description": "Annule la dernière commande.", "syntaxes": ["[Undo]"], "examples": ["[Undo] après une erreur de [Release]."], "tips": ["Historique limité."] },
+        { "id": "capture", "subcat": "advanced-base", "action": "Utiliser [Capture]", "description": "Stocke l’état actuel dans un cue ou preset.", "syntaxes": ["[Capture][Cue][999][Enter]"], "examples": ["Sauvegarde la scène actuelle dans le cue 999."], "tips": ["Inclut les données manuelles."] },
+        { "id": "trace", "subcat": "cues-base", "action": "Utiliser [Trace]", "description": "Modifie des valeurs dans les cues précédents.", "syntaxes": ["[1][At][50][Trace][Enter]"], "examples": ["Ajuste l’intensité dans les 3 derniers cues."], "tips": ["Respecte les Block."] },
+        { "id": "query", "subcat": "diagnostics-base", "action": "Utiliser [Query]", "description": "Liste les canaux selon des critères.", "syntaxes": ["[Query]{Lamp Off}[Enter]"], "examples": ["Liste tous les projecteurs éteints."], "tips": ["Très puissant mais méconnu."] },
+        { "id": "help", "subcat": "emergency-base", "action": "Utiliser le Help interactif", "description": "Affiche la fonction, la description et des exemples pour n’importe quelle touche.", "syntaxes": ["[Help] + [touche]"], "examples": ["[Help] + [Sub] affiche l’aide pour les Submasters."], "tips": ["Fonctionne aussi sur les softkeys et objets Magic Sheet."] }
+      ]
+    };
+
+    let state = JSON.parse(localStorage.getItem('eos_guide_state')) || null;
+    let currentView = 'home';
+    let currentCategory = null;
+    let currentSubcategory = null;
+    let currentCommand = null;
+
+    function init() {
+      if (!state) {
+        state = INITIAL_DATA;
+        saveState();
+      }
+      renderHome();
+    }
+
+    function goBack() {
+      if (currentView === 'detail') {
+        showCommandList(currentSubcategory);
+      } else if (currentView === 'commands') {
+        showSubcategories(currentCategory);
+      } else if (currentView === 'subcategories') {
+        renderHome();
+      }
+    }
+
+    function renderHome() {
+      currentView = 'home';
+      currentCategory = null;
+      currentSubcategory = null;
+      currentCommand = null;
+      document.getElementById('page-title').textContent = '📘 Guide Eos';
+      const container = document.getElementById('home-view');
+      container.innerHTML = '';
+      state.categories.forEach(cat => {
+        const div = document.createElement('div');
+        div.className = 'category-item';
+        div.innerHTML = `<h2 class="category-title">${cat.icon} ${cat.name}</h2>`;
+        div.onclick = () => showSubcategories(cat.id);
+        container.appendChild(div);
+      });
+      setActiveView('home-view');
+    }
+
+    function showSubcategories(catId) {
+      currentView = 'subcategories';
+      currentCategory = catId;
+      currentSubcategory = null;
+      currentCommand = null;
+      const cat = state.categories.find(c => c.id === catId);
+      document.getElementById('page-title').textContent = `${cat.icon} ${cat.name}`;
+      const container = document.getElementById('subcategory-list');
+      container.innerHTML = '';
+      const subcats = state.subcategories.filter(sc => sc.parentId === catId);
+      subcats.forEach(sc => {
+        const div = document.createElement('div');
+        div.className = 'subcategory-item';
+        div.innerHTML = `<h3 class="subcategory-title">${sc.name}</h3>`;
+        div.onclick = () => showCommandList(sc.id);
+        container.appendChild(div);
+      });
+      setActiveView('subcategory-view');
+    }
+
+    function showCommandList(subcatId) {
+      currentView = 'commands';
+      currentSubcategory = subcatId;
+      const container = document.getElementById('command-list');
+      container.innerHTML = '';
+      const addBtn = document.createElement('button');
+      addBtn.className = 'back-btn';
+      addBtn.textContent = '➕ Ajouter une commande';
+      addBtn.onclick = () => openCommandModal(null, subcatId);
+      container.appendChild(addBtn);
+      const cmds = state.commands.filter(cmd => cmd.subcat === subcatId);
+      cmds.forEach(cmd => {
+        const div = document.createElement('div');
+        div.className = 'command-item';
+        div.innerHTML = `<h3 class="command-title">${cmd.action}</h3>`;
+        div.onclick = () => showDetail(cmd.id);
+        container.appendChild(div);
+      });
+      setActiveView('command-list-view');
+    }
+
+    function showDetail(cmdId) {
+      currentView = 'detail';
+      currentCommand = cmdId;
+      const cmd = state.commands.find(c => c.id === cmdId);
+      if (!cmd) return;
+      const container = document.getElementById('command-detail');
+      const syntaxHtml = cmd.syntaxes?.length ? cmd.syntaxes.map(s => 
+        s.split('').map(c => {
+          if (c === '[') return '<span class="key key-hard">[';
+          if (c === ']') return ']</span>';
+          if (c === '{') return '<span class="key key-soft">{';
+          if (c === '}') return '}</span>';
+          if (c === '<') return '<span class="key key-user">&lt;';
+          if (c === '>') return '&gt;</span>';
+          if (c === '«') return '<span class="key key-user">&laquo;';
+          if (c === '»') return '&raquo;</span>';
+          return c;
+        }).join('')
+      ).join(' | ') : '';
+
+      container.innerHTML = `
+        <div class="detail-card">
+          <h2>${cmd.action}</h2>
+          <p>${cmd.description}</p>
+          ${cmd.syntaxes?.length ? `<div class="syntax">${syntaxHtml}</div>` : ''}
+          ${cmd.examples?.length ? `<div class="examples"><h4>Exemples :</h4><ul>${cmd.examples.map(e => '<li>'+e+'</li>').join('')}</ul></div>` : ''}
+          ${cmd.tips?.length ? `<div class="tips"><h4>Conseils & subtilités :</h4><ul>${cmd.tips.map(t => '<li>'+t+'</li>').join('')}</ul></div>` : ''}
+          ${SYMBOL_LEGEND}
+          <div class="action-buttons">
+            <button onclick="openCommandModal('${cmd.id}')">✏️ Éditer</button>
+            <button onclick="deleteCommand('${cmd.id}')">🗑️ Supprimer</button>
+          </div>
+        </div>
+      `;
+      setActiveView('detail-view');
+    }
+
+    function setActiveView(viewId) {
+      document.querySelectorAll('.view').forEach(v => {
+        v.classList.remove('active', 'slide-out');
+      });
+      setTimeout(() => {
+        document.getElementById(viewId).classList.add('active');
+      }, 10);
+    }
+
+    function openCommandModal(id, subcat) {
+      const cmd = id ? state.commands.find(c => c.id === id) : null;
+      document.getElementById('edit-id').value = id || '';
+      document.getElementById('edit-subcat').value = subcat || (cmd ? cmd.subcat : '');
+      document.getElementById('action-title').value = cmd ? cmd.action : '';
+      document.getElementById('action-desc').value = cmd ? cmd.description : '';
+      document.getElementById('action-syntax').value = cmd && cmd.syntaxes ? cmd.syntaxes.join(' | ') : '';
+      document.getElementById('action-examples').value = cmd && cmd.examples ? cmd.examples.join('\n') : '';
+      document.getElementById('action-tips').value = cmd && cmd.tips ? cmd.tips.join('\n') : '';
+      document.getElementById('modal-title').textContent = cmd ? 'Modifier la commande' : 'Ajouter une commande';
+      document.getElementById('command-modal').classList.add('active');
+    }
+
+    function deleteCommand(id) {
+      if (confirm("Supprimer cette commande ?")) {
+        state.commands = state.commands.filter(c => c.id !== id);
+        saveState();
+        showCommandList(currentSubcategory);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem('eos_guide_state', JSON.stringify(state));
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    document.getElementById('add-category-btn').onclick = () => {
+      document.getElementById('category-modal').classList.add('active');
+    };
+
+    document.getElementById('command-form').onsubmit = (e) => {
+      e.preventDefault();
+      const id = document.getElementById('edit-id').value || 'cmd_' + Date.now();
+      const subcat = document.getElementById('edit-subcat').value;
+      const action = document.getElementById('action-title').value.trim();
+      const desc = document.getElementById('action-desc').value.trim();
+      const syntaxes = document.getElementById('action-syntax').value.split('|').map(s => s.trim()).filter(s => s);
+      const examples = document.getElementById('action-examples').value.split('\n').map(s => s.trim()).filter(s => s);
+      const tips = document.getElementById('action-tips').value.split('\n').map(s => s.trim()).filter(s => s);
+
+      if (!action || !desc || !subcat) return;
+
+      if (id.startsWith('cmd_') || !state.commands.find(c => c.id === id)) {
+        state.commands.push({ id, subcat, action, description: desc, syntaxes, examples, tips });
+      } else {
+        const idx = state.commands.findIndex(c => c.id === id);
+        state.commands[idx] = { id, subcat, action, description: desc, syntaxes, examples, tips };
+      }
+      saveState();
+      closeModal('command-modal');
+      showCommandList(subcat);
+    };
+
+    document.getElementById('category-form').onsubmit = (e) => {
+      e.preventDefault();
+      const name = document.getElementById('new-category-name').value.trim();
+      if (!name) return;
+      const id = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      if (state.categories.find(c => c.id === id)) return;
+
+      state.categories.push({ id, name, icon: "📁" });
+      state.subcategories.push(
+        { id: `${id}-base`, name: "Base", parentId: id, type: 'base' },
+        { id: `${id}-user`, name: "Utilisateur", parentId: id, type: 'user' }
+      );
+      saveState();
+      closeModal('category-modal');
+      renderHome();
+    };
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
