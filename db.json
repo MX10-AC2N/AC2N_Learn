@@ -1,22 +1,23 @@
 {
-  "eos_house_operator_guide_v3": {
-    "version": "3.0.1",
-    "source": [
+  "eos_house_operator_ultimate_guide": {
+    "version": "3.0.2",
+    "source_documents": [
       "Eos Family v3.0.0 Operations Manual (pp.1–659)",
-      "EosFamily_MSInt_Workbook_v3.0.1A.pdf"
+      "EosFamily_MSInt_Workbook_v3.0.1A.pdf",
+      "ETC Community & Professional Best Practices (2015–2024)"
     ],
     "last_updated": "2025-12-06",
-    "description": "Base de données complète pour un guide HTML destiné au régisseur d'accueil sur console Eos. Inclut syntaxes, trucs, subtilités, et bonnes pratiques.",
+    "description": "Base de données ultime pour un régisseur d'accueil sur console Eos. Inclut syntaxes officielles, macros, raccourcis, workflows, et pièges à éviter.",
     "commands": [
       {
-        "action": "Allumer des canaux (lumières d'accueil)",
-        "description": "Active des canaux conventionnels à pleine intensité. Fonctionne uniquement en [Live].",
+        "action": "Allumer les lumières d'accueil",
+        "description": "Active des canaux conventionnels à 100 %. Essentiel pour l’ouverture, les pauses ou la fermeture.",
         "syntaxes": ["[1][Thru][10][At][Full][Enter]"],
-        "examples": ["Allumer les fronts (canaux 1–10) à 100 %."],
+        "examples": ["Allumer les fronts (canaux 1–10)."],
         "tips": [
-          "Les canaux deviennent rouges dans Live (données manuelles).",
-          "Utiliser [+] pour des canaux discontinus : [1][+][3][+][5][At][80][Enter].",
-          "En [Blind], aucune sortie DMX n’est générée."
+          "Fonctionne uniquement en [Live].",
+          "Utiliser [Full][Full] pour auto-terminer la commande.",
+          "Les canaux deviennent rouges (données manuelles) tant qu’ils ne sont pas enregistrés."
         ]
       },
       {
@@ -25,67 +26,58 @@
         "syntaxes": ["[Sub][101][Out][Enter]"],
         "examples": ["Éteindre le Sub House Lights avant le début du spectacle."],
         "tips": [
-          "Les Submasters sont HTP → leur extinction ne touche pas les Cues LTP.",
-          "Éviter [Go To Cue][0] : il éteint toutes les intensités non protégées.",
-          "Si le Sub est en {Hold}, [Out] le force à s’éteindre."
+          "Les Submasters sont HTP → ne sont pas écrasés par les Cues LTP.",
+          "Éviter [Go To Cue][0] en contexte d’accueil : il éteint les intensités manuelles non protégées."
         ]
       },
       {
-        "action": "Créer un Submaster d'accueil",
-        "description": "Stocker un look fixe dans un Submaster pour accès rapide et fiable.",
-        "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Select Last][Record][Sub][101][Label] House[Enter]"],
-        "examples": ["Sub 101 = House Lights, avec fondu 1s/1s."],
+        "action": "Créer un Submaster d'accueil avec fondu et Hold",
+        "description": "Stocker un look fixe dans un Submaster avec timing et maintien actif.",
+        "syntaxes": ["[1][Thru][10][At][Full][Enter] → [Select Last][Record][Sub][101][Label] House[Enter] → [Time][1][Time][Time][1][Enter] → {Hold}[Enter]"],
+        "examples": ["Sub 101 = House Lights, Up/Down = 1s, avec Hold actif."],
         "tips": [
-          "Ajouter [Time][1][Time][Time][1][Enter] pour Up/Down = 1s.",
-          "Utiliser {Hold}[Enter] pour maintenir le Sub actif même après un Go To Cue.",
-          "Préférer les Submasters aux commandes manuelles : plus stables, nommables, intégrables dans Magic Sheets."
+          "Activer {Hold} pour éviter l’extinction automatique lors d’un Go To Cue.",
+          "Toujours tester en [Live] après enregistrement."
         ]
       },
       {
-        "action": "Désactiver le Sneak",
-        "description": "Le Sneak permet des changements discrets. S’il est actif, il peut éteindre les lumières sans que l’opérateur le sache.",
-        "syntaxes": ["[Clear][Sneak][Enter]"],
-        "examples": ["Désactiver Sneak après une manipulation imprévue."],
+        "action": "Désactiver le Sneak (manuel + macro)",
+        "description": "Le Sneak permet des changements invisibles. Il doit être désactivé en contexte d’accueil.",
+        "syntaxes": ["[Clear][Sneak][Enter]", "<U0> Clear Sneak 1 Enter"],
+        "examples": ["Macro 201 = <U0> Clear Sneak 1 Enter → bouton 'Clean Sneak' sur MS 508."],
         "tips": [
-          "Exécuter via <U0> pour ne pas interrompre la ligne : <U0> Clear Sneak 1 Enter",
-          "Le Sneak est souvent activé par des macros ou erreurs de frappe.",
-          "Le Playback Status Display affiche un compteur rouge quand Sneak est actif."
+          "Le Sneak peut être activé par des macros, effets ou erreurs de frappe.",
+          "Toujours exécuter via <U0> pour éviter d’interrompre la ligne de commande."
         ]
       },
       {
         "action": "Utiliser User 0 (<U0>) pour commandes silencieuses",
         "description": "Exécute des commandes système sans affecter la ligne de commande visible.",
-        "syntaxes": ["<U0> Clear Sneak 1 Enter"],
-        "examples": ["Bouton 'Sneak All' sur Magic Sheet qui nettoie discrètement."],
+        "syntaxes": ["<U0> Sub 101 Toggle Enter"],
+        "examples": ["Bouton House Toggle sur MS 501 exécuté via <U0>."],
         "tips": [
-          "U0 = User 0, utilisateur invisible. Idéal pour maintenance.",
-          "Ne laisse aucune trace dans l’historique.",
-          "Syntaxe : <U0>$ [commande] → toujours inclure le $ et un espace après <U0>."
+          "Syntaxe exacte : `<U0>$ [commande]` → inclure `$` et un espace.",
+          "Ne laisse aucune trace → idéal pour boutons de maintenance."
         ]
       },
       {
         "action": "Créer un indicateur visuel pour Submaster",
-        "description": "Affiche visuellement si un Sub est actif (car les Submasters ne changent pas d’état graphique).",
-        "syntaxes": [
-          "Patch : Channel 9101 = MS Indicator (pas d’adresse DMX)",
-          "[Blind][Sub][101][Enter] → [9101][At][Full][Enter]"
-        ],
+        "description": "Affiche visuellement si un Sub est actif sur un Magic Sheet.",
+        "syntaxes": ["Patch Channel 9101 = MS Indicator", "[Blind][Sub][101][Enter] → [9101][At][Full][Enter]"],
         "examples": ["Rectangle gris = Sub ON, transparent = OFF."],
         "tips": [
-          "Utiliser deux objets groupés : (1) Submaster (transparent), (2) rectangle lié à Channel 9101 (gris si intensité > 0).",
-          "Le canal indicateur ne doit jamais avoir d’adresse DMX.",
-          "Fonctionne aussi pour Cues, Presets, etc."
+          "Grouper deux objets : (1) Submaster transparent, (2) rectangle lié à Channel 9101.",
+          "Le canal indicateur ne doit jamais avoir d’adresse DMX."
         ]
       },
       {
         "action": "Vérifier un projecteur (Channel Check)",
         "description": "Test visuel temporaire d’un canal sans affecter la scène.",
         "syntaxes": ["[1][At][7]<0>{Chan Check}[Enter]"],
-        "examples": ["Amener le canal 1 à 70 %, puis [Next] pour passer au suivant."],
+        "examples": ["[Next] pour passer au canal suivant, [Last] pour revenir."],
         "tips": [
           "Les valeurs reviennent automatiquement à leur état précédent.",
-          "Ne fonctionne que sur les canaux patchés.",
-          "Idéal pour les checks avant spectacle."
+          "Idéal pour valider le patch ou identifier un projecteur HS."
         ]
       },
       {
@@ -94,9 +86,8 @@
         "syntaxes": ["[Home][Enter]"],
         "examples": ["[Home][Enter] pour remettre shutters, zoom, couleur à leur home."],
         "tips": [
-          "[Home] ne touche pas l’intensité → parfait pour les ML.",
-          "Cibler : [Group][10][Color][Home][Enter].",
-          "À utiliser avec prudence en contexte d’accueil."
+          "[Home] ne touche pas l’intensité → sécurisé en pleine scène.",
+          "Peut être ciblé : [Group][10][Color][Home][Enter]."
         ]
       },
       {
@@ -106,8 +97,7 @@
         "examples": ["Appuyer sur [1][Flash] pour identifier le projecteur 1."],
         "tips": [
           "Ne laisse aucune trace dans les données.",
-          "Fonctionne uniquement en [Live].",
-          "Idéal pour l’identification rapide."
+          "Fonctionne uniquement en [Live]."
         ]
       },
       {
@@ -117,8 +107,7 @@
         "examples": ["Modifier un Sub en [Blind] pour tester sans éteindre les lumières."],
         "tips": [
           "Fond **bleu en Blind**, **doré en Live**.",
-          "Les éditions en Blind sont sauvegardées dès la fin de la commande.",
-          "Essentiel pour ne pas perturber le show."
+          "Les éditions en Blind sont sauvegardées dès la fin de la commande."
         ]
       },
       {
@@ -127,23 +116,17 @@
         "syntaxes": ["[Go To Cue][0][Enter]", "[Go To Cue][Out][Enter]"],
         "examples": ["[Go To Cue][0] éteint les intensités manuelles, mais pas les Cues actifs."],
         "tips": [
-          "[Go To Cue][0] n’affecte **pas** les canaux contrôlés par un Submaster HTP ou un autre Cue List.",
-          "[Go To Cue][Out] réinitialise **tous** les paramètres → à éviter en représentation.",
-          "En contexte d’accueil, préférez les Submasters."
+          "[Go To Cue][0] n’affecte **pas** les canaux contrôlés par un Submaster HTP.",
+          "[Go To Cue][Out] réinitialise **tous** les paramètres → à éviter en représentation."
         ]
       },
       {
         "action": "Gérer les Submasters (Hold, Bump, Release)",
         "description": "Comportement des Submasters en contexte d’accueil.",
-        "syntaxes": [
-          "[Sub][101][Enter] → activer",
-          "[Sub][101][Out][Enter] → désactiver",
-          "{Hold}[Enter] → maintien actif"
-        ],
+        "syntaxes": ["[Sub][101][Enter]", "[Sub][101][Out][Enter]", "{Hold}[Enter]"],
         "examples": ["Sub 101 = House Lights, toujours en HTP, avec Hold activé."],
         "tips": [
-          "Les Submasters sont **HTP par défaut** → ne peuvent pas être écrasés par un cue LTP.",
-          "Activer {Hold} pour éviter l’extinction automatique.",
+          "Les Submasters sont **HTP par défaut**.",
           "Éviter les Submasters en LTP en contexte d’accueil."
         ]
       },
@@ -164,8 +147,7 @@
         "examples": ["Release l’intensité du canal 1 dans le cue courant."],
         "tips": [
           "Les données restent enregistrées mais ne sortent plus.",
-          "Peut être annulé avec [Assert].",
-          "À éviter en contexte d’accueil : préférer les Submasters."
+          "Peut être annulé avec [Assert]."
         ]
       },
       {
@@ -175,8 +157,7 @@
         "examples": ["Block l’intensité du canal 1 pour qu’elle ne change plus."],
         "tips": [
           "Très puissant mais dangereux si mal utilisé.",
-          "Peut être annulé avec [Release] ou [Assert].",
-          "À éviter en contexte d’accueil."
+          "Peut être annulé avec [Release] ou [Assert]."
         ]
       },
       {
@@ -186,8 +167,7 @@
         "examples": ["Magic Sheet 501 avec Sub 101 (House), bouton Help → MS 501.1, logo."],
         "tips": [
           "Ne jamais inclure de fonctions comme Update, Move, Blind.",
-          "Utiliser un popup d’aide avec contacts du programmeur.",
-          "Idéal pour les remplacements."
+          "Utiliser un popup d’aide avec contacts du programmeur."
         ]
       },
       {
@@ -197,8 +177,7 @@
         "examples": ["Menu latéral avec boutons Home, Movers, Control…"],
         "tips": [
           "Utiliser des **Background Macros**.",
-          "Mettre en surbrillance le bouton de la page active.",
-          "Nommer clairement : MS 501 = Home, MS 508 = Control."
+          "Mettre en surbrillance le bouton de la page active."
         ]
       },
       {
@@ -214,31 +193,361 @@
       {
         "action": "Afficher un statut système (ex: RFR On/Off)",
         "description": "Utilise un canal indicateur + Color Palettes pour un état binaire.",
-        "syntaxes": [
-          "Patch Channel 9290 = Generic RGB LED",
-          "CP 290.1 = On (vert), CP 290.2 = Off (rouge)",
-          "Macro 291 → RFR enable + Blind Color_Palette 290 + 9290 Recall_From CP 290.1"
-        ],
+        "syntaxes": ["Patch Channel 9290 = Generic RGB LED", "CP 290.1 = On (vert), CP 290.2 = Off (rouge)", "Macro 291 → RFR enable + Blind Color_Palette 290 + 9290 Recall_From CP 290.1"],
         "examples": ["Carré vert = RFR activé, rouge = désactivé sur MS 508."],
         "tips": [
           "Préférer les **Color Palettes** aux Submasters pour les indicateurs.",
-          "Toujours utiliser [Blind] dans la macro.",
-          "Le canal indicateur doit être hors DMX."
+          "Toujours utiliser [Blind] dans la macro."
         ]
       },
       {
         "action": "Configurer un démarrage automatique personnalisé",
         "description": "Affiche un écran de bienvenue au lancement de la console.",
-        "syntaxes": [
-          "Magic Sheet 599.1 = logo, 599.2 = bouton 'Press to Begin'",
-          "Snapshot 599 = configuration d’écrans",
-          "Macro 599 = Background Macro → Fire Snapshot 599",
-          "Setup > System > System Startup Macro = Macro 599"
-        ],
+        "syntaxes": ["Magic Sheet 599.1 = logo, 599.2 = bouton 'Press to Begin'", "Snapshot 599 = configuration d’écrans", "Macro 599 = Background Macro → Fire Snapshot 599", "Setup > System > System Startup Macro = Macro 599"],
         "examples": ["Au boot, deux écrans apparaissent : logo + bouton pour lancer l’interface."],
         "tips": [
           "Sur un système multi-console, seul le Primary exécute la macro au démarrage.",
           "Utiliser le mode 'Limited Expand' pour masquer la barre d’état."
+        ]
+      },
+      {
+        "action": "Macro : House Lights Toggle (avec feedback visuel)",
+        "description": "Bascule l’état des lumières de salle (ON/OFF) avec maintien et indication visuelle.",
+        "syntaxes": ["<U0> Sub 101 Toggle Enter"],
+        "examples": ["Bouton sur MS 501 : cible = Macro 201 → exécute Sub 101 Toggle en arrière-plan."],
+        "tips": [
+          "Utilise un canal indicateur (ex: 9101) pour afficher l’état sur le Magic Sheet.",
+          "Préférer 'Toggle' plutôt que '[Out]' ou '[Go]' pour un seul bouton."
+        ]
+      },
+      {
+        "action": "Macro : All Home (sans éteindre)",
+        "description": "Ramène tous les paramètres non-intensité à leur valeur Home, sans toucher à l’intensité.",
+        "syntaxes": ["[Home][Enter]"],
+        "examples": ["Macro 202 = [Home][Enter] → bouton 'Reset ML' sur MS 502."],
+        "tips": [
+          "[Home] ne touche pas l’intensité → sécurisé en pleine scène.",
+          "Fonctionne sur tous les canaux actifs, même ceux non sélectionnés."
+        ]
+      },
+      {
+        "action": "Macro : Channel Check Rapide",
+        "description": "Lance un Channel Check sur un canal à 70 %, avec possibilité de passer au suivant via [Next].",
+        "syntaxes": ["[1][At][7]<0>{Chan Check}[Enter]"],
+        "examples": ["Macro 203 = [Select Last][At][7]<0>{Chan Check}[Enter] → vérifie le dernier canal modifié."],
+        "tips": [
+          "Les valeurs reviennent automatiquement à leur état d’origine après [Next] ou [Last].",
+          "Idéal pour valider le patch ou identifier un projecteur HS."
+        ]
+      },
+      {
+        "action": "Macro : Clear Sneak All (sécurisée)",
+        "description": "Nettoie tous les Sneak actifs dans le système.",
+        "syntaxes": ["<U0> Clear Sneak 1 Enter"],
+        "examples": ["Bouton 'Clean Sneak' sur MS 508 (Control)."],
+        "tips": [
+          "Le Sneak peut être activé par des effets, macros, ou erreurs de frappe.",
+          "Essentiel avant/durant un spectacle pour éviter des baisses inattendues."
+        ]
+      },
+      {
+        "action": "Macro : Reset All Effects",
+        "description": "Arrête tous les effets actifs sur tous les faders et canaux.",
+        "syntaxes": ["[Stop Effect][Enter]"],
+        "examples": ["Macro 205 = [Stop Effect][Enter] → bouton rouge 'Stop FX' sur MS 502."],
+        "tips": [
+          "N’affecte pas les intensités ni les positions Home.",
+          "Très utile en cas de boucle d’effet ou d’erreur de programmation."
+        ]
+      },
+      {
+        "action": "Macro : Flash All (sans modifier la scène)",
+        "description": "Fait flasher brièvement tous les canaux actifs à 100 %, puis revient à l’état précédent.",
+        "syntaxes": ["[Select Active][Flash]"],
+        "examples": ["Macro 206 = [Select Active][Flash] → test visuel rapide de tous les projecteurs allumés."],
+        "tips": [
+          "Ne laisse aucune trace dans les données.",
+          "À utiliser avec prudence en représentation."
+        ]
+      },
+      {
+        "action": "Raccourci : Shift + At (relance la dernière sélection)",
+        "description": "Relance la dernière sélection de canaux ET paramètres sans terminer la commande.",
+        "syntaxes": ["[Shift][At]"],
+        "examples": ["Après avoir réglé un gobo, appuyer [Shift][At] pour réappliquer la même sélection et ajuster l’intensité."],
+        "tips": [
+          "Stocke les 5 dernières sélections (canaux + paramètres).",
+          "Très utilisé par les programmeurs rapides."
+        ]
+      },
+      {
+        "action": "Raccourci : Full Full (All Full puis Enter auto)",
+        "description": "Allume les canaux sélectionnés à 100 % et termine automatiquement la commande.",
+        "syntaxes": ["[Full][Full]"],
+        "examples": ["Sélectionner [1][Thru][10] → [Full][Full] = allume à 100 % sans [Enter]."],
+        "tips": [
+          "Gagne une touche sur chaque commande d’intensité → crucial en live.",
+          "Fonctionne aussi avec [Out][Out] pour éteindre immédiatement."
+        ]
+      },
+      {
+        "action": "Raccourci : At Enter (rappel depuis le cue précédent)",
+        "description": "Permet de rappeler manuellement une valeur depuis le cue précédent.",
+        "syntaxes": ["[1][At][Enter]"],
+        "examples": ["Dans le cue 5, le canal 1 est resté à 0. [1][At][Enter] le ramène à sa valeur du cue 4."],
+        "tips": [
+          "[At][Enter] = 'rappel depuis le cue précédent'.",
+          "Peu connu mais extrêmement utile en correction live."
+        ]
+      },
+      {
+        "action": "Macro : Patch Validator (Vérification visuelle du patch)",
+        "description": "Allume chaque canal un par un (Channel Check) pour valider le patch physique vs logique.",
+        "syntaxes": ["[1][At][7]<0>{Chan Check}[Enter][Next]"],
+        "examples": ["Macro 210 = boucle sur les 50 premiers canaux en Channel Check (avec Wait entre chaque)."],
+        "tips": [
+          "À combiner avec {Wait} dans une macro pour automatiser le défilement.",
+          "Souvent partagée sur ETC Community comme 'Patch Checker Macro'."
+        ]
+      },
+      {
+        "action": "Macro : Backup Snapshot (à exécuter avant gros changements)",
+        "description": "Prend un Snapshot de l’état actuel de la console pour pouvoir revenir en arrière.",
+        "syntaxes": ["[Snapshot][999][Label] Pre-Change Backup [Enter]"],
+        "examples": ["Avant de modifier un cue complexe, exécuter Macro 220 → Snapshot 999 sauvegardé."],
+        "tips": [
+          "Les Snapshots incluent : écrans, faders, filtres, état Live/Blind, Magic Sheets actifs.",
+          "Pratique recommandée par les Résidents ETC."
+        ]
+      },
+      {
+        "action": "Astuce : Encodage rapide avec Flexi Encoders",
+        "description": "Utilise le mode Flexi des encodeurs pour accéder à des paramètres secondaires sans changer de page.",
+        "syntaxes": ["[Flexi][Color Encoder]"],
+        "examples": ["Sur un projecteur avec CTO + CMY, [Flexi][Color] permet de switcher entre les deux sans quitter la page Color."],
+        "tips": [
+          "Disponible sur Eos, Ti, Gio, Ion Xe.",
+          "Configurer les Flexi dans Setup > Encoders."
+        ]
+      },
+      {
+        "action": "Macro : Allfade (transition douce vers le noir)",
+        "description": "Fait fondre progressivement toute la scène à 0 % selon le temps du Allfade Master.",
+        "syntaxes": ["[Allfade][Enter]"],
+        "examples": ["Macro 230 = [Allfade][Enter] → fin de spectacle douce."],
+        "tips": [
+          "Le Allfade Master se configure dans Setup > Timings.",
+          "Ne déclenche pas de Go To Cue → sécurisé pour les house lights."
+        ]
+      },
+      {
+        "action": "Macro : Release All (désactiver toutes les données manuelles)",
+        "description": "Masque toutes les données manuelles sans les supprimer.",
+        "syntaxes": ["[Release All][Enter]"],
+        "examples": ["Macro 231 = [Release All][Enter] → nettoie la scène sans altérer les cues."],
+        "tips": [
+          "Peut être annulé avec [Assert All].",
+          "À utiliser avec prudence : masque tout, y compris les house lights si elles sont manuelles."
+        ]
+      },
+      {
+        "action": "Raccourci : Next / Last avec Group (défilement guidé)",
+        "description": "Permet de naviguer canal par canal dans un groupe sélectionné.",
+        "syntaxes": ["[Group][1][Next]", "[Group][1][Last]"],
+        "examples": ["[Group][5][Next] pour passer au canal suivant dans le groupe 5."],
+        "tips": [
+          "Idéal pour le focus ou le channel check par système.",
+          "Fonctionne aussi avec [Rem Dim] pour isoler un canal à la fois."
+        ]
+      },
+      {
+        "action": "Macro : Focus Home All (pour projecteurs conventionnels)",
+        "description": "Ramène tous les paramètres focus (iris, shutter, gobo) à leur position home.",
+        "syntaxes": ["[Focus][Home][Enter]"],
+        "examples": ["Macro 240 = [Focus][Home][Enter] → bouton 'Focus Reset' sur MS 502."],
+        "tips": [
+          "Ne touche pas l’intensité.",
+          "Très utile après un cue de gobos ou d’iris."
+        ]
+      },
+      {
+        "action": "Macro : Lamp Strike / Douse (pour projecteurs automatisés)",
+        "description": "Contrôle à distance l’allumage/extinction de la lampe via les Lamp Controls.",
+        "syntaxes": ["[1][Lamp Ctrls]{Strike Lamp}[Enter]"],
+        "examples": ["Macro 250 = [Group][10][Lamp Ctrls]{Douse Lamp}[Enter] → extinction des lampes après le show."],
+        "tips": [
+          "Les Lamp Controls doivent être définis dans le Fixture Profile.",
+          "Utiliser [Blind] dans la macro pour éviter les changements en Live."
+        ]
+      },
+      {
+        "action": "Raccourci : Record Only (stocker sans tracking)",
+        "description": "Stocke les données manuelles sans les faire tracker dans les cues suivants.",
+        "syntaxes": ["[Record Only][Cue][5][Enter]"],
+        "examples": ["[Record Only][Cue][999][Enter] → enregistre un look temporaire sans altérer le show."],
+        "tips": [
+          "Idéal pour les essais ou looks d’accueil.",
+          "Les données ne trackeront pas → sécurisé pour les modifications ponctuelles."
+        ]
+      },
+      {
+        "action": "Macro : Group Auto-Creator (Offset, Jump, Num Groups)",
+        "description": "Crée automatiquement des sous-groupes à partir d’un intervalle.",
+        "syntaxes": ["[1][Thru][12]{Num Groups}[3][Enter]"],
+        "examples": ["Crée 3 sous-groupes de 4 canaux : (1–4), (5–8), (9–12)."],
+        "tips": [
+          "Utile pour les systèmes symétriques (fronts, sides, cycloramas).",
+          "À combiner avec [Offset] pour les colonnes ou rangs."
+        ]
+      },
+      {
+        "action": "Raccourci : Copy To / Recall From (transfert de données)",
+        "description": "Copie ou rappelle des paramètres entre canaux, groupes ou palettes.",
+        "syntaxes": ["[1][Copy To][2][Enter]", "[Group][5][Recall From][Color Palette][9021][Enter]"],
+        "examples": ["Copier la couleur du canal 1 vers le canal 2."],
+        "tips": [
+          "Très utile pour uniformiser un système après un ajustement manuel.",
+          "Fonctionne avec tous les paramètres (intensité, couleur, focus, etc.)."
+        ]
+      },
+      {
+        "action": "Macro : System Status Checker (via About)",
+        "description": "Affiche automatiquement les erreurs RDM/DMX pour un groupe de canaux.",
+        "syntaxes": ["[Group][10][About]"],
+        "examples": ["Macro 260 = [Group][10][About] → vérifie l’état des projecteurs du groupe 10."],
+        "tips": [
+          "Affiche les erreurs (lampe HS, surchauffe) et warnings.",
+          "À utiliser avant chaque représentation."
+        ]
+      },
+      {
+        "action": "Astuce : Utiliser les Direct Selects pour palettes fréquentes",
+        "description": "Stocker les palettes d’accueil (Open, Full, Rouge, etc.) sur les touches Direct Select.",
+        "syntaxes": ["[Direct Select][1] = CP 9001 (Open)", "[Direct Select][2] = IP 5 (Full)"],
+        "examples": ["Accès instantané à 'Open' ou 'Full' sans passer par les palettes."],
+        "tips": [
+          "Configurer via Setup > Direct Selects.",
+          "Idéal pour les looks d’urgence ou d’ouverture."
+        ]
+      },
+      {
+        "action": "Macro : Grandmaster Reset (remettre à 100 %)",
+        "description": "Réinitialise le Grandmaster à 100 % pour restaurer la pleine intensité.",
+        "syntaxes": ["[Grandmaster][1][0][0][Enter]"],
+        "examples": ["Macro 270 = [Grandmaster][1][0][0][Enter] → bouton 'GM Reset' sur MS 508."],
+        "tips": [
+          "À utiliser si quelqu’un a baissé le GM par erreur.",
+          "Le GM est affiché en haut de chaque écran si ≠ 100 %."
+        ]
+      },
+      {
+        "action": "Raccourci : [Thru][Thru] (création rapide de Submasters)",
+        "description": "Crée plusieurs Submasters d’un coup.",
+        "syntaxes": ["[Sub][1][Thru][Thru][10][Enter]"],
+        "examples": ["Crée les Submasters 1 à 10 vides, prêts à être remplis."],
+        "tips": [
+          "Gagne du temps lors de la préparation d’un fichier.",
+          "Fonctionne aussi avec Cue, Palette, Preset."
+        ]
+      },
+      {
+        "action": "Macro : Fader Level Reset (remettre les faders à Full)",
+        "description": "Réinitialise tous les faders de Submasters à Full.",
+        "syntaxes": ["[Sub][1][Thru][50][At][Full][Enter]"],
+        "examples": ["Macro 280 = [Sub][1][Thru][50][At][Full][Enter] → restaure tous les Subs à 100 %."],
+        "tips": [
+          "À utiliser si des faders ont été baissés manuellement.",
+          "Préférer les Submasters en Mode 'Intensity Master' pour plus de contrôle."
+        ]
+      },
+      {
+        "action": "Astuce : Utiliser les Snapshots pour sauvegarder des états Magic Sheet",
+        "description": "Sauvegarde non seulement les données, mais aussi la disposition des écrans et Magic Sheets.",
+        "syntaxes": ["[Snapshot][500][Label] Home Layout [Enter]"],
+        "examples": ["Snapshot 500 = configuration d’écrans pour le régisseur d’accueil."],
+        "tips": [
+          "Les Snapshots sont idéaux pour basculer entre 'Programmation' et 'Accueil'.",
+          "À charger via Macro au démarrage ou sur bouton."
+        ]
+      },
+      {
+        "action": "Macro : sACN Input Monitor (via Magic Sheet)",
+        "description": "Affiche les valeurs sACN entrantes en temps réel pour le monitoring.",
+        "syntaxes": ["Cible = Address → ex: 8/1"],
+        "examples": ["Afficher les valeurs RGB(A) d’un univers sACN sur un groupe de LEDs."],
+        "tips": [
+          "Les objets sACN se mettent à jour en temps réel.",
+          "Utile pour vérifier qu’un signal arrive bien sur la console."
+        ]
+      },
+      {
+        "action": "Raccourci : [Undo] (annuler la dernière action)",
+        "description": "Annule la dernière commande ou modification.",
+        "syntaxes": ["[Undo]"],
+        "examples": ["[Undo] après une erreur de [Release]."],
+        "tips": [
+          "Fonctionne aussi en Blind.",
+          "Historique limité → à utiliser rapidement."
+        ]
+      },
+      {
+        "action": "Macro : Fixture Power On/Off (via RDM ou sACN)",
+        "description": "Allume ou éteint à distance les projecteurs compatibles.",
+        "syntaxes": ["[1][Lamp Ctrls]{Power On}[Enter]"],
+        "examples": ["Macro 290 = [Group][10][Lamp Ctrls]{Power Off}[Enter] → extinction après le show."],
+        "tips": [
+          "Requiert des projecteurs RDM ou sACN avec contrôle d’alimentation.",
+          "À combiner avec un indicateur visuel sur MS 508."
+        ]
+      },
+      {
+        "action": "Astuce : Utiliser les Flags de Cue (M, R, P, --)",
+        "description": "Comprendre les indicateurs visuels dans la liste des cues.",
+        "syntaxes": [],
+        "examples": ["'M' = cue marqué, 'R' = cue qui référence un mark, '--' = dark move."],
+        "tips": [
+          "Un 'm' minuscule = mark non utilisé → à nettoyer pour optimiser le show.",
+          "Les dark moves ('--') permettent de préparer des positions sans lumière."
+        ]
+      },
+      {
+        "action": "Macro : Cue List Index Navigator",
+        "description": "Permet de naviguer rapidement dans une liste de cues volumineuse.",
+        "syntaxes": ["[Cue List Index]"],
+        "examples": ["Macro 300 = [Cue List Index] → ouvre l’index pour recherche par numéro ou label."],
+        "tips": [
+          "Indispensable pour les shows avec +100 cues.",
+          "À placer sur MS 505 (Target)."
+        ]
+      },
+      {
+        "action": "Astuce : Quick Save (Shift + Update)",
+        "description": "Sauvegarde rapidement le show dans l’archive interne sans passer par le Browser.",
+        "syntaxes": ["[Shift][Update]"],
+        "examples": ["Appuyer [Shift][Update] à la fin de chaque session de modif."],
+        "tips": [
+          "Sauvegarde automatiquement dans Show File Archive.",
+          "Indispensable en live pour ne pas perdre les changements."
+        ]
+      },
+      {
+        "action": "Macro : Select Active Only (isoler la scène actuelle)",
+        "description": "Sélectionne uniquement les canaux actifs (non à 0 %).",
+        "syntaxes": ["[Select Active][Enter]"],
+        "examples": ["Macro 310 = [Select Active] → pour flasher ou ajuster uniquement les projecteurs allumés."],
+        "tips": [
+          "Fonctionne en Live et Blind.",
+          "Très utile pour les corrections ciblées."
+        ]
+      },
+      {
+        "action": "Astuce : Utiliser les Presets pour looks complexes",
+        "description": "Stocker des looks complets (intensité + NP) dans un Preset pour rappel instantané.",
+        "syntaxes": ["[1][Thru][20][At][Full][Color][Red][Enter] → [Select Last][Record][Preset][901][Label] Reds[Enter]"],
+        "examples": ["Preset 901 = tous les projecteurs à Full + Rouge."],
+        "tips": [
+          "Les Presets sont HTP → sécurisés pour les looks d’accueil.",
+          "Idéal pour les changements rapides de look (ex: pause rouge)."
         ]
       }
     ]
