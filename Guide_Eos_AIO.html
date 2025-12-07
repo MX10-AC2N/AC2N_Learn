@@ -77,6 +77,15 @@
         /* Améliorations accessibilité */
         .back-btn[aria-label] { position: relative; }
         .back-btn[aria-label]:hover::after { content: attr(aria-label); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; white-space: nowrap; }
+        /* Recherche */
+        #search-input { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .category-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 10px; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons button { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -128,7 +137,7 @@
             </div>
             <p>Ce guide interactif contient des centaines de commandes, syntaxes et astuces pour les consoles Eos.</p>
             <p>Il est conçu pour être utilisé par les débutants comme les experts.</p>
-            <p><strong>Version : </strong> 1.2 (Mis à jour avec Eos v3.0.0)</p>
+            <p><strong>Version : </strong> 1.3 (Mis à jour avec Eos v3.0.0)</p>
             <div class="footer">
                 <p>Guide interactif Eos – 2025</p>
             </div>
@@ -145,7 +154,7 @@
                 <input type="hidden" id="edit-command-id">
                 <div class="form-group">
                     <label for="command-action">Action *</label>
-                    <input type="text" id="command-action" required pattern="[A-Za-z0-9\s\[\]\{\}«»<>\-+\/*%#@&=≠<≤>≥^√°π∞±≈→←↑↓↔↕↵⇥⌫⌦␣…•◦▪▫◆◇●○◎◉\s\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+">
+                    <input type="text" id="command-action" required pattern="^[\w\s\[\]\{\}«»<>\-+\/*%#@&=≠<≤>≥^√°π∞±≈→←↑↓↔↕↵⇥⌫⌦␣…•◦▪▫◆◇●○◎◉\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$">
                 </div>
                 <div class="form-group">
                     <label for="command-description">Description *</label>
@@ -250,7 +259,7 @@
             <li><span class="key key-user">π</span> = Pi (ex: π)</li>
             <li><span class="key key-user">∞</span> = Infini (ex: ∞)</li>
             <li><span class="key key-user">±</span> = Plus ou moins (ex: ±1)</li>
-            <span class="key key-user">≈</span> = Environ (ex: ≈1)</li>
+            <li><span class="key key-user">≈</span> = Environ (ex: ≈1)</li>
             <li><span class="key key-user">→</span> = Flèche droite (ex: →)</li>
             <li><span class="key key-user">←</span> = Flèche gauche (ex: ←)</li>
             <li><span class="key key-user">↑</span> = Flèche haut (ex: ↑)</li>
@@ -1722,7 +1731,6 @@
             currentCategory = null;
             currentSubcategory = null;
             currentCommand = null;
-            // document.getElementById('page-title').textContent = '📘 Guide Eos'; // Titre dans le header
             const container = document.getElementById('category-grid');
             container.innerHTML = ''; // Nettoyer le conteneur
             if (state.categories && state.categories.length > 0) {
@@ -1971,7 +1979,7 @@
         // --- Améliorations demandées ---
 
         // 1. Validation des entrées (pattern HTML5)
-        // Déjà implémenté sur #command-action
+        // Déjà implémenté sur #command-action avec un pattern plus large
 
         // 2. Persistance des données (localStorage)
         // Déjà implémenté dans saveState() et init()
